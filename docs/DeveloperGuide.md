@@ -13,3 +13,11 @@ To prevent it from being pushed, devs can use the following command:
 ```
 git update-index --assume-unchanged <file_path>
 ```
+
+## 2. Installing dependencies
+
+In root, run the following command
+
+```
+npm install
+```
