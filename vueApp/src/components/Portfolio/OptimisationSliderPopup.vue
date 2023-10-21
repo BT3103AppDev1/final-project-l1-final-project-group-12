@@ -2,13 +2,13 @@
     <div>
       <div v-if="showPopup" class="popup" @click.stop="">
         <div class="popup-content" @click.stop="">
-          <h3>Specify Risk</h3>
+          <h3>Specify your desired Risk level</h3>
           <div class="slider-container">
             <input type="range" v-model="sliderValue" @input="updateSpeechBubble" min="0" max="100">
-            <div class="speech-bubble" :style="{ left: `${sliderValue}%`, top: '50%' }">
+            <div class="speech-bubble" :style="{ left: `${sliderValue}%`, top: '25%' }">
               {{ sliderValue }}%
             </div>
-            <button @click="closeSliderPopup">Generate</button>
+            <button class="generateButton" @click="closeSliderPopup">Generate</button>
           </div>
         </div>
       </div>
@@ -82,26 +82,44 @@
     width: 22%;
     background-color: #fff;
     border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    padding: 1.5%;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+    padding-left: 1.5%;
+    padding-right: 1.5%;
     text-align: center;
     z-index: 999;
-    font-size: 3vh;
+    font-size: 100%;
+    border-radius: 10px;
   }
   
   .popup-content {
     cursor: default; /* Prevent the cursor from changing when clicking inside the popup */
   }
-  
+
+  /* Slider */
   .slider-container {
     position: relative;
     margin-top: 0;
   }
   
   input[type="range"] {
-    width: 100%;
-  }
-  
+  width: 100%;
+  height:2vh;
+  background: #272F51;
+  -webkit-appearance: none; /* Remove default styles for WebKit browsers */
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  background: #587DBD; /* Set the color to #587DBD */
+  height:2.7vh;
+  width: 12%;
+  border-radius: 10vh;
+  -webkit-appearance: none;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #79a3eb; /* Change the color to your desired color */
+}
+
+/* Slider */
   .speech-bubble {
     position: absolute;
     top: 100%;
@@ -115,5 +133,23 @@
     display: block;
   }
   
+
+/* Generate button */
+  .generateButton {
+  background-color: #272F51;
+  color: #fff; 
+  padding: 1.5% 7%; 
+  border: none; 
+  border-radius: 20vh; /* Add border radius */
+  font-size: 100%; /* Set the font size */
+  font-weight: bold;
+  cursor: pointer; /* Add a pointer cursor on hover */
+  margin-top:6%;
+  margin-bottom: 6%
+}
+
+.generateButton:hover {
+  background-color: #305ca8; /* Change the background color on hover */
+}
   </style>
   
