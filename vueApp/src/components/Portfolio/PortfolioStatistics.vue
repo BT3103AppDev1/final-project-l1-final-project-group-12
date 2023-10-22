@@ -1,97 +1,67 @@
 <template>
+
     <div class="statistics-table">
-        <div class="TimeView">
-            <button class="top-button" :class="{ active: selectedButton === '1Y' }" @click="selectButton('1Y')">1Y</button>
-      <button class="top-button" :class="{ active: selectedButton === '6M' }" @click="selectButton('6M')">6M</button>
-      <button class="top-button" :class="{ active: selectedButton === '7D' }" @click="selectButton('7D')">7D</button>
-        </div>
-    <div class="statistics-content">
-      <div class="column">
-        <div class="row">
-          <div class="cell">Absolute Return</div>
-          <div class="cell">{{ absoluteReturn }}</div>
-        </div>
-        <div class="row">
-            <div class="cell">Market's Benchmark</div>
-          <div class="cell">{{ marketBenchmark }}</div>
-        </div>
-        <div class="row">
-          <div class="cell">Expected Alpha</div>
-          <div class="cell">{{ expectedAlpha }}</div>
-        </div>
-        <div class="row">
-          <div class="cell">Active Shares</div>
-          <div class="cell">{{ activeShares }}</div>
-        </div>
+        
+        <!-- Button -->
+        <div class="time-view-button">
+        <button
+          v-for="button in buttons"
+          :key="button"
+          class="top-button"
+          :class="{ active: selectedButton === button }"
+          @click="selectButton(button)"
+        >
+          {{ button }}
+        </button>
       </div>
-  
-      <div class="column">
-        <div class="row">
-          <div class="cell">Overall Beta</div>
-          <div class="cell">{{ overallBeta }}</div>
-        </div>
-        <div class="row">
-          <div class="cell">Sharpe Ratio</div>
-          <div class="cell">{{ sharpeRatio }}</div>
-        </div>
-        <div class="row">
-          <div class="cell">Std Deviation</div>
-          <div class="cell">{{ stdDeviation }}</div>
-        </div>
-        <div class="row">
-          <div class="cell">Variance</div>
-          <div class="cell">{{ variance }}</div>
-        </div>
-      </div>
-  
-      <div class="column">
-        <div class="row">
-          <div class="cell">Riskiest Stock</div>
-          <div class="cell">{{ riskiestStock }}</div>
-        </div>
-        <div class="row">
-          <div class="cell">Beta of Stock</div>
-          <div class="cell">{{ betaOfStock }}</div>
-          <div class="cell"></div>
-          <div class="cell"></div>
-          <div class="cell"></div>
-          <div class="cell"></div>
-          <div class="cell"></div>
-          <div class="cell"></div>
+
+      <!-- Content -->
+      <div class="statistics-content">
+        <div class="column" v-for="(column, columnIndex) in columns" :key="columnIndex">
+          <div class="row" v-for="(row, rowIndex) in column" :key="rowIndex">
+            <div class="cell">{{ row.label }}</div>
+            <div class="cell">{{ row.value }}</div>
+          </div>
         </div>
       </div>
     </div>
-</div>
+
   </template>
-
-<script>
-export default {
-  data() {
-    return {
-      selectedButton: '1Y',
-
-      absoluteReturn: '5%',
-      marketBenchmark: '10%', 
-      expectedAlpha: '10%', 
-      activeShares: '10%', 
-
-      overallBeta: '10%', 
-      sharpeRatio: '10%', 
-      stdDeviation: '10%',
-      variance: '10%',
-
-      riskiestStock: '10%',
-      betaOfStock: '10%',
-
-    };
-  },
-  methods: {
-    selectButton(button) {
-      this.selectedButton = button;
+  
+  <script>
+  export default {
+    data() {
+      return {
+        selectedButton: '1Y',
+        buttons: ['1Y', '6M', '7D'],
+        columns: [
+          [
+            { label: 'Absolute Return', value: '5%' },
+            { label: "Market's Benchmark", value: '10%' },
+            { label: 'Expected Alpha', value: '10%' },
+            { label: 'Active Shares', value: '10%' },
+          ],
+          [
+            { label: 'Overall Beta', value: '10%' },
+            { label: 'Sharpe Ratio', value: '10%' },
+            { label: 'Std Deviation', value: '10%' },
+            { label: 'Variance', value: '10%' },
+          ],
+          [
+            { label: 'Riskiest Stock', value: '10%' },
+            { label: 'Beta of Stock', value: '10%' },
+          ],
+        ],
+      };
     },
-  },
-};
-</script>
+    methods: {
+      selectButton(button) {
+        this.selectedButton = button;
+      },
+    },
+  };
+  </script>
+  
   
   <style>
   .statistics-table {
@@ -130,7 +100,7 @@ export default {
   }
 
 /* button */
-  .TimeView {
+  .time-view-button {
   padding-left: 2%;
   padding-top: 2%;
 }
