@@ -1,6 +1,6 @@
 import yfinance as yf
 import json
-import pandas as pd
+import sys
 
 """
 get_stock_statistics Function:
@@ -82,3 +82,15 @@ def get_options_data(ticker):
     options_data_json = {'calls': calls_json, 'puts': puts_json}
     
     return options_data_json
+
+
+if __name__ == "__main__":
+    function_name = sys.argv[1]
+    args = sys.argv[2:]
+    
+    if function_name == 'get_stock_statistics' and len(args) == 1:
+        print(get_stock_statistics(*args))
+    elif function_name == 'get_historical_data' and len(args) >= 1:
+        print(get_historical_data(*args))
+    elif function_name == 'get_options_data' and len(args) == 1:
+        print(json.dumps(get_options_data(*args)))
