@@ -17,8 +17,8 @@ Outputs:
 
 Example:
 equities = [
-    {'beta': 1.2, 'qty': 100, 'avg_price': 50, 'return': 0.08},
-    {'beta': 0.9, 'qty': 150, 'avg_price': 30, 'return': 0.06},
+    {'ticker' : 'AAPL', 'beta': 1.2, 'qty': 100, 'avg_price': 50, 'return': 0.08},
+    {'ticker' : 'AAPL', 'beta': 0.9, 'qty': 150, 'avg_price': 30, 'return': 0.06},
 ]
 benchmark_return = 0.07  # SPY500 return
 risk_free_rate = 0.02  # Typically can be a short-term treasury bill rate
