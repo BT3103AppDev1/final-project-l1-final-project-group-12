@@ -8,7 +8,7 @@
             <div class="speech-bubble" :style="{ left: `${sliderValue}%`, top: '25%' }">
               {{ sliderValue }}%
             </div>
-            <button class="generateButton" @click="closeSliderPopup">Generate</button>
+            <button class="generateButton" @click="generateRiskLevel">Generate</button>
           </div>
         </div>
       </div>
@@ -52,7 +52,11 @@
         }
         this.mouseDownInside = false;
       },
-  
+
+      generateRiskLevel() {
+        this.$emit('slider-value-updated', this.sliderValue);
+        this.closeSliderPopup();
+      },
       
     },
     mounted() {

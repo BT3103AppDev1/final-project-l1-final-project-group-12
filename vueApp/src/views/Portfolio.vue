@@ -9,28 +9,14 @@
 
         <!-- Optimisation Tabs  -->
         <div class="Optimisation-container">
-        <button
-            v-for="(tab, index) in buttons"
-            :key="index"
-            :class="{ 'selected-Optimisation-tab': tab === selectedButton }"
-            @click="selectButton(index)"
-            class="Optimisation-tab"
-            >
-            <span class="Optimisation-tab-line">{{ tab.split(' ')[0] }}</span>
-            <span class="Optimisation-tab-line">{{ tab.split(' ')[1] }}</span>
-        </button>
+          <OptimisationTab @update-selected-tab-index="updateSelectedTabIndex" @slider-value-updated="handleSliderValue"/>
+        </div>
 
-    </div>
-
-    <!-- Pop-up Window for the Customize Risk Button -->
-    <div v-if="showOptimisationSlider" class="right-icon">
-      <OptimisationSlider :showPopup="showOptimisationSlider" @closePopup="showOptimisationSlider = false" />
-    </div>
 
     <!-- Asset View & Add Trade  -->
     <div v-if="!showStatistics" class="portfolioDisplay">
         <div class="table">
-            <PortfolioAssetView :selectedTabIndex="selectedTabIndex" :key="refreshComp"/>
+            <PortfolioAssetView :selectedTabIndex="selectedTabIndex" :sliderValue="sliderValue" :key="refreshComp"/>
         </div>
         <div class="addTrade">
             <AddTrade :key="refreshComp" @added = "change"/>
@@ -52,15 +38,8 @@
   import PortfolioAssetView from '@/components/Portfolio/PortfolioAssetView.vue'
   import AddTrade from '@/components/Portfolio/AddTrade.vue'
   import PortfolioStatistics from '@/components/Portfolio/PortfolioStatistics.vue'
-  import OptimisationSlider from '@/components/Portfolio/OptimisationSliderPopup.vue'
+  import OptimisationTab from '@/components/Portfolio/OptimisationTab.vue'
 
-  const TABS = [
-  "Current Portfolio",
-  "Maximize Returns",
-  "Minimize Risk",
-  "Balance Portfolio",
-  "Customize Risk",
-  ];
   
   export default {
     name: 'App',
@@ -68,18 +47,16 @@
         PortfolioAssetView,
         AddTrade,
         PortfolioStatistics,
-        OptimisationSlider,
+        OptimisationTab,
     },
 
     data() {
       return {
         isChecked: false,
         refreshComp: 0,
-        buttons: TABS,
-        selectedButton: TABS[0],
-        selectedTabIndex: 1,
         showStatistics: false,
-        showOptimisationSlider: false,
+        selectedTabIndex: 1,
+        sliderValue: 0,
       };
     },
 
@@ -98,28 +75,26 @@
         this.refreshComp += 1
       },
 
-      selectButton(index) {
-        this.selectedButton = this.buttons[index];
-        this.refreshComp += 1
-        this.selectedTabIndex = index + 1;
-        
-        if (index === 4) {
-          this.showOptimisationSlider = true;
+      updateSelectedTabIndex(index) {
+      this.selectedTabIndex = index; // Update selectedTabIndex in the parent component
+      this.change()
+    },
           
-        } else {
-          this.showOptimisationSlider = false;
-          
-        }
-          
-      },
-
       toggleStatistics() {
-      this.showStatistics = !this.showStatistics;
+        this.showStatistics = !this.showStatistics;
         },
 
+      handleSliderValue(sliderValue) {
+        this.sliderValue = sliderValue;
+        console.log('Slider value received:', sliderValue);
+      },
     },
 
-  }
+    emits: ['slider-value-updated'],
+    
+  };
+    
+
   </script>
   
 
@@ -164,32 +139,6 @@
       width: 72%;
       justify-content: space-between; /* Spread buttons evenly */
       margin-top: 0vw;
-    }
-    .Optimisation-tab {
-      flex: 1; 
-      background-color: #cdcdd0;
-      color: white;
-      margin: 1vw 0.5vw;
-      padding: 0.8vw 0; 
-      border: 1vw;
-      border-radius: 1.2vw;
-      cursor: pointer;
-      font-size: 1.6vw;
-      font-weight: bold;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .Optimisation-tab-line {
-      line-height: 1; /* Adjust line-height to control spacing between lines */
-    }
-    
-    button.selected-Optimisation-tab {
-      background-color: #bde4fa;
-      color: #4e5ea4;
     }
 
     /* Portfolio Display */

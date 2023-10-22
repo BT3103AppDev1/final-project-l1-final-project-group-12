@@ -47,8 +47,8 @@
     },
 
     watch: {
-        tradeQuantity: "calculateTotalCost",
-        pricePerTrade: "calculateTotalCost",
+        /* tradeQuantity: "calculateTotalCost",
+        pricePerTrade: "calculateTotalCost", */
         },
 
     methods: {

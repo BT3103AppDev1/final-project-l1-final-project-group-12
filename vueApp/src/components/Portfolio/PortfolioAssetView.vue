@@ -43,6 +43,7 @@
 
     props: {
       selectedTabIndex: Number,
+      sliderValue: Number,
     },
 
     data() {
@@ -88,7 +89,12 @@
           } else if (this.selectedTabIndex == 3) {
             return {};
 
+          } else if (this.selectedTabIndex == 4) {
+            return {};
+
           } else {
+            console.log(this.sliderValue)
+            
             return {};
 
           }
