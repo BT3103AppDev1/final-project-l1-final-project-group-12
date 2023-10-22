@@ -25,7 +25,7 @@
 
     <!-- Statistic Table  -->
     <div v-else class="right-icon">
-        <PortfolioStatistics />
+        <PortfolioStatistics :key="refreshComp"/>
         
     </div>
 

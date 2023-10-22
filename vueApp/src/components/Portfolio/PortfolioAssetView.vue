@@ -94,7 +94,7 @@
 
           } else {
             console.log(this.sliderValue)
-            
+
             return {};
 
           }
@@ -113,10 +113,10 @@
   <style>
   /* Toggle Switch */
   .toggleContainer {
-    margin-left: 21%;
-    margin-top: 9.3%;
+     margin-left: 21%;
+     margin-top: 3%;  
     position: absolute; 
-    top: 0; 
+    top: 0;   
   }
   
   .toggle-switch {
