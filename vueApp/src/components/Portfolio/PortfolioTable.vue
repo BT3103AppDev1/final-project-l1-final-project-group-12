@@ -43,8 +43,13 @@
                 {{ SuggestedQty(item.Buy_Quantity, item.Stock) }}
               </template>
             </td>
-  
-            <td>0</td>      <!-- TODO: Update P/L -->
+
+
+            <!-- P/L -->
+            <td>
+              {{ calculateProfitLoss(item).toFixed(2) }}
+            </td>
+
   
             <!-- Button -->
             <td>
@@ -137,6 +142,14 @@
         this.$emit('refresh-request');
       },
   
+    },
+
+    computed: {
+      calculateProfitLoss() {
+      return (item) => {
+        return (item.Buy_Quantity * item.Buy_Price) - (item.Buy_Quantity * 0);
+      };
+      },
     },
   
   };
