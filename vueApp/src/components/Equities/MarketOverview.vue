@@ -4,34 +4,8 @@
       <h1>Market Overview</h1>
       <button class="view-watchlist-button">View Watchlist</button>
     </div>
-
-    <div class="box-container">
-      <!-- Loop through the containers -->
-      <div v-for="(container, index) in containers" :key="index" class="box">
-        <div class="box-header">
-          <div class="icon">
-            <img :src="container.imageSrc" alt="" />
-          </div>
-          <div class="header-text">
-            <h3>{{ container.header }}</h3>
-          </div>
-        </div>
-
-        <hr class="custom-hr" />
-
-        <table class="table">
-          <!-- Table content for the container -->
-          <tr v-for="(row, rowIndex) in container.rows" :key="rowIndex">
-            <td>{{ rowIndex + 1 }}</td>
-            <td v-for="(cell, cellIndex) in row" :key="cellIndex">
-              {{ cell }}
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-    <br />
   </div>
+  <br />
 </template>
 
 <style>
