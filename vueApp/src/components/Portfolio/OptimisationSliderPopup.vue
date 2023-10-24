@@ -3,13 +3,17 @@
       <div v-if="showPopup" class="popup" @click.stop="">
         <div class="popup-content" @click.stop="">
           <h3>Specify your desired Risk level</h3>
+
           <div class="slider-container">
             <input type="range" v-model="sliderValue" @input="updateSpeechBubble" min="0" max="100">
+            
             <div class="speech-bubble" :style="{ left: `${sliderValue}%`, top: '25%' }">
               {{ sliderValue }}%
             </div>
-            <button class="generateButton" @click="generateRiskLevel">Generate</button>
+            
+              <button class="generateButton" @click="generateRiskLevel">Generate</button>
           </div>
+
         </div>
       </div>
     </div>

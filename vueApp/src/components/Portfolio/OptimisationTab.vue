@@ -12,7 +12,10 @@
 
     <!-- Optimisation Slider For Customize Risk -->
     <div v-if="showOptimisationSlider" class="right-icon">
-        <OptimisationSlider :showPopup="showOptimisationSlider" @slider-value-updated="updateSliderValue" @closePopup="showOptimisationSlider = false" />
+        <OptimisationSlider 
+          :showPopup="showOptimisationSlider" 
+          @slider-value-updated="updateSliderValue" 
+          @closePopup="showOptimisationSlider = false" />
     </div>
 
 

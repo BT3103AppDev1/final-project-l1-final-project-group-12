@@ -18,7 +18,7 @@
 
         <div id = "profitContainer">
             <h3>Total Profit SGD </h3>
-            <h1 id="totalProfit">$XXXX</h1>    <!-- TODO: Total up Profit--> 
+            <h1 id="totalProfit">${{ this.totalPL.toFixed(2) }}</h1>    <!-- TODO: Total up Profit--> 
         </div>
       
         
@@ -39,6 +39,10 @@
       };
     },
 
+    props: {
+      totalPL: Number,
+    },
+
     computed: {
         // Calculate the trade profit based on tradeQuantity and pricePerTrade
         tradeCost() {
@@ -46,16 +50,11 @@
         },
     },
 
-    watch: {
-        /* tradeQuantity: "calculateTotalCost",
-        pricePerTrade: "calculateTotalCost", */
-        },
-
     methods: {
         
         // Save to Firebase
         async savetofs() {
-
+            console.log(this.totalPL)
             // Get input from placeholder
             let stock = document.getElementById("stock1").value
             let buyPrice = document.getElementById("buy1").value

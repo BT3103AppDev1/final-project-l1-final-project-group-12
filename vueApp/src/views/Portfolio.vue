@@ -3,29 +3,39 @@
 
         <div class="title-button-container">
             <span>{{ portfolioTitle }}</span>
-        
+
             <button @click="toggleStatistics" id="portfolioButton">{{ buttonLabel }}</button>
         </div>
 
         <!-- Optimisation Tabs  -->
         <div class="Optimisation-container">
-          <OptimisationTab @update-selected-tab-index="updateSelectedTabIndex" @slider-value-updated="handleSliderValue"/>
+          <OptimisationTab 
+            @update-selected-tab-index="updateSelectedTabIndex" 
+            @slider-value-updated="handleSliderValue"/>
         </div>
 
 
     <!-- Asset View & Add Trade  -->
     <div v-if="!showStatistics" class="portfolioDisplay">
         <div class="table">
-            <PortfolioAssetView :selectedTabIndex="selectedTabIndex" :sliderValue="sliderValue" :key="refreshComp"/>
+            <PortfolioAssetView 
+              :selectedTabIndex="selectedTabIndex" 
+              :sliderValue="sliderValue" 
+              :key="refreshComp" 
+              @total-pl-updated = "emitTotalPL"/>
         </div>
         <div class="addTrade">
-            <AddTrade :key="refreshComp" @added = "change"/>
+            <AddTrade 
+              :key="refreshComp" 
+              :totalPL = "totalPL"
+              @added = "change"/>
         </div>
     </div>
 
     <!-- Statistic Table  -->
     <div v-else class="right-icon">
-        <PortfolioStatistics :key="refreshComp"/>
+        <PortfolioStatistics 
+          :key="refreshComp"/>
         
     </div>
 
@@ -57,6 +67,7 @@
         showStatistics: false,
         selectedTabIndex: 1,
         sliderValue: 0,
+        totalPL: 0,
       };
     },
 
@@ -88,9 +99,14 @@
         this.sliderValue = sliderValue;
         console.log('Slider value received:', sliderValue);
       },
+
+      emitTotalPL(totalPL) {
+        this.totalPL = totalPL;
+        this.$emit('total-pl-updated', totalPL);
+      },
     },
 
-    emits: ['slider-value-updated'],
+    emits: ['slider-value-updated', "total-pl-updated"],
     
   };
     

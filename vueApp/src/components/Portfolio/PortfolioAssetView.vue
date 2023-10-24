@@ -16,14 +16,25 @@
     </div>
 
       <!-- Table / PieChart  -->
-      <component
-        :is="isChecked ? 'PieChart' : 'PortfolioTable'"
+      <PortfolioTable
+        v-if="!isChecked"
         :SuggestedQty="SuggestedQty"
         :key="refreshComp"
         :portfolioData="portfolioData"
         :hasData="hasData"
         @refresh-request="fetchData"
+        @total-pl-updated="emitTotalPL"
       />
+
+      <PieChart
+        v-else
+        :SuggestedQty="SuggestedQty"
+        :portfolioData="portfolioData"
+        :hasData="hasData"
+        @refresh-request="fetchData"
+      />
+
+     
     </template>
   
   
@@ -98,9 +109,14 @@
             return {};
 
           }
-      }
+      },
+
+      emitTotalPL(totalPL) {
+        this.$emit('total-pl-updated', totalPL);
+      },
 
     },
+    emits: ["total-pl-updated"],
 
 
 

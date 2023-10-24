@@ -93,6 +93,7 @@
       return {
         updatedBuyQuantity: 0,
         updatedBuyPrice: 0,
+        totalProfitLoss: 0,
       };
     },
   
@@ -141,6 +142,10 @@
         
         this.$emit('refresh-request');
       },
+
+      emitTotalPL() {
+        this.$emit('total-pl-updated', this.totalPL);
+      },
   
     },
 
@@ -150,7 +155,16 @@
         return (item.Buy_Quantity * item.Buy_Price) - (item.Buy_Quantity * 0);
       };
       },
+      totalPL() {
+        return this.portfolioData.reduce((total, item) => {
+          return total + this.calculateProfitLoss(item);
+        }, 0);
+      },
     },
+
+    watch: {
+  totalPL: 'emitTotalPL',
+},
   
   };
   </script>
