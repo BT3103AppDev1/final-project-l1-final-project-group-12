@@ -29,14 +29,13 @@
   .app-container {
     padding: 20px; /* Add padding for spacing */
     width: 100%;
-    margin-right: 2px;
   }
   
   .side-by-side-container {
     display: flex; 
     gap: 10%; 
+    margin-left: 2%;
 
   }
-
   </style>
   

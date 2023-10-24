@@ -38,21 +38,20 @@
     border-radius: 13px;
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
-    margin-right: 2%;
-    padding: 1%;
-    padding-left: 1%;
     font-weight: bold;
     font-size: large;
-    width: 250%;
+    width: 200%; 
+    max-width: 800px; 
   }
   
   .box table td {
-    padding: 10px; /* Adjust the amount of padding to control the space between columns */
+    padding: 15px;
   }
   
   .header-text .icon {
-    max-width: 30px; /* Adjust the size of the icon */
-    margin-right: 10px; /* Adjust the margin as needed */
+    max-width: 30px; /* Adjust size of icon */
+    margin-right: 10px; 
+    padding-left: 10px;
   }
   </style>
   
