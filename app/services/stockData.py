@@ -2,6 +2,7 @@ import yfinance as yf
 import json
 import sys
 
+
 """
 get_stock_statistics Function:
 Fetches stock statistics for a specified ticker from Yahoo Finance.
@@ -17,7 +18,7 @@ Returns:
 
 def get_stock_statistics(ticker):
     stock = yf.Ticker(ticker)
-    info = stock.info
+    info = stock.earnings
     
     # Convert info dictionary to JSON
     info_json = json.dumps(info, indent=2)

@@ -19,9 +19,10 @@ const executePythonScript = (scriptPath, args) => {
 
 // Connector method to get stock statistics
 const getStockStatistics = async (req, res) => {
+  console.log("Controller connected");
   const { ticker } = req.params;
   try {
-    const output = await executePythonScript("../services/yfinance.py", [
+    const output = await executePythonScript("../services/stockData.py", [
       "get_stock_statistics",
       ticker,
     ]);
@@ -36,7 +37,7 @@ const getHistoricalData = async (req, res) => {
   const { ticker } = req.params;
   const { period, interval } = req.query;
   try {
-    const output = await executePythonScript("../services/yfinance.py", [
+    const output = await executePythonScript("../services/stockData.py", [
       "get_historical_data",
       ticker,
       period,
@@ -52,7 +53,7 @@ const getHistoricalData = async (req, res) => {
 const getOptionsData = async (req, res) => {
   const { ticker } = req.params;
   try {
-    const output = await executePythonScript("../services/yfinance.py", [
+    const output = await executePythonScript("../services/stockData.py", [
       "get_options_data",
       ticker,
     ]);
