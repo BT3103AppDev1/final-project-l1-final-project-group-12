@@ -12,7 +12,7 @@ Requirements:
 
 ## API Endpoints
 
-### 1. Get Stock Statistics
+### 1. Get Stock Statistics [DEPRECATED]
 
 - Endpoint: `/stock-statistics/:ticker`
 - Method: `GET`
