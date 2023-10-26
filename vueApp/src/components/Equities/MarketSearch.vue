@@ -1,0 +1,82 @@
+<template>
+  <div class="market-header">
+    <h1>Market</h1>
+    <form id="marketSearch" class="search-form">
+      <input
+        type="text"
+        id="searchInput"
+        required=""
+        placeholder="Search by company name/code"
+      />
+      <br /><br />
+
+      <button id="searchButton" type="button" @click="runMarketSearch()">
+        Search</button
+      ><br /><br />
+    </form>
+  </div>
+</template>
+
+
+<script>
+export default {
+  methods: {
+    runMarketSearch() {
+      // Define search functionality 
+
+    }
+  },
+};
+</script>
+
+
+
+<style scoped>
+.market-header {
+  display: flex;
+  justify-content: space-between;
+  width:100%;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#searchInput {
+  margin-right: 1vw; 
+  margin-top: 0.5vw;
+  width:28vw;
+  height: 32%;
+  border-radius: 0.75vw;
+  border-color: #FFFDFD;
+  font-weight: bold;
+  font-size: 1.4vw;
+  background-color: white;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+  padding-left: 0.75vw;
+}
+
+#searchInput::placeholder {
+  color: #CBCBCB; 
+  font-size: 1.2vw;
+}
+
+#searchButton {
+  background-color: #272f51;
+  width: 35%;
+  color: white;
+  border: none;
+  padding: 0.75%;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 100%;
+  height: 40%;
+  font-weight: bold;
+  margin-right: 0.5vw;
+  margin-top: 0.5vw;
+
+
+}
+</style>

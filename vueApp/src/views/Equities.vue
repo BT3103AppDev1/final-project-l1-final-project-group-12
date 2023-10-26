@@ -1,41 +1,51 @@
 <template>
-    <div class="app-container">
-      <MarketOverview />
-      <div class="side-by-side-container">
-        <Trending />
-        <TopGainers />
-        <TopLosers />
-      </div>
+  <div class="body">
+    <MarketOverview />
+    <div class="side-by-side-container">
+      <Trending />
+      <TopGainers />
+      <TopLosers />
     </div>
-  </template>
-  
-  <script>
-  import MarketOverview from '../components/Equities/MarketOverview.vue';
-  import Trending from '../components/Equities/Trending.vue';
-  import TopGainers from '../components/Equities/TopGainers.vue';
-  import TopLosers from '../components/Equities/TopLosers.vue';
-  
-  export default {
-    components: {
-      MarketOverview,
-      Trending,
-      TopGainers,
-      TopLosers
-    }
-  }
-  </script>
-  
-  <style>
-  .app-container {
-    padding: 20px; /* Add padding for spacing */
-    width: 100%;
-  }
-  
-  .side-by-side-container {
-    display: flex; 
-    gap: 10%; 
-    margin-left: 2%;
+    <br /><br />
+    <MarketSearch />
+    <br>
+    <MarketTable />
+  </div>
+</template>
 
-  }
-  </style>
-  
+<script>
+import MarketOverview from "../components/Equities/MarketOverview.vue";
+import Trending from "../components/Equities/Trending.vue";
+import TopGainers from "../components/Equities/TopGainers.vue";
+import TopLosers from "../components/Equities/TopLosers.vue";
+import MarketSearch from "../components/Equities/MarketSearch.vue";
+import MarketTable from '../components/Equities/MarketTable.vue';
+
+export default {
+  components: {
+    MarketOverview,
+    Trending,
+    TopGainers,
+    TopLosers,
+    MarketSearch,
+    MarketTable
+  },
+};
+</script>
+
+<style>
+.side-by-side-container {
+  display: flex;
+  gap: 8%;
+  width: 120%;
+}
+html {
+  background-color: #f6f6f6;
+}
+
+.body {
+  margin: 1% 3.5% 0% 2%;
+  padding: 0 0 3% 1.5%; 
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
