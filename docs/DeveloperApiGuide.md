@@ -1,6 +1,6 @@
 # Developer Guide: Accessing the YFinance API
 
-This guide provides instructions on how to access the API endpoints exposed by the `yfinance_controller.js` for retrieving stock statistics, historical data, and options data from Yahoo Finance.
+This guide provides instructions on how to access the API endpoints exposed by the routes.
 
 ## Getting Started
 
