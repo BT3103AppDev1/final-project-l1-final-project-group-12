@@ -2,6 +2,22 @@ import yfinance as yf
 import json
 import sys
 
+"""
+get_current_price Function:
+Fetches stock statistics for a specified ticker from Yahoo Finance.
+
+Parameters:
+@param ticker: str
+    The stock ticker symbol.
+
+Returns:
+@return: float
+    A float of the latest stock value.
+"""
+def get_current_price(ticker):
+    ticker = yf.Ticker(ticker)
+    todays_data = ticker.history(period='1d')
+    return todays_data['Close'].iloc[0]
 
 """
 get_stock_statistics Function:
@@ -95,3 +111,5 @@ if __name__ == "__main__":
         print(get_historical_data(*args))
     elif function_name == 'get_options_data' and len(args) == 1:
         print(json.dumps(get_options_data(*args)))
+    elif function_name == 'get_current_price' and len(args) == 1:
+        print(json.dumps(get_current_price(*args)))
