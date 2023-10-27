@@ -18,6 +18,20 @@ const executePythonScript = (scriptPath, args) => {
 };
 
 // Connector method to get stock statistics
+const getCurrentPrice = async (req, res) => {
+  console.log("Controller connected");
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_current_price",
+      ticker,
+    ]);
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+// Connector method to get stock statistics
 const getStockStatistics = async (req, res) => {
   console.log("Controller connected");
   const { ticker } = req.params;
@@ -31,7 +45,6 @@ const getStockStatistics = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
 // Connector method to get historical data
 const getHistoricalData = async (req, res) => {
   const { ticker } = req.params;
@@ -64,6 +77,7 @@ const getOptionsData = async (req, res) => {
 };
 
 module.exports = {
+  getCurrentPrice,
   getStockStatistics,
   getHistoricalData,
   getOptionsData,
