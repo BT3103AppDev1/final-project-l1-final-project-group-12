@@ -1,47 +1,35 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
-<template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+<template>   
+  <div class="topnav" :class="{ 'responsive': isResponsive }" id="myTopnav">
+    <!-- Logo -->
+    <div class="logo-container">
+       <router-link to="/" class="logo"><img src="./assets/logo/whiteLogo.png" alt="Logo"></router-link> 
     </div>
-  </header>
 
-  <main>
-    <TheWelcome />
-  </main>
+    <!-- Navigation links -->
+    <div class="nav-links">
+      <router-link to="/equities" :class="{ 'active': $route.path === '/equities' }"><b>Equities</b></router-link>
+      <router-link to="/portfolio" :class="{ 'active': $route.path === '/portfolio' }"><b>Portfolio</b></router-link>
+      <router-link to="/user" :class="{ 'active': $route.path === '/user' }"><b>User</b></router-link>      
+    </div>
+  </div>
+  <router-view/>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<script>
+export default {
+name: 'App',
+
+computed: {
+  currentRoute() {
+    return this.$route.path;
+  },
+},
+
+data() {
+  return {
+    isResponsive: false,
+  };
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+};
+</script>
