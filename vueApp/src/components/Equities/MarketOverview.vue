@@ -7,6 +7,10 @@
 </template>
 
 <style>
+h1 {
+  font-size: 3vw;
+}
+
 .market-overview {
   display: flex;
   justify-content: space-between;
@@ -21,7 +25,7 @@
   padding: 0.75%;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 120%;
+  font-size: 1.5vw;
   font-weight: bold;
 }
 </style>
