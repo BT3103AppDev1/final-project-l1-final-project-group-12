@@ -11,7 +11,7 @@ const {
 } = require("../../controllers/readDataController");
 
 // Endpoint to read user information
-router.get("/user/:userEmail", async (req, res) => {
+router.get("/userInfo/:userEmail", async (req, res) => {
   try {
     const data = await readUserInfo(req.params.userEmail);
     if (data) {
@@ -26,7 +26,7 @@ router.get("/user/:userEmail", async (req, res) => {
 });
 
 // Endpoint to read portfolio information
-router.get("/portfolio/:userEmail", async (req, res) => {
+router.get("/portfolioInfo/:userEmail", async (req, res) => {
   try {
     const data = await readPortfolioInfo(req.params.userEmail);
     if (data) {
@@ -40,7 +40,7 @@ router.get("/portfolio/:userEmail", async (req, res) => {
 });
 
 // Endpoint to read all trades of a user
-router.get("/trades/:userEmail", async (req, res) => {
+router.get("/allTrades/:userEmail", async (req, res) => {
   try {
     const data = await readAllTrades(req.params.userEmail);
     if (data) {
