@@ -12,6 +12,8 @@ const {
 const db = getFirestore(firebaseApp);
 
 async function readUserInfo(userEmail) {
+  console.log("This function is deprecated.");
+
   const userRef = doc(db, "users", userEmail);
   const userDoc = await getDoc(userRef);
   if (!userDoc.exists()) {
@@ -43,9 +45,9 @@ async function readAllTrades(userEmail) {
   return trades;
 }
 
-async function readSpecificTrade(userEmail, userId, ticker) {
+async function readSpecificTrade(userEmail, ticker) {
   const tradesId = `${userEmail}_trades`;
-  const tradeId = `${userId}_${ticker}`;
+  const tradeId = `${userEmail}_${ticker}`;
   const tradeRef = doc(db, "trades", tradesId, "trades", tradeId);
   const tradeDoc = await getDoc(tradeRef);
   if (!tradeDoc.exists()) {

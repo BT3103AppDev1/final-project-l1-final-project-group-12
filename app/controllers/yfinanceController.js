@@ -33,6 +33,8 @@ const getCurrentPrice = async (req, res) => {
 };
 // Connector method to get stock statistics
 const getStockStatistics = async (req, res) => {
+  console.log("This function is deprecated.");
+
   console.log("Controller connected");
   const { ticker } = req.params;
   try {

@@ -93,20 +93,21 @@ class Portfolio:
     def __repr__(self):
         return f"<Portfolio for user {self.user_id}>"
 
-    # Return class as a JSON
     def to_dict(self):
+        """Converts the Portfolio class instance into a dictionary."""
         return {
             'user_id': self.user_id,
-            'portfolioValue': self.portfolioValue,
+            'trades': [trade.to_dict() for trade in self.trades],
             'marketReturn': self.marketReturn,
             'rfRate': self.rfRate,
+            'portfolioValue': self.portfolioValue,
             'portfolioReturn': self.portfolioReturn,
             'stddev': self.stddev,
             'beta': self.beta,
             'alpha': self.alpha,
-            'sharpeRatio': self.sharpeRatio,
-            'trades': [trade.to_dict() for trade in self.trades]
+            'sharpeRatio': self.sharpeRatio
         }
 
     def to_json(self):
+        """Converts the Portfolio class instance into a JSON string."""
         return json.dumps(self.to_dict(), indent=4)

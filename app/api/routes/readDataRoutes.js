@@ -54,11 +54,10 @@ router.get("/allTrades/:userEmail", async (req, res) => {
 });
 
 // Endpoint to read a specific trade's details
-router.get("/trade/:userEmail/:userId/:ticker", async (req, res) => {
+router.get("/trade/:userEmail/:ticker", async (req, res) => {
   try {
     const data = await readSpecificTrade(
       req.params.userEmail,
-      req.params.userId,
       req.params.ticker
     );
     if (data) {
