@@ -130,7 +130,7 @@
   /* Toggle Switch */
   .toggleContainer {
      margin-left: 21%;
-     margin-top: 3%;  
+     margin-top: 9.3%;  
     position: absolute; 
     top: 0;   
   }

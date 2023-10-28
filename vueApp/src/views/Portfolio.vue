@@ -1,4 +1,6 @@
 <template>
+    <NavBar />
+
     <div class="app-container">
 
         <div class="title-button-container">
@@ -49,6 +51,10 @@
   import AddTrade from '@/components/Portfolio/AddTrade.vue'
   import PortfolioStatistics from '@/components/Portfolio/PortfolioStatistics.vue'
   import OptimisationTab from '@/components/Portfolio/OptimisationTab.vue'
+  import NavBar from '@/components/NavBar.vue'
+
+  import { getAuth } from 'firebase/auth'
+
 
   
   export default {
@@ -58,6 +64,7 @@
         AddTrade,
         PortfolioStatistics,
         OptimisationTab,
+        NavBar,
     },
 
     data() {
@@ -107,6 +114,8 @@
     },
 
     emits: ['slider-value-updated', "total-pl-updated"],
+
+    
     
   };
     

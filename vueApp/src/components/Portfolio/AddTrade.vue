@@ -5,9 +5,10 @@
         <form id="userForm">
             <h1 class="titleOfDiv">Add Trade</h1>
 
-            <input type="text" id="stock1" required="" placeholder="Stock name/code"> <br><br>    
-            <input type="number" id="quant1" required="" placeholder="Input Trade Quantity" v-model="tradeQuantity"> <br><br>   
-            <input type="number" id="buy1" required="" placeholder="Input Price Per Trade" v-model="pricePerTrade"> <br><br>
+            <!-- Add Coins Form -->
+            <input type="text" id="stock1" required="yes" placeholder="Stock name/code"> <br><br>    
+            <input type="number" id="quant1" required="yes" placeholder="Input Trade Quantity" v-model="tradeQuantity"> <br><br>   
+            <input type="number" id="buy1" required="yes" placeholder="Input Price Per Trade" v-model="pricePerTrade"> <br><br>
   
             <h2 id="tradecost">Total: SGD {{ tradeCost.toFixed(2) }}</h2>
 
