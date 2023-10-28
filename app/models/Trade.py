@@ -1,9 +1,8 @@
 # The Trades class is meant to model a row from the Trades table in Firestore
 
 class Trade:
-    def __init__(self, tradeKey, portfolioId, ticker, name, buyPrice, buyQty, beta):
+    def __init__(self, tradeKey, ticker, name, buyPrice, buyQty, beta):
         self.tradeKey = tradeKey
-        self.portfolioId = portfolioId
         self.ticker = ticker
         self.name = name
         self.buyPrice = buyPrice
@@ -26,3 +25,18 @@ class Trade:
 
     def getReturn(self, rfRate, marketReturn):
         return rfRate + (self.beta * marketReturn)
+
+    # Return class as a JSON
+
+    def to_dict(self):
+        return {
+            'tradeKey': self.tradeKey,
+            'ticker': self.ticker,
+            'name': self.name,
+            'buyPrice': self.buyPrice,
+            'buyQty': self.buyQty,
+            'beta': self.beta
+        }
+
+    def to_json(self):
+        return json.dumps(self.to_dict(), indent=4)

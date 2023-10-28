@@ -20,8 +20,8 @@ Requirements:
 
 #### Usage:
 
-```bash
-curl http://<your-server-url>/stockStatistics/AAPL
+```
+curl http://<your-server-url>/api/stockStatistics/AAPL
 ```
 
 ### 2. Get Historical Data
@@ -37,7 +37,7 @@ curl http://<your-server-url>/stockStatistics/AAPL
 #### Usage:
 
 ```
-curl http://<your-server-url>/historicalData/AAPL?period=1Y&interval=1d
+curl http://<your-server-url>/api/historicalData/AAPL?period=1Y&interval=1d
 ```
 
 3. Get Options Data
@@ -50,7 +50,7 @@ curl http://<your-server-url>/historicalData/AAPL?period=1Y&interval=1d
 #### Usage:
 
 ```
-curl http://<your-server-url>/optionsData/AAPL
+curl http://<your-server-url>/api/optionsData/AAPL
 ```
 
 4. Get Latest Stock Price
@@ -63,7 +63,62 @@ curl http://<your-server-url>/optionsData/AAPL
 #### Usage:
 
 ```
-curl http://<your-server-url>/curentPrice/AAPL
+curl http://<your-server-url>/api/curentPrice/AAPL
 ```
 
-## API Endpoints for Portfolio Calculations
+## API Endpoints for Reading Firestore Data
+
+1. Get User Information
+
+- Endpoint: `/userInfo/:userEmail`
+- Method: `GET`
+- URL Params: `userEmail` (**required**)
+- Example: `/userInfo/john.doe@example.com`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/read/user/john.doe@example.com
+```
+
+2. Get Portfolio Information
+
+- Endpoint: `/portfolioInfo/:userEmail`
+- Method: `GET`
+- URL Params: `userEmail`(**required**)
+- Example: `/portfolioInfo/john.doe@example.com`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/read/portfolio/john.doe@example.com
+```
+
+3. Get All Trades for a User
+
+- Endpoint: `/allTrades/:userEmail`
+- Method: `GET`
+- URL Params: `userEmail`(**required**)
+- Example: `/allTrades/john.doe@example.com`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/read/trades/john.doe@example.com
+```
+
+4. Get Specific Trade Details
+
+- Endpoint: `/trade/:userEmail/:userId/:ticker`
+- Method: `GET`
+- URL Params:
+  - `userEmail` (**required**)
+  - `userId` (**required**)
+  - `ticker` (**required**)
+- Example: `/trade/john.doe@example.com/12345/AAPL`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/read/trade/john.doe@example.com/1234/AAPL
+```

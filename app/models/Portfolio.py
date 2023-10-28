@@ -1,24 +1,5 @@
 import math
-"""
-    Initialisation:
-    - user_id (str): A unique identifier for the user.
-    - trades (list): A list of Trade objects representing individual trades in the portfolio.
-    - rfRate (float): The risk-free rate used in portfolio metric calculations.
-    - marketReturn (float): The expected market return used in portfolio metric calculations.
-
-    Public Attributes:
-    - user_id (str): A unique identifier for the user.
-    - trades (list): A list of Trade objects representing individual trades in the portfolio.
-    - marketReturn (float): The expected market return used in portfolio metric calculations.
-    - rfRate (float): The risk-free rate used in portfolio metric calculations.
-    - portfolioValue (float): The total value of the portfolio based on the sum of trade values.
-    - beta: The systematic risk of the portfolio
-    - alpha: The actual excess return of the portfolio benchmarked against the market
-    - sharpeRatio (float): The risk-adjusted return of the portfolio
-    
-    Public Methods:
-    - getMetrics(): Calculate and return a dictionary of portfolio metrics, including beta, alpha, and Sharpe ratio.
-"""
+import Trade
 
 
 class Portfolio:
@@ -37,11 +18,12 @@ class Portfolio:
 
         # Portfolio Alpha & Beta calculations
         self._portfolioWeights = self._weights()
-        self.beta = self._beta()
         __allReturns = self._allReturns()  # temp assignment
         self.portfolioReturn = sum(__allReturns)  # ACTUAL return of portfolio
+        self.stddev = self._stddev()
+        self.beta = self._beta()
         self.alpha = self.portfolioReturn - self._expectedReturn()
-        self.sharpeRatio = self._sharpeRatio(__allReturns)
+        self.sharpeRatio = self._sharpeRatio()
 
     # Private Methods
     def _weights(self):  # Captures the weightage of each stock in the portfolio
@@ -62,25 +44,68 @@ class Portfolio:
     def _expectedReturn(self):  # Returns expected return of the portfolio
         return self.rfRate + self.beta * self.marketReturn
 
-    def _sharpeRatio(self, __allReturns):
+    def _stddev(self, __allReturns):
+        return math.sqrt(sum((r - self.portfolioReturn) ** 2 for r in __allReturns) / len(__allReturns))
+
+    def _sharpeRatio(self):
         excessReturn = self.portfolioReturn - self.rfRate  # Excess Return of Portfolio
-        portfolioStdDev = math.sqrt(
-            sum((r - self.portfolioReturn) ** 2 for r in __allReturns) / len(__allReturns))
+        portfolioStdDev = self.stddev
         return float(excessReturn/portfolioStdDev)
 
     # Public Getter Methods
 
-    @property
-    def getMetrics(self):
-        '''
-        Parameters: NA
-        Result    : Returns a dictionary of beta, alpha, and sharpe ratio
-        '''
-        return {
-            'beta': self.beta,
-            'alpha': self.alpha,
-            'sharpe_ratio': self.sharpeRatio
-        }
+    def getAlpha(self):
+        return self.alpha
+
+    def getBeta(self):
+        return self.beta
+
+    def getSharpeRatio(self):
+        return self.sharpeRatio
+
+    def getReturn(self):
+        return self.portfolioReturn
+
+    def getMarketReturn(self):
+        return self.marketReturn
+
+    def getStdDev(self):
+        return self.stddev
+
+    def getVariance(self):
+        return (self.stddev)**2
+
+    def getRiskiestStock(self):
+        maxTicker = ""
+        maxBeta = 0
+
+        for eachTrade in self.trades:
+            if eachTrade.getBeta() > maxBeta:
+                maxBeta = eachTrade.getBeta()
+                maxTicker = eachTrade.getTicker()
+
+        return (maxTicker, maxBeta)
+
+    def getTrades(self):
+        return self.trades
 
     def __repr__(self):
         return f"<Portfolio for user {self.user_id}>"
+
+    # Return class as a JSON
+    def to_dict(self):
+        return {
+            'user_id': self.user_id,
+            'portfolioValue': self.portfolioValue,
+            'marketReturn': self.marketReturn,
+            'rfRate': self.rfRate,
+            'portfolioReturn': self.portfolioReturn,
+            'stddev': self.stddev,
+            'beta': self.beta,
+            'alpha': self.alpha,
+            'sharpeRatio': self.sharpeRatio,
+            'trades': [trade.to_dict() for trade in self.trades]
+        }
+
+    def to_json(self):
+        return json.dumps(self.to_dict(), indent=4)
