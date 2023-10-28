@@ -1,4 +1,6 @@
 # The Trades class is meant to model a row from the Trades table in Firestore
+import json
+
 
 class Trade:
     def __init__(self, tradeKey, ticker, name, buyPrice, buyQty, beta):

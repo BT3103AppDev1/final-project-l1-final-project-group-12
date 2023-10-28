@@ -1,9 +1,20 @@
-const firebase = require("../firebase");
+const firebaseApp = require("../firebase");
+const {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  query,
+  where,
+  getDocs,
+} = require("firebase/firestore");
+
+const db = getFirestore(firebaseApp);
 
 async function readUserInfo(userEmail) {
-  const userRef = firebase.firestore().collection("users").doc(userEmail);
-  const userDoc = await userRef.get();
-  if (!userDoc.exists) {
+  const userRef = doc(db, "users", userEmail);
+  const userDoc = await getDoc(userRef);
+  if (!userDoc.exists()) {
     console.log("No such user found!");
     return;
   }
@@ -12,12 +23,9 @@ async function readUserInfo(userEmail) {
 
 async function readPortfolioInfo(userEmail) {
   const portfolioId = `${userEmail}_portfolio`;
-  const portfolioRef = firebase
-    .firestore()
-    .collection("portfolios")
-    .doc(portfolioId);
-  const portfolioDoc = await portfolioRef.get();
-  if (!portfolioDoc.exists) {
+  const portfolioRef = doc(db, "portfolios", portfolioId);
+  const portfolioDoc = await getDoc(portfolioRef);
+  if (!portfolioDoc.exists()) {
     console.log("No such portfolio found!");
     return;
   }
@@ -26,12 +34,8 @@ async function readPortfolioInfo(userEmail) {
 
 async function readAllTrades(userEmail) {
   const tradesId = `${userEmail}_trades`;
-  const tradesRef = firebase
-    .firestore()
-    .collection("trades")
-    .doc(tradesId)
-    .collection("trades");
-  const tradesSnapshot = await tradesRef.get();
+  const tradesQuery = query(collection(db, "trades", tradesId, "trades"));
+  const tradesSnapshot = await getDocs(tradesQuery);
   const trades = [];
   tradesSnapshot.forEach((trade) => {
     trades.push({ id: trade.id, ...trade.data() });
@@ -42,14 +46,9 @@ async function readAllTrades(userEmail) {
 async function readSpecificTrade(userEmail, userId, ticker) {
   const tradesId = `${userEmail}_trades`;
   const tradeId = `${userId}_${ticker}`;
-  const tradeRef = firebase
-    .firestore()
-    .collection("trades")
-    .doc(tradesId)
-    .collection("trades")
-    .doc(tradeId);
-  const tradeDoc = await tradeRef.get();
-  if (!tradeDoc.exists) {
+  const tradeRef = doc(db, "trades", tradesId, "trades", tradeId);
+  const tradeDoc = await getDoc(tradeRef);
+  if (!tradeDoc.exists()) {
     console.log("No such trade found!");
     return;
   }

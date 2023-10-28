@@ -1,5 +1,6 @@
 import math
 import Trade
+import json
 
 
 class Portfolio:
