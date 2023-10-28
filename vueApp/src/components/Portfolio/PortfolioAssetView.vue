@@ -41,6 +41,8 @@
   <script>
   import { extractData } from '@/firebasefunc.js'
   import { COLLECTION_NAMES } from '@/firebaseConfig.js';
+  import firebaseApp from '@/firebase.js'
+  import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
   import PortfolioTable from '@/components/Portfolio/PortfolioTable.vue'
   import PieChart from '@/components/Portfolio/PortfolioPieChart.vue'
@@ -63,16 +65,23 @@
         refreshComp: 0,
         portfolioData: [],
         hasData: true,
+
+        userID: '',
       };
     },
 
-    created() {
-      this.fetchData(); // Fetch data when the component is created
+    async created() {
+      const auth = getAuth()
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          this.userID = user.uid;
+          this.fetchData()
+        } else {
+          console.error('User not authenticated')
+        }
+      })
     },
 
-    computed: {
-      
-    },
 
     methods: {
       
@@ -82,7 +91,7 @@
 
       async fetchData() {
           try {
-            this.portfolioData = await extractData(COLLECTION_NAMES.EQUITY_PORTFOLIO);
+            this.portfolioData = await extractData(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.userID);
             this.hasData = this.portfolioData.length > 0;
 
           } catch (error) {

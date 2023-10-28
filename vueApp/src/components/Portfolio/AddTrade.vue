@@ -18,8 +18,8 @@
         
 
         <div id = "profitContainer">
-            <h3>Total Profit SGD </h3>
-            <h1 id="totalProfit">${{ this.totalPL.toFixed(2) }}</h1>    <!-- TODO: Total up Profit--> 
+            <h3>Expected Return  </h3>
+            <h1 id="totalProfit">SGD$ {{ this.totalPL.toFixed(2) }}</h1>    <!-- TODO: Total up Profit--> 
         </div>
       
         
@@ -30,7 +30,7 @@
   import { addInstrument } from '@/firebasefunc.js';
   import { COLLECTION_NAMES } from '@/firebaseConfig.js';
   import firebaseApp from '@/firebase.js'
-  import { getAuth } from 'firebase/auth'
+  import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
   export default {
     data() {
@@ -46,11 +46,16 @@
     },
 
     async mounted() {
-        const auth = getAuth()
-        if (auth.currentUser) {
-        this.userID = auth.currentUser.uid
-        }
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                this.userID = user.uid;
+            } else {
+                this.userID = ''; // Ensure it's cleared when the user signs out
+            }
+        });
     },
+
 
     props: {
       totalPL: Number,

@@ -8,7 +8,7 @@
             <th>BuyPrice</th>
             <th>Price</th>
             <th>Quantity</th>
-            <th>P/L</th>
+            <th>Expected <br> Return</th>
             <th></th>
           </tr>
         </thead>
@@ -67,7 +67,7 @@
                 </button>
               </template>
               <!-- Display Delete button if not in editing state -->
-              <button v-if="!item.editing" @click="deleteItem(item.Stock)" class="btw">
+              <button v-if="!item.editing" @click="deleteItem(item)" class="btw">
                 <img src="@/assets/deleteIcon.png" alt="Delete" />
               </button>
             </td>
@@ -87,6 +87,8 @@
   <script>
   import { editInstrument, deleteInstrument } from '@/firebasefunc.js';
   import { COLLECTION_NAMES } from '@/firebaseConfig.js';
+  import firebaseApp from '@/firebase.js'
+  import { getAuth, onAuthStateChanged } from 'firebase/auth'
   
   export default {
     data() {
@@ -95,6 +97,17 @@
         updatedBuyPrice: 0,
         totalProfitLoss: 0,
       };
+    },
+
+    async mounted() {
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                this.userID = user.uid;
+            } else {
+                this.userID = ''; // Ensure it's cleared when the user signs out
+            }
+        });
     },
   
     props: {
@@ -121,10 +134,10 @@
           Buy_Price: this.updatedBuyPrice,
           Buy_Quantity: this.updatedBuyQuantity,
         };
-        await editInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, item.Stock, updatedData);
-  
-        item.editing = false;
+        await editInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.userID, item, updatedData);
+        
         this.$emit('refresh-request');
+        item.editing = false;
       },
   
       cancelEdit(index) {
@@ -138,7 +151,7 @@
       },
   
       async deleteItem(stock) {
-        await deleteInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, stock);
+        await deleteInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.userID, stock);
         
         this.$emit('refresh-request');
       },
@@ -206,7 +219,7 @@
     }
       
     #scrollable-table th {
-      padding-top: 2.2vw;
+      padding-top: 2vw;
       background-color: white;
     }
     

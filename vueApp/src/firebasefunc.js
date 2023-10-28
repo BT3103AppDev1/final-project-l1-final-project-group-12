@@ -4,9 +4,17 @@ import { doc, collection, setDoc,  getDocs, getDoc, deleteDoc, updateDoc } from 
 
 const db = getFirestore(firebaseApp);
 
-async function extractData(collectionName) {
+async function getStockDocRef(collectionName, userID, stock) {
+    const userDocRef = doc(db, collectionName, userID);
+    const stocksCollectionRef = collection(userDocRef, 'stocks');
+    const stockDocRef = doc(stocksCollectionRef, stock.Stock);
+    return stockDocRef;
+}
+
+async function extractData(collectionName, userID) {
     try {
-        const querySnapshot = await getDocs(collection(db, collectionName));
+        const userDocRef = doc(db, collectionName, userID);
+        const querySnapshot = await getDocs(collection(userDocRef, 'stocks'));
         const data = querySnapshot.docs.map(doc => doc.data());
         return data;
 
@@ -18,10 +26,7 @@ async function extractData(collectionName) {
 
 async function addInstrument(collectionName, userID, stock) {
     try {
-
-        const userDocRef = doc(db, collectionName, userID);
-        const stocksCollectionRef = collection(userDocRef, 'stocks');
-        const stockDocRef = doc(stocksCollectionRef, stock.Stock);
+        const stockDocRef = await getStockDocRef(collectionName, userID, stock);
         const individualStockSnapshot = await getDoc(stockDocRef);
        
         if (individualStockSnapshot.exists()) {
@@ -41,28 +46,6 @@ async function addInstrument(collectionName, userID, stock) {
             // Stock doesn't exist, add a new document
             await setDoc(stockDocRef, stock);
         }
-
-       /*  // Check if the stock exists in the database
-        const stockDocRef = doc(db, collectionName, stock.Stock);
-        const stockDocSnapshot = await getDoc(stockDocRef);
-
-        if (stockDocSnapshot.exists()) {
-            // Stock exists, update the quantity and price
-            const existingData = stockDocSnapshot.data();
-            const updatedQuantity = parseFloat(existingData.Buy_Quantity) + parseFloat(stock.Buy_Quantity);
-            const updatedPrice = (existingData.Buy_Price * existingData.Buy_Quantity + stock.Buy_Price * stock.Buy_Quantity) / updatedQuantity; // Calculate the new average price
-
-            // Update the document with the new data
-            await setDoc(stockDocRef, {
-                Stock: stock.Stock,
-                Code: stock.Stock,                  // TO BE EDITED: Show Ticker 
-                Buy_Price: updatedPrice,
-                Buy_Quantity: updatedQuantity
-            });
-        } else {
-            // Stock doesn't exist, add a new document
-            await setDoc(doc(db, collectionName, stock.Stock), stock);
-        } */
         
         alert("Saving your data for coin : " + stock.Stock);        //TODO: Show Popup window
     
@@ -73,10 +56,12 @@ async function addInstrument(collectionName, userID, stock) {
 }
 
 
-async function deleteInstrument(collectionName, stock) {
+async function deleteInstrument(collectionName, userID, stock) {
     try {
-        await deleteDoc(doc(db, collectionName, stock));
-        alert("Document successfully deleted!" + stock);
+        const stockDocRef = await getStockDocRef(collectionName, userID, stock);
+        console.log("Stock Doc Ref:", stockDocRef); // Log the stockDocRef
+        await deleteDoc(stockDocRef);
+        alert("Document successfully deleted " + stock.Stock);
         
     } catch (error) {
         console.error("Error deleting document:", error);
@@ -84,10 +69,17 @@ async function deleteInstrument(collectionName, stock) {
     }
 }
 
-async function editInstrument(collectionName, stock, updatedData) {
-    if (!isNaN(parseFloat(updatedData.Buy_Price)) && !isNaN(parseFloat(updatedData.Buy_Quantity)) && updatedData.Buy_Price > 0 && updatedData.Buy_Quantity > 0) {
+async function editInstrument(collectionName, userID, stock, updatedData) {
+    if (!isNaN(parseFloat(updatedData.Buy_Price)) && 
+        !isNaN(parseFloat(updatedData.Buy_Quantity)) && 
+        updatedData.Buy_Price > 0 && 
+        updatedData.Buy_Quantity > 0) {
+
         try {
-            const docRef = doc(db, collectionName, stock);
+            const userDocRef = doc(db, collectionName, userID);
+            const stocksCollectionRef = collection(userDocRef, 'stocks');
+            const docRef = doc(stocksCollectionRef, stock.Stock);
+
             await updateDoc(docRef, updatedData);
             alert("Document successfully updated!");
 
