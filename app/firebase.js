@@ -1,5 +1,5 @@
 // Keep credentials in .env file
-import { initializeApp } from "firebase/app";
+const { initializeApp } = require("firebase/app");
 require("dotenv").config();
 // ------------------------------ Firebase Config ------------------------------ //
 // Your web app's Firebase configuration
@@ -18,4 +18,4 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
-export default firebaseApp;
+module.exports = firebaseApp;

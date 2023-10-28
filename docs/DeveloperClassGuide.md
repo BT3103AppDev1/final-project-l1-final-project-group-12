@@ -11,7 +11,6 @@ Trade(tradeKey, portfolioId, ticker, name, buyPrice, buyQty, beta)
 ### Attributes:
 
 - **tradeKey**: A unique identifier for the trade.
-- **portfolioId**: Identifier linking to the portfolio.
 - **ticker**: Stock ticker symbol.
 - **name**: Name of the stock.
 - **buyPrice**: Price at which the stock was bought.
@@ -38,6 +37,8 @@ Portfolio(user_id, trades, rfRate, marketReturn)
 - **marketReturn** (float): The expected market return used in portfolio metric calculations.
 - **rfRate** (float): The risk-free rate used in portfolio metric calculations.
 - **portfolioValue** (float): The total value of the portfolio based on the sum of trade values.
+- **portfolioReturn** (float): The total portfolio return
+- **stddev** (float): The standard deviation of the portfolio
 - **beta**: The systematic risk of the portfolio
 - **alpha**: The actual excess return of the portfolio benchmarked against the market
 - **sharpeRatio** (float): The risk-adjusted return of the portfolio
@@ -45,7 +46,14 @@ Portfolio(user_id, trades, rfRate, marketReturn)
 
 ### Public Methods:
 
-- **getMetrics()**: Calculate and return a dictionary of portfolio metrics, including beta, alpha, and Sharpe ratio.
+- **getAlpha()**: Returns alpha.
+- **getBeta()**: Returns beta.
+- **getSharpeRatio()**: Returns the Sharpe ratio.
+- **getReturn()**: Returns the actual return of the portfolio.
+- **getMarketReturn()**: Returns the expected market return.
+- **getStdDev()**: Returns the standard deviation of the portfolio.
+- **getVariance()**: Returns the variance of the portfolio.
+- **getRiskiestStock()**: Returns a tuple of (maxBetaStock, maxBetaValue)
 
 ### Private Methods:
 
@@ -53,4 +61,5 @@ Portfolio(user_id, trades, rfRate, marketReturn)
 - **\_allReturns()**: Returns the returns of every trade in the portfolio.
 - **\_beta()**: Returns the beta of every trade in the portfolio.
 - **\_expectedReturn()**: Returns the expected return of the portfolio.
-- **\_sharpeRatio(\_\_allReturns)**: Calculates the Sharpe ratio of the portfolio given the returns of all trades.
+- **\_stddev(self, \_\_allReturns)**: Returns the std deviation of the portfolio
+- **\_sharpeRatio()**: Calculates the Sharpe ratio of the portfolio given the returns of all trades.
