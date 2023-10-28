@@ -29,6 +29,8 @@
   <script>
   import { addInstrument } from '@/firebasefunc.js';
   import { COLLECTION_NAMES } from '@/firebaseConfig.js';
+  import firebaseApp from '@/firebase.js'
+  import { getAuth } from 'firebase/auth'
 
   export default {
     data() {
@@ -37,7 +39,17 @@
         tradeQuantity: null,
         pricePerTrade: null,
         totalCost: 0,
+
+        // User info
+        userID: '',
       };
+    },
+
+    async mounted() {
+        const auth = getAuth()
+        if (auth.currentUser) {
+        this.userID = auth.currentUser.uid
+        }
     },
 
     props: {
@@ -78,7 +90,7 @@
                 Buy_Quantity: parseFloat(buyQuantity),
             };
 
-            await addInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, tradeData);
+            await addInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.userID, tradeData);
 
             // Reset placeholder
             document.getElementById('userForm').reset();

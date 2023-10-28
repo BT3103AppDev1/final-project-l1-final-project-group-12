@@ -16,9 +16,33 @@ async function extractData(collectionName) {
     }
 }
 
-async function addInstrument(collectionName, stock) {
+async function addInstrument(collectionName, userID, stock) {
     try {
-        // Check if the stock exists in the database
+
+        const userDocRef = doc(db, collectionName, userID);
+        const stocksCollectionRef = collection(userDocRef, 'stocks');
+        const stockDocRef = doc(stocksCollectionRef, stock.Stock);
+        const individualStockSnapshot = await getDoc(stockDocRef);
+       
+        if (individualStockSnapshot.exists()) {
+            // Stock exists, update the quantity and price
+            const existingData = individualStockSnapshot.data();
+            const updatedQuantity = parseFloat(existingData.Buy_Quantity) + parseFloat(stock.Buy_Quantity);
+            const updatedPrice = (existingData.Buy_Price * existingData.Buy_Quantity + stock.Buy_Price * stock.Buy_Quantity) / updatedQuantity; // Calculate the new average price
+
+            // Update the document with the new data
+            await setDoc(stockDocRef, {
+                Stock: stock.Stock,
+                Code: stock.Stock,                  // TO BE EDITED: Show Ticker 
+                Buy_Price: updatedPrice,
+                Buy_Quantity: updatedQuantity
+            });
+        } else {
+            // Stock doesn't exist, add a new document
+            await setDoc(stockDocRef, stock);
+        }
+
+       /*  // Check if the stock exists in the database
         const stockDocRef = doc(db, collectionName, stock.Stock);
         const stockDocSnapshot = await getDoc(stockDocRef);
 
@@ -38,7 +62,7 @@ async function addInstrument(collectionName, stock) {
         } else {
             // Stock doesn't exist, add a new document
             await setDoc(doc(db, collectionName, stock.Stock), stock);
-        }
+        } */
         
         alert("Saving your data for coin : " + stock.Stock);        //TODO: Show Popup window
     
