@@ -1,15 +1,17 @@
 # The Trades class is meant to model a row from the Trades table in Firestore
 import json
+import urllib
+import sys
 
 
 class Trade:
-    def __init__(self, tradeKey, ticker, name, buyPrice, buyQty, beta):
+    def __init__(self, tradeKey, ticker, buyPrice, buyQty):
         self.tradeKey = tradeKey
         self.ticker = ticker
-        self.name = name
+        self.name = self.getStockName()
         self.buyPrice = buyPrice
         self.buyQty = buyQty
-        self.beta = beta  # market levered beta
+        self.beta = self.getStockBeta()  # market levered beta
 
     def __repr__(self):
         return f"Trade({self.ticker}, Name: {self.name}, Beta: {self.beta}, Quantity: {self.buyQty}, Buy Price: ${self.buyPrice})"
@@ -28,8 +30,6 @@ class Trade:
     def getReturn(self, rfRate, marketReturn):
         return rfRate + (self.beta * marketReturn)
 
-    # Return class as a JSON
-
     def to_dict(self):
         return {
             'tradeKey': self.tradeKey,
@@ -37,8 +37,35 @@ class Trade:
             'name': self.name,
             'buyPrice': self.buyPrice,
             'buyQty': self.buyQty,
-            'beta': self.beta
+            'beta': self.beta,
         }
 
     def to_json(self):
+        """Converts the Portfolio class instance into a JSON string."""
         return json.dumps(self.to_dict(), indent=4)
+
+    def getStockName(self):
+        response = urllib.request.urlopen(
+            f'https://query2.finance.yahoo.com/v1/finance/search?q={self.ticker}')
+        content = response.read()
+        data = json.loads(content.decode('utf8'))['quotes'][0]['shortname']
+        return data
+
+    def getStockBeta(self, symbol):
+        response = urllib.request.urlopen(
+            f'https://api.newtonanalytics.com/stock-beta/?ticker={self.ticker}&index=^GSPC&interval=1mo​&observations=99999'
+        )
+        content = response.read()
+        data = json.loads(content.decode('utf8'))['data']
+        return data
+
+
+if __name__ == "__main__":
+    trade_data = json.loads(sys.argv[1])
+    trade = Trade(
+        trade_data['tradeKey'],
+        trade_data['ticker'],
+        trade_data['buyPrice'],
+        trade_data['buyQty']
+    )
+    print(trade.to_json())
