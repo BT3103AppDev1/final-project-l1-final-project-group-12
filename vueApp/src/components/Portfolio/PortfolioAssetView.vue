@@ -66,7 +66,7 @@
         portfolioData: [],
         hasData: true,
 
-        userID: '',
+        useremail: '',
       };
     },
 
@@ -74,7 +74,7 @@
       const auth = getAuth()
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          this.userID = user.uid;
+          this.useremail = user.email;
           this.fetchData()
         } else {
           console.error('User not authenticated')
@@ -91,7 +91,7 @@
 
       async fetchData() {
           try {
-            this.portfolioData = await extractData(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.userID);
+            this.portfolioData = await extractData(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.useremail);
             this.hasData = this.portfolioData.length > 0;
 
           } catch (error) {

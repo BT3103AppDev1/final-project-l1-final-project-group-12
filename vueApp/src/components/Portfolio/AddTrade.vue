@@ -41,7 +41,7 @@
         totalCost: 0,
 
         // User info
-        userID: '',
+        useremail: '',
       };
     },
 
@@ -49,9 +49,9 @@
         const auth = getAuth();
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                this.userID = user.uid;
+                this.useremail = user.email;
             } else {
-                this.userID = ''; // Ensure it's cleared when the user signs out
+                this.useremail = ''; // Ensure it's cleared when the user signs out
             }
         });
     },
@@ -95,7 +95,7 @@
                 Buy_Quantity: parseFloat(buyQuantity),
             };
 
-            await addInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.userID, tradeData);
+            await addInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.useremail, tradeData);
 
             // Reset placeholder
             document.getElementById('userForm').reset();

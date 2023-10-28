@@ -1,6 +1,6 @@
 
 export const COLLECTION_NAMES = {
-    EQUITY_PORTFOLIO: "EquityPortfolio",
+    EQUITY_PORTFOLIO: "Portfolio",
     WISHLIST: "Wishlist",
   };
   

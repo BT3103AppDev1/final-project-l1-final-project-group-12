@@ -103,9 +103,9 @@
         const auth = getAuth();
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                this.userID = user.uid;
+                this.useremail = user.email;
             } else {
-                this.userID = ''; // Ensure it's cleared when the user signs out
+                this.useremail = ''; // Ensure it's cleared when the user signs out
             }
         });
     },
@@ -134,7 +134,7 @@
           Buy_Price: this.updatedBuyPrice,
           Buy_Quantity: this.updatedBuyQuantity,
         };
-        await editInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.userID, item, updatedData);
+        await editInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.useremail, item, updatedData);
         
         this.$emit('refresh-request');
         item.editing = false;
@@ -151,7 +151,7 @@
       },
   
       async deleteItem(stock) {
-        await deleteInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.userID, stock);
+        await deleteInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.useremail, stock);
         
         this.$emit('refresh-request');
       },

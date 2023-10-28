@@ -4,16 +4,16 @@ import { doc, collection, setDoc,  getDocs, getDoc, deleteDoc, updateDoc } from 
 
 const db = getFirestore(firebaseApp);
 
-async function getStockDocRef(collectionName, userID, stock) {
-    const userDocRef = doc(db, collectionName, userID);
+async function getStockDocRef(collectionName, userEmail, stock) {
+    const userDocRef = doc(db, collectionName, `${userEmail}_${collectionName}` );
     const stocksCollectionRef = collection(userDocRef, 'stocks');
     const stockDocRef = doc(stocksCollectionRef, stock.Stock);
     return stockDocRef;
 }
 
-async function extractData(collectionName, userID) {
+async function extractData(collectionName, userEmail) {
     try {
-        const userDocRef = doc(db, collectionName, userID);
+        const userDocRef = doc(db, collectionName, `${userEmail}_${collectionName}`);
         const querySnapshot = await getDocs(collection(userDocRef, 'stocks'));
         const data = querySnapshot.docs.map(doc => doc.data());
         return data;
@@ -24,9 +24,9 @@ async function extractData(collectionName, userID) {
     }
 }
 
-async function addInstrument(collectionName, userID, stock) {
+async function addInstrument(collectionName, userEmail, stock) {
     try {
-        const stockDocRef = await getStockDocRef(collectionName, userID, stock);
+        const stockDocRef = await getStockDocRef(collectionName, userEmail, stock);
         const individualStockSnapshot = await getDoc(stockDocRef);
        
         if (individualStockSnapshot.exists()) {
@@ -56,9 +56,9 @@ async function addInstrument(collectionName, userID, stock) {
 }
 
 
-async function deleteInstrument(collectionName, userID, stock) {
+async function deleteInstrument(collectionName, userEmail, stock) {
     try {
-        const stockDocRef = await getStockDocRef(collectionName, userID, stock);
+        const stockDocRef = await getStockDocRef(collectionName, userEmail, stock);
         console.log("Stock Doc Ref:", stockDocRef); // Log the stockDocRef
         await deleteDoc(stockDocRef);
         alert("Document successfully deleted " + stock.Stock);
@@ -69,14 +69,14 @@ async function deleteInstrument(collectionName, userID, stock) {
     }
 }
 
-async function editInstrument(collectionName, userID, stock, updatedData) {
+async function editInstrument(collectionName, userEmail, stock, updatedData) {
     if (!isNaN(parseFloat(updatedData.Buy_Price)) && 
         !isNaN(parseFloat(updatedData.Buy_Quantity)) && 
         updatedData.Buy_Price > 0 && 
         updatedData.Buy_Quantity > 0) {
 
         try {
-            const userDocRef = doc(db, collectionName, userID);
+            const userDocRef = doc(db, collectionName, `${userEmail}_${collectionName}`);
             const stocksCollectionRef = collection(userDocRef, 'stocks');
             const docRef = doc(stocksCollectionRef, stock.Stock);
 
