@@ -1,6 +1,6 @@
 const firebaseApp = require("../firebase");
 const { getFirestore, doc, setDoc } = require("firebase/firestore");
-const { convertTradeData } = require("./changeStructureController"); // Import the function to convert JS object to Python Trade class
+const { convertTradeData } = require("./changeTradeStructureController"); // Import the function to convert JS object to Python Trade class
 const { readSpecificTrade } = require("./readDataController");
 
 const db = getFirestore(firebaseApp);
@@ -13,7 +13,7 @@ async function updateUserInfo(userEmail, userData) {
   console.log("User data updated or created!");
 }
 
-// Function to create portfolio information
+// Function to create portfolio information in firestore
 
 async function createPortfolio(userEmail) {
   const portfolioId = `${userEmail}_portfolio`;
