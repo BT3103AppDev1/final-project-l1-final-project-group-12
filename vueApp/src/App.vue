@@ -11,7 +11,7 @@
       <div class="nav-links">
         <router-link to="/equities" :class="{ 'active': $route.path === '/equities' }"><b>Equities</b></router-link>
         <router-link to="/portfolio" :class="{ 'active': $route.path === '/portfolio' }"><b>Portfolio</b></router-link>
-        <router-link to="/user" :class="{ 'active': $route.path === '/user' }">
+        <router-link to="/profile" :class="{ 'active': $route.path === '/profile' }">
           <b v-if="isLoggedIn">{{this.displayName}}</b>
           <b v-else>User</b>
         </router-link>

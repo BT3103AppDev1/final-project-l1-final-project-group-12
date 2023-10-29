@@ -5,6 +5,7 @@ import Portfolio from '@/views/Portfolio.vue'
 import Equities from '@/views/Equities.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
+import Profile from '@/views/Profile.vue'
 
 
 
@@ -39,6 +40,12 @@ const routes = [
         path: '/equities',
         name: 'Equities',
         component: Equities,
+        meta: { auth:true }
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: Profile,
         meta: { auth:true }
     }
 ]
