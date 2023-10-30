@@ -141,7 +141,7 @@ curl http://<your-server-url>/api/post/createPortfolio/john.doe@example.com
 This method uses both post and put because I am lazy. Live with it
 
 - Endpoint: `/update/updateTrade/:userEmail`
-- Method: `POST`
+- Method: `POST` and `Put`
 - URL Params:
   - `userEmail` (**required**)
 - Response Body Params:
@@ -149,16 +149,25 @@ This method uses both post and put because I am lazy. Live with it
   - `buyQty` (**required**)
   - `buyPrice` (**required**)
 
+#### Usage:
+
+```
+curl http://<your-server-url>/api/update/updateTrade/john.doe@example.com
+```
+
 ### 3. Update all Portfolio Data
 
-- Endpoint: `/update/setPortfolio/:userEmail`
+This function is used to update the portfolio data to its latest metrics.
+Ideally, it should be used after setting a trade or updating a trade
+
+- Endpoint: `/update/updatePortfolio/:userEmail`
 - Method: `GET`
 - URL Params: `userEmail` (**required**)
 
 #### Usage:
 
 ```
-curl http://<your-server-url>/api/get/getPortfolioData/john.doe@example.com
+curl http://<your-server-url>/api/update/updatePortfolio/john.doe@example.com
 ```
 
 ## API Endpoints for Deleting a trade from the portfolio
@@ -175,4 +184,25 @@ curl http://<your-server-url>/api/get/getPortfolioData/john.doe@example.com
 
 ```
 curl http://<your-server-url>/api/delete/trade/john.doe@example.com/AAPL
+```
+
+## API Endpoints for optimising the portfolio
+
+### 1. Delete Trade
+
+- Endpoint: `/optimise/:userEmail/:objectiveForUpdate`
+- Method: `POST`
+- URL Params:
+  - `userEmail` (**required**)
+  - `objectiveForUpdate` (**required**)
+    - alpha
+    - beta
+    - balance
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/optimise/john.doe@example.com/alpha
+curl http://<your-server-url>/api/optimise/john.doe@example.com/beta
+curl http://<your-server-url>/api/optimise/john.doe@example.com/balance
 ```

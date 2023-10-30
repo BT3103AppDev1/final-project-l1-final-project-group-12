@@ -4,7 +4,7 @@ const {
   updateUserInfo,
   createPortfolio,
   updateTrade,
-  setPortfolio,
+  updatePortfolio,
 } = require("../../controllers/createDataController");
 
 // Route to update user information
@@ -67,11 +67,11 @@ router.put("/updateTrade/:userEmail", async (req, res) => {
 });
 
 // Route to update the portfolio after setting trades
-router.put("/setPortfolio/:userEmail", async (req, res) => {
+router.put("/updatePortfolio/:userEmail", async (req, res) => {
   try {
     const { userEmail } = req.params;
 
-    await setPortfolio(userEmail);
+    await updatePortfolio(userEmail);
 
     res.status(200).json({
       success: true,

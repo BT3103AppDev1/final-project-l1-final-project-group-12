@@ -2,7 +2,6 @@ const { execSync } = require("child_process");
 const path = require("path");
 
 function convertTradeData(tradeData) {
-  console.log(tradeData);
   // Convert the JavaScript object to a JSON string
   const tradeDataString = JSON.stringify(tradeData);
 
