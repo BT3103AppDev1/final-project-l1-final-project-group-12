@@ -9,7 +9,7 @@
         placeholder="Search by company name/code"
       />
       <button type="button" class="add-button"  @click="savetofs()">
-        <img src="@/assets/star.png" alt="" class="star-icon" />
+        <img src="@/assets/starIcon.png" alt="" class="star-icon" />
         <span class="add-text">Add</span>
       </button>
     </form>
