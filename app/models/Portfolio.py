@@ -95,13 +95,13 @@ class Portfolio:
 
     # Public Methods to compute optimisation
     def optimiseForMaxAlpha(self):
-        return maximiseAlphaMethod(self)
+        return Portfolio.maximiseAlphaMethod(self)
 
     def optimiseForMinBeta(self):
-        return minimiseBetaMethod(self)
+        return Portfolio.minimiseBetaMethod(self)
 
     def optimiseforBestBalance(self):
-        return maximiseSharpeMethod(self)
+        return Portfolio.maximiseSharpeMethod(self)
     # Private Helper Methods
 
     def __riskFreeRate(self):
@@ -145,6 +145,7 @@ class Portfolio:
         return json.dumps(self.to_dict(), indent=4)
 
     # Optimisation Methods to be hidden
+    @staticmethod
     def maximiseAlphaMethod(portfolio):
         # Extract relevant data from portfolio using provided methods
         trades = portfolio.getTrades()
@@ -156,7 +157,7 @@ class Portfolio:
         total_value = portfolio.portfolioValue
 
         # Define optimization variables
-        weights = cp.Variable(n)
+        weights = cp.Variable(n, nonneg=True)
 
         # Calculate portfolio expected return and alpha
         port_return = cp.sum(weights * returns)
@@ -164,9 +165,8 @@ class Portfolio:
             cp.sum(weights * betas) * portfolio.getMarketReturn()
         port_alpha = port_return - expected_port_return
 
-        # Constraints
-        constraints = [cp.sum(weights) == 1, cp.sum(
-            weights * values) == total_value]
+        # Adjusted constraints
+        constraints = [cp.sum(weights * values) <= total_value]
 
         # Optimization problem
         problem = cp.Problem(cp.Maximize(port_alpha), constraints)
@@ -177,18 +177,28 @@ class Portfolio:
         # Extract optimized weights
         optimized_weights = weights.value
 
+        if optimized_weights is None:
+            return portfolio
+
         # Adjust the trade quantities to reflect the optimized weights using provided methods
         adjusted_trades = []
         for i, trade in enumerate(trades):
             adjusted_qty = (
                 optimized_weights[i] * total_value) / trade.buyPrice
-            adjusted_trade = Trade(trade.tradeKey, trade.getTicker(
-            ), trade.name, trade.buyPrice, adjusted_qty, trade.getBeta())
+            adjusted_trade = Trade(
+                trade.tradeKey, trade.getTicker(), trade.buyPrice, adjusted_qty)
             adjusted_trades.append(adjusted_trade)
 
         # Return a new Portfolio instance with the adjusted trades
-        return Portfolio(portfolio.user_id, adjusted_trades, portfolio.rfRate, portfolio.getMarketReturn())
+        newPortfolio = Portfolio(portfolio.user_id, adjusted_trades)
 
+        if (newPortfolio.getAlpha() > portfolio.getAlpha()):
+            return newPortfolio
+        elif (newPortfolio.getAlpha() == portfolio.getAlpha() and newPortfolio.getBeta() < portfolio.getBeta()):
+            return newPortfolio
+        return portfolio
+
+    @staticmethod
     def maximiseSharpeMethod(portfolio):
 
         # Extract relevant data from portfolio using provided methods
@@ -200,7 +210,7 @@ class Portfolio:
         total_value = portfolio.portfolioValue
 
         # Define optimization variables
-        weights = cp.Variable(n)
+        weights = cp.Variable(n, nonneg=True)
 
         # Calculate portfolio expected return and variance
         port_return = cp.sum(weights * returns)
@@ -218,7 +228,9 @@ class Portfolio:
             weights * values) == total_value]
 
         # Optimization problem
-        problem = cp.Problem(cp.Maximize(sharpe_ratio), constraints)
+        sharpe_ratio_squared = (
+            port_return - portfolio.rfRate)**2 / port_variance
+        problem = cp.Problem(cp.Maximize(sharpe_ratio_squared), constraints)
 
         # Solve the problem
         problem.solve()
@@ -226,6 +238,8 @@ class Portfolio:
         # Extract optimized weights
         optimized_weights = weights.value
 
+        if optimized_weights is None:
+            return portfolio
         # Adjust the trade quantities to reflect the optimized weights using provided methods
         adjusted_trades = []
         for i, trade in enumerate(trades):
@@ -236,8 +250,13 @@ class Portfolio:
             adjusted_trades.append(adjusted_trade)
 
         # Return a new Portfolio instance with the adjusted trades
-        return Portfolio(portfolio.user_id, adjusted_trades, portfolio.rfRate, portfolio.getMarketReturn())
+        newPortfolio = Portfolio(portfolio.user_id, adjusted_trades)
 
+        if (newPortfolio.getSharpeRatio() > portfolio.getSharpeRatio()):
+            return newPortfolio
+        return portfolio
+
+    @staticmethod
     def minimiseBetaMethod(portfolio):
         # Extract relevant data from portfolio using provided methods
         trades = portfolio.getTrades()
@@ -247,14 +266,13 @@ class Portfolio:
         total_value = portfolio.portfolioValue
 
         # Define optimization variables
-        weights = cp.Variable(n)
+        weights = cp.Variable(n, nonneg=True)
 
         # Calculate portfolio beta
         port_beta = cp.sum(weights * betas)
 
-        # Constraints
-        constraints = [cp.sum(weights) == 1, cp.sum(
-            weights * values) == total_value]
+        # Adjusted constraints
+        constraints = [cp.sum(weights * values) <= total_value]
 
         # Optimization problem
         problem = cp.Problem(cp.Minimize(port_beta), constraints)
@@ -265,6 +283,9 @@ class Portfolio:
         # Extract optimized weights
         optimized_weights = weights.value
 
+        if optimized_weights is None:
+            return portfolio
+
         # Adjust the trade quantities to reflect the optimized weights using provided methods
         adjusted_trades = []
         for i, trade in enumerate(trades):
@@ -274,15 +295,44 @@ class Portfolio:
             ), trade.name, trade.buyPrice, adjusted_qty, trade.getBeta())
             adjusted_trades.append(adjusted_trade)
 
+        newPortfolio = Portfolio(portfolio.user_id, adjusted_trades)
         # Return a new Portfolio instance with the adjusted trades
-        return Portfolio(portfolio.user_id, adjusted_trades, portfolio.rfRate, portfolio.getMarketReturn())
+        if (newPortfolio.getBeta() < portfolio.getBeta()):
+            return newPortfolio
+        elif (newPortfolio.getBeta() == portfolio.getBeta() and newPortfolio.getAlpha() > portfolio.getAlpha()):
+            return newPortfolio
+        return portfolio
 
 
 if __name__ == "__main__":
     userOldPortfolioData = json.loads(sys.argv[1])
-    user_id = userOldPortfolioData["userId"]
-    trades = [Trade(trade['id'], trade['ticker'], trade['buyPrice'],
-                    trade['buyQty']) for trade in userOldPortfolioData["allTradesData"]]
+    objectiveOfUpdate = sys.argv[2]
 
-    portfolio = Portfolio(user_id, trades)
-    print(portfolio.to_json())
+    if (objectiveOfUpdate == "alpha"):
+        user_id = userOldPortfolioData["userId"]
+        trades = [Trade(trade['id'], trade['ticker'], trade['buyPrice'],
+                        trade['buyQty']) for trade in userOldPortfolioData["allTradesData"]]
+
+        portfolio = Portfolio(user_id, trades).optimiseForMaxAlpha()
+        print(portfolio.to_json())
+    elif (objectiveOfUpdate == "beta"):
+        user_id = userOldPortfolioData["userId"]
+        trades = [Trade(trade['id'], trade['ticker'], trade['buyPrice'],
+                        trade['buyQty']) for trade in userOldPortfolioData["allTradesData"]]
+
+        portfolio = Portfolio(user_id, trades).optimiseForMinBeta()
+        print(portfolio.to_json())
+    elif (objectiveOfUpdate == "balance"):
+        user_id = userOldPortfolioData["userId"]
+        trades = [Trade(trade['id'], trade['ticker'], trade['buyPrice'],
+                        trade['buyQty']) for trade in userOldPortfolioData["allTradesData"]]
+
+        portfolio = Portfolio(user_id, trades).optimiseforBestBalance()
+        print(portfolio.to_json())
+    else:
+        user_id = userOldPortfolioData["userId"]
+        trades = [Trade(trade['id'], trade['ticker'], trade['buyPrice'],
+                        trade['buyQty']) for trade in userOldPortfolioData["allTradesData"]]
+
+        portfolio = Portfolio(user_id, trades)
+        print(portfolio.to_json())

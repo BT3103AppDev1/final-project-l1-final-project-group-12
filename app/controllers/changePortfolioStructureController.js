@@ -1,7 +1,11 @@
 const { execSync } = require("child_process");
 const path = require("path");
 
-async function updatePortfolioData(oldPortfolioData, allTradesData) {
+async function updatePortfolioData(
+  oldPortfolioData,
+  allTradesData,
+  objectiveOfUpdate
+) {
   const data = {
     alpha: oldPortfolioData.alpha,
     beta: oldPortfolioData.beta,
@@ -23,16 +27,10 @@ async function updatePortfolioData(oldPortfolioData, allTradesData) {
   const pythonScriptPath = path.join(__dirname, "..", "models", "Portfolio.py");
 
   // Command to run the Python script with the user email data
-  const command = `python ${pythonScriptPath} ${escapeDataString}`;
+  const command = `python ${pythonScriptPath} ${escapeDataString} ${objectiveOfUpdate}`;
 
   // Execute the Python script and get the output
   const output = execSync(command).toString();
-
-  // Parse the output JSON string to a JavaScript object and return
-  const lines = output.split("\n");
-  const jsonLine = lines.find((line) => line.trim().startsWith("{"));
-
-  console.log(output);
 
   return JSON.parse(output);
 }
