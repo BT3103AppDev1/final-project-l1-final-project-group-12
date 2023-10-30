@@ -1,7 +1,7 @@
 <template>
     <Navigation/>
     <div id="bigLogo">
-      <img src="../assets/logo/logo.png">
+      <img src="@/assets/logo/logo.png">
     </div>
 
     <div id="information1">
@@ -24,7 +24,6 @@
 
     <div id="information3">
         <img src="../assets/logo/riskMeter.png" alt="riskMeter">
-
       <div id="info4Container">
         <h2 id="info4">Portfolio risks are calculated automatically</h2>
       </div>
