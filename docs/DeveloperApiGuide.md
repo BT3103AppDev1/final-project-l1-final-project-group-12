@@ -185,3 +185,24 @@ curl http://<your-server-url>/api/update/updatePortfolio/john.doe@example.com
 ```
 curl http://<your-server-url>/api/delete/trade/john.doe@example.com/AAPL
 ```
+
+## API Endpoints for optimising the portfolio
+
+### 1. Delete Trade
+
+- Endpoint: `/optimise/:userEmail/:objectiveForUpdate`
+- Method: `POST`
+- URL Params:
+  - `userEmail` (**required**)
+  - `objectiveForUpdate` (**required**)
+    - alpha
+    - beta
+    - balance
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/optimise/john.doe@example.com/alpha
+curl http://<your-server-url>/api/optimise/john.doe@example.com/beta
+curl http://<your-server-url>/api/optimise/john.doe@example.com/balance
+```

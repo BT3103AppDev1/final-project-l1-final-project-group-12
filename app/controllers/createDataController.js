@@ -105,10 +105,9 @@ async function updatePortfolio(userEmail) {
   // Update the portfolio data by giving old data and the updated trades data
   const updatedFields = await updatePortfolioData(
     oldPortfolioData,
-    allTradesData
+    allTradesData,
+    "update"
   );
-
-  console.log(updatedFields);
 
   const portfolioData = {
     alpha: updatedFields.alpha,
@@ -123,7 +122,6 @@ async function updatePortfolio(userEmail) {
     userId: userEmail,
     variance: updatedFields.variance,
   };
-  console.log(portfolioData);
   const portfolioId = `${userEmail}_portfolio`;
   const portfolioRef = doc(db, "portfolios", portfolioId);
   await setDoc(portfolioRef, portfolioData); //  overwrite the document

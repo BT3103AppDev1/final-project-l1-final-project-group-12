@@ -15,6 +15,7 @@ const yfinanceRoutes = require("./routes/yfinanceRoutes");
 const readDataRoutes = require("./routes/readDataRoutes");
 const updateDataRoutes = require("./routes/updateDataRoutes");
 const deleteDataRoutes = require("./routes/deleteDataRoutes");
+const optimiseDataRoutes = require("./routes/optimiseDataRoutes");
 
 // Use the routes with a prefix (if you desire)
 
@@ -22,6 +23,7 @@ app.use("/api/yfinance", yfinanceRoutes);
 app.use("/api/read", readDataRoutes);
 app.use("/api/update", updateDataRoutes);
 app.use("/api/delete", deleteDataRoutes);
+app.use("/api/optimise", optimiseDataRoutes);
 
 //... Your other server configurations ...
 
