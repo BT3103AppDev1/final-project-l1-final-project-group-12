@@ -1,4 +1,5 @@
 <template>
+  <div>
     <NavBar />
 
     <div class="app-container">
@@ -42,7 +43,7 @@
     </div>
 
   </div>
-
+</div>
 </template>
   
 
@@ -53,7 +54,8 @@
   import OptimisationTab from '@/components/Portfolio/OptimisationTab.vue'
   import NavBar from '@/components/NavBar.vue'
 
-  import { getAuth } from 'firebase/auth'
+  import { getAuth, onAuthStateChanged } from 'firebase/auth'
+  import axios from 'axios';
 
 
   
@@ -75,7 +77,21 @@
         selectedTabIndex: 1,
         sliderValue: 0,
         totalPL: 0,
+
+        useremail: '',
       };
+    },
+
+    async mounted() {
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                this.useremail = user.email;
+                this.checkAndCreatePortfolio();
+            } else {
+                this.useremail = ''; // Ensure it's cleared when the user signs out
+            }
+        });
     },
 
     computed: {
@@ -111,6 +127,28 @@
         this.totalPL = totalPL;
         this.$emit('total-pl-updated', totalPL);
       },
+
+      async checkAndCreatePortfolio() {
+        const apiReadPortfolioUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}`;
+        const apiCreatePortfolioUrl = `http://localhost:3000/api/update/createPortfolio/${this.useremail}`;
+        
+        try {
+            const existingPortfolio = await axios.get(apiReadPortfolioUrl);
+             if (!existingPortfolio.data) { // Check if the portfolio doesn't exist
+              try {
+                console.log(apiCreatePortfolioUrl)
+                await axios.post(apiCreatePortfolioUrl);
+                // Now that you've created the portfolio, you can proceed to load other data or perform other actions if needed.
+              } catch (error) {
+                alert('Error: ' + error.response.data);
+              }
+            } 
+              
+        } catch (error) {
+            alert('Error: ' + error.response.data);
+        }
+      },
+
     },
 
     emits: ['slider-value-updated', "total-pl-updated"],

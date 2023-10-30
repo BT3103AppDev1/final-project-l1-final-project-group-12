@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div class="toggleContainer">
 
       <!-- Toggle Switch -->
@@ -34,7 +35,7 @@
         @refresh-request="fetchData"
       />
 
-     
+    </div>
     </template>
   
   

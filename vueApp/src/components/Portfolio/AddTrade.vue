@@ -6,7 +6,7 @@
             <h1 class="titleOfDiv">Add Trade</h1>
 
             <!-- Add Coins Form -->
-            <input type="text" id="stock1" required="yes" placeholder="Stock name/code"> <br><br>    
+            <input type="text" id="ticker1" required="yes" placeholder="ticker name/code"> <br><br>    
             <input type="number" id="quant1" required="yes" placeholder="Input Trade Quantity" v-model="tradeQuantity"> <br><br>   
             <input type="number" id="buy1" required="yes" placeholder="Input Price Per Trade" v-model="pricePerTrade"> <br><br>
   
@@ -31,11 +31,12 @@
   import { COLLECTION_NAMES } from '@/firebaseConfig.js';
   import firebaseApp from '@/firebase.js'
   import { getAuth, onAuthStateChanged } from 'firebase/auth'
+  import axios from 'axios';
 
   export default {
     data() {
       return {
-        stockName: '',
+        tickerName: '',
         tradeQuantity: null,
         pricePerTrade: null,
         totalCost: 0,
@@ -74,28 +75,38 @@
         async savetofs() {
             console.log(this.totalPL)
             // Get input from placeholder
-            let stock = document.getElementById("stock1").value
+            let ticker = document.getElementById("ticker1").value
             let buyPrice = document.getElementById("buy1").value
             let buyQuantity = document.getElementById("quant1").value
 
             //Define valid input
-            if (isNaN(parseFloat(buyPrice)) || isNaN(parseFloat(buyQuantity)) ) {   //TODO: ADD CONTRAINT FOR INVALID STOCK
+            if (isNaN(parseFloat(buyPrice)) || isNaN(parseFloat(buyQuantity)) ) {   //TODO: ADD CONTRAINT FOR INVALID ticker
                 alert("Buy Price or Buy Quantity must be valid numbers.");          //TODO: Add PopUp Window
                 return;
-            } else if (stock.trim() === "" || buyPrice.trim() === "" || buyQuantity.trim() === "") {
+            } else if (ticker.trim() === "" || buyPrice.trim() === "" || buyQuantity.trim() === "") {
                 alert("All fields must be filled out.");
                 return;
             }      
 
             // Add Trade
             const tradeData = {
-                Stock: stock,
-                Code: stock,                            // TO BE EDITED
-                Buy_Price: parseFloat(buyPrice),
-                Buy_Quantity: parseFloat(buyQuantity),
+                ticker: ticker,                          // TO BE EDITED
+                buyQty: parseFloat(buyQuantity),
+                buyPrice: parseFloat(buyPrice),
             };
 
-            await addInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.useremail, tradeData);
+            const apiUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
+            console.log(apiUrl)
+            try {
+                // Make a POST request to updateTrade endpoint
+                await axios.put(apiUrl, tradeData);
+            
+            } catch (error) {
+                alert('Error: ' + error.response.data);
+            
+            }
+
+            //await addInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.useremail, tradeData);
 
             // Reset placeholder
             document.getElementById('userForm').reset();
