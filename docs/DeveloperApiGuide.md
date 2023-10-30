@@ -126,7 +126,7 @@ curl http://<your-server-url>/api/read/trade/john.doe@example.com/AAPL
 
 ### 1. Create a portfolio on user creation
 
-- Endpoint: `/post/createPortfolio/:userEmail`
+- Endpoint: `/update/createPortfolio/:userEmail`
 - Method: `POST`
 - URL Params: `userEmail` (**required**)
 
@@ -140,17 +140,18 @@ curl http://<your-server-url>/api/post/createPortfolio/john.doe@example.com
 
 This method uses both post and put because I am lazy. Live with it
 
-- Endpoint: `/post/updateTrade/:userEmail/:ticker/:buyQty/:buyPrice`
+- Endpoint: `/update/updateTrade/:userEmail`
 - Method: `POST`
 - URL Params:
   - `userEmail` (**required**)
+- Response Body Params:
   - `ticker` (**required**)
   - `buyQty` (**required**)
   - `buyPrice` (**required**)
 
-### 3. Get ALL Portfolio Data
+### 3. Update all Portfolio Data
 
-- Endpoint: `/get/getPortfolioData/:userEmail`
+- Endpoint: `/update/setPortfolio/:userEmail`
 - Method: `GET`
 - URL Params: `userEmail` (**required**)
 

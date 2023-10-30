@@ -1,7 +1,14 @@
 const firebaseApp = require("../firebase");
 const { getFirestore, doc, setDoc } = require("firebase/firestore");
 const { convertTradeData } = require("./changeTradeStructureController"); // Import the function to convert JS object to Python Trade class
-const { readSpecificTrade } = require("./readDataController");
+const {
+  readSpecificTrade,
+  readAllTrades,
+  readPortfolioInfo,
+} = require("./readDataController");
+const {
+  convertPortfolioData,
+} = require("./changePortfolioStructureController");
 
 const db = getFirestore(firebaseApp);
 
@@ -36,14 +43,19 @@ async function createPortfolio(userEmail) {
 
   await setDoc(portfolioRef, portfolioData);
   console.log("Portfolio data updated or created!");
+
+  // Create a document in the 'trades' collection
+  const tradesId = `${userEmail}_trades`;
+  const tradesRef = doc(db, "trades", tradesId);
+  await setDoc(tradesRef, {}); // or add whatever initial data you want for this doc
+  console.log("Trades data updated or created!");
 }
 
-// Function to create or update trades
+// Function to create or update trades, and then update the portfolio when trades are set
 async function updateTrade(userEmail, ticker, buyQty, buyPrice) {
   const tradesId = `${userEmail}_trades`;
   const tradeId = `${userEmail}_${ticker}`;
   const tradeRef = doc(db, "trades", tradesId, "trades", tradeId);
-
   let existingTradeData = await readSpecificTrade(userEmail, ticker);
   let updatedBuyQty = buyQty;
   let updatedBuyPrice = buyPrice;
@@ -79,10 +91,37 @@ async function updateTrade(userEmail, ticker, buyQty, buyPrice) {
   console.log("Trade data updated or created!");
 }
 
-module.exports = { updateTrade };
+async function setPortfolio(userEmail) {
+  // Get the new Trades Data
+  allTradesData = readAllTrades(userEmail);
 
+  // Get the old Portfolio data
+  const oldPortfolioData = readPortfolioInfo(userEmail);
+
+  // Update the portfolio data by giving old data and the updated trades data
+  const updatedFields = updatePortfolioData(oldPortfolioData, allTradesData);
+
+  const portfolioData = {
+    alpha: updatedFields[alpha],
+    beta: updatedFields[beta],
+    marketReturn: updatedFields[marketReturn],
+    portfolioReturn: updatedFields[portfolioReturn],
+    portfolioValue: updatedFields[portfolioValue],
+    rfRate: updatedFields[rfRate],
+    sharpeRatio: updatedFields[sharpeRatio],
+    stdDev: updatedFields[stdDev],
+    trades: `/trades/${userEmail}_trades`,
+    userId: userEmail,
+    variance: updatedFields[variance],
+  };
+
+  const portfolioId = `${userEmail}_portfolio`;
+  const portfolioRef = doc(db, "portfolios", portfolioId);
+  await setDoc(portfolioRef, portfolioData); //  overwrite the document
+}
 module.exports = {
   updateUserInfo,
   createPortfolio,
   updateTrade,
+  setPortfolio,
 };
