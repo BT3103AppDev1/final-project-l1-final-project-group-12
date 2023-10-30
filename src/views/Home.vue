@@ -1,4 +1,5 @@
 <template>
+    <Navigation/>
     <div id="bigLogo">
       <img src="../assets/logo/logo.png">
     </div>
@@ -30,6 +31,17 @@
       
     </div>
 </template>
+
+<script>
+import Navigation from '@/components/Navigation.vue';
+
+export default {
+  name: 'Home',
+  components: {
+    Navigation
+  }
+}
+</script>
 
 <style scoped>
 #bigLogo {
