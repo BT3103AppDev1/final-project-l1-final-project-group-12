@@ -3,6 +3,7 @@ import json
 import urllib
 import urllib.request
 import sys
+import time
 from urllib.parse import urlencode
 
 
@@ -47,11 +48,23 @@ class Trade:
         return json.dumps(self.to_dict(), indent=4)
 
     def getStockName(self):
-        response = urllib.request.urlopen(
-            f'https://query2.finance.yahoo.com/v1/finance/search?q={self.ticker}')
-        content = response.read()
-        data = json.loads(content.decode('utf8'))['quotes'][0]['shortname']
-        return data
+        max_retries = 5
+        retries = 0
+
+        while retries < max_retries:
+            try:
+                response = urllib.request.urlopen(
+                    f'https://query2.finance.yahoo.com/v1/finance/search?q={self.ticker}')
+                content = response.read()
+                data = json.loads(content.decode('utf8'))[
+                    'quotes'][0]['shortname']
+                return data
+            except Exception as e:
+                time.sleep(5)  # wait for 5 seconds before retrying
+                retries += 1
+
+        # If the loop completes without a successful return
+        raise Exception("Failed to get stock name after maximum retries.")
 
     def getStockBeta(self):
         ticker = self.ticker
