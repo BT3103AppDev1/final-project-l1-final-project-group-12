@@ -1,19 +1,15 @@
 const { execSync } = require("child_process");
 const path = require("path");
 
-function updatePortfolioData(oldPortfolioData, allTradesData) {
-  const data = {
-    ...oldPortfolioData,
-    allTradesData: allTradesData,
-  };
+function convertTradeData(tradeData) {
+  // Convert the JavaScript object to a JSON string
+  const tradeDataString = JSON.stringify(tradeData);
 
-  const dataString = JSON.stringify(data);
+  // Path to the Trade.py file
+  const pythonScriptPath = path.join(__dirname, "..", "models", "Trade.py");
 
-  // Path to the Portfolio.py file
-  const pythonScriptPath = path.join(__dirname, "..", "models", "Portfolio.py");
-
-  // Command to run the Python script with the user email data
-  const command = `python ${pythonScriptPath} "${dataString}"`;
+  // Command to run the Python script with the trade data
+  const command = `python ${pythonScriptPath} "${tradeDataString}"`;
 
   // Execute the Python script and get the output
   const output = execSync(command).toString();
@@ -22,4 +18,4 @@ function updatePortfolioData(oldPortfolioData, allTradesData) {
   return JSON.parse(output);
 }
 
-module.exports = { updatePortfolioData };
+module.exports = { convertTradeData };

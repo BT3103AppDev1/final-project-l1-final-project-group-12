@@ -54,9 +54,6 @@ Portfolio(user_id, trades, rfRate, marketReturn)
 - **getStdDev()**: Returns the standard deviation of the portfolio.
 - **getVariance()**: Returns the variance of the portfolio.
 - **getRiskiestStock()**: Returns a tuple of (maxBetaStock, maxBetaValue)
-- **optimiseForMaxAlpha()**: Optimises the Alpha
-- **optimiseForMinBeta()**: Optimises the Beta to be as low as possible
-- **optimiseforBestBalance()**: Optimises the Portfoli to be balanced
 
 ### Private Methods:
 
@@ -64,7 +61,5 @@ Portfolio(user_id, trades, rfRate, marketReturn)
 - **\_allReturns()**: Returns the returns of every trade in the portfolio.
 - **\_beta()**: Returns the beta of every trade in the portfolio.
 - **\_expectedReturn()**: Returns the expected return of the portfolio.
-- **\_stddev(\_\_allReturns)**: Returns the std deviation of the portfolio
+- **\_stddev(self, \_\_allReturns)**: Returns the std deviation of the portfolio
 - **\_sharpeRatio()**: Calculates the Sharpe ratio of the portfolio given the returns of all trades.
-- **\_\_riskFreeRate():**: Gets risk free rate of the TNX
-- **\_\_marketReturn()**: Gets market return of the SPY, the default benchmark

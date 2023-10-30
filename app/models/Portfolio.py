@@ -1,14 +1,10 @@
 import math
 import Trade
 import json
-import yfinance as yf
-from app.services.maxAlpha import maximiseAlphaMethod
-from app.services.maxBalance import maximiseSharpeMethod
-from app.services.minBeta import minimiseBetaMethod
 
 
 class Portfolio:
-    def __init__(self, user_id, trades):
+    def __init__(self, user_id, trades, rfRate, marketReturn):
         # Assert that every item in the equities list is an instance of Trade class
         if not all(isinstance(trade, Trade) for trade in trades):
             raise ValueError(
@@ -16,10 +12,10 @@ class Portfolio:
 
         self.user_id = user_id
         self.trades = trades
-        self.rfRate = self.__riskFreeRate()
-        self.marketReturn = self.__marketReturn()
+        self.marketReturn = marketReturn
+        self.rfRate = rfRate
         self.portfolioValue = sum([eachTrade.getTradeValue()
-                                  for eachTrade in trades])  # Actual value, used to capture weight
+                                  for eachTrade in trades])
 
         # Portfolio Alpha & Beta calculations
         self._portfolioWeights = self._weights()
@@ -47,7 +43,7 @@ class Portfolio:
                     for eachTrade in self.trades])
 
     def _expectedReturn(self):  # Returns expected return of the portfolio
-        return self.rfRate + self.beta * (self.marketReturn - self.rfRate)
+        return self.rfRate + self.beta * self.marketReturn
 
     def _stddev(self, __allReturns):
         return math.sqrt(sum((r - self.portfolioReturn) ** 2 for r in __allReturns) / len(__allReturns))
@@ -94,34 +90,6 @@ class Portfolio:
     def getTrades(self):
         return self.trades
 
-    # Public Methods to compute optimisation
-    def optimiseForMaxAlpha(self):
-        return maximiseAlphaMethod(self)
-
-    def optimiseForMinBeta(self):
-        return minimiseBetaMethod(self)
-
-    def optimiseforBestBalance(self):
-        return minimiseBetaMethod(self)
-    # Private Helper Methods
-
-    def __riskFreeRate(self):
-        tnx = yf.Ticker("^TNX")
-        riskFreeRate = tnx.history(period="1y")['Close'].iloc[-1]
-        return riskFreeRate
-
-    def __marketReturn(self):
-        # Fetch the data for S&P 500 for the last year
-        sp500 = yf.Ticker("^GSPC")
-        data = sp500.history(period="1y")
-
-        # Calculate the annual return
-        start_price = data['Close'].iloc[0]
-        end_price = data['Close'].iloc[-1]
-        marketReturn = (end_price - start_price) / start_price
-
-        return marketReturn
-
     def __repr__(self):
         return f"<Portfolio for user {self.user_id}>"
 
@@ -143,13 +111,3 @@ class Portfolio:
     def to_json(self):
         """Converts the Portfolio class instance into a JSON string."""
         return json.dumps(self.to_dict(), indent=4)
-
-
-if __name__ == "__main__":
-    userOldPortfolioData = json.loads(sys.argv[1])
-    user_id = userOldPortfolioData['userId']
-    trades = [Trade(trade['tradeKey'], trade['ticker'], trade['buyPrice'],
-                    trade['buyQty']) for trade in userOldPortfolioData['allTradesData']]
-
-    portfolio = Portfolio(user_id, trades)
-    print(portfolio.to_json())

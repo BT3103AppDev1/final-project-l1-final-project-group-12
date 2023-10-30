@@ -14,7 +14,7 @@ from app.models.Trade import Trade
 from app.models.Portfolio import Portfolio
 
 
-def maximiseSharpeMethod(portfolio):
+def maximize_sharpe_ratio(portfolio):
 
     # Extract relevant data from portfolio using provided methods
     trades = portfolio.getTrades()

@@ -15,7 +15,7 @@ from app.models.Trade import Trade
 from app.models.Portfolio import Portfolio
 
 
-def maximiseAlphaMethod(portfolio):
+def maximize_alpha(portfolio):
     # Extract relevant data from portfolio using provided methods
     trades = portfolio.getTrades()
     n = len(trades)

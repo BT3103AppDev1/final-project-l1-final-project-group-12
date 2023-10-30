@@ -1,9 +1,7 @@
 # The Trades class is meant to model a row from the Trades table in Firestore
 import json
 import urllib
-import urllib.request
 import sys
-from urllib.parse import urlencode
 
 
 class Trade:
@@ -30,7 +28,7 @@ class Trade:
         return self.beta
 
     def getReturn(self, rfRate, marketReturn):
-        return rfRate + (self.beta * marketReturn - rfRate)
+        return rfRate + (self.beta * marketReturn)
 
     def to_dict(self):
         return {
@@ -53,21 +51,10 @@ class Trade:
         data = json.loads(content.decode('utf8'))['quotes'][0]['shortname']
         return data
 
-    def getStockBeta(self):
-        ticker = self.ticker
-        ticker = self.ticker.replace('\u200b', '')
-        params = {
-            'ticker': ticker,
-            'index': '^GSPC',
-            'interval': '1mo',
-            'observations': '99999'
-        }
-
-        # Construct the full URL
-        base_url = 'https://api.newtonanalytics.com/stock-beta/'
-        full_url = base_url + '?' + urlencode(params)
-
-        response = urllib.request.urlopen(full_url)
+    def getStockBeta(self, symbol):
+        response = urllib.request.urlopen(
+            f'https://api.newtonanalytics.com/stock-beta/?ticker={self.ticker}&index=^GSPC&interval=1mo​&observations=99999'
+        )
         content = response.read()
         data = json.loads(content.decode('utf8'))['data']
         return data
