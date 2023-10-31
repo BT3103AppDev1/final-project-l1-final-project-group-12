@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- Show searched stock name on indiv stock page -->
+    <!-- Show searched stock name on indiv -->
     <search-results-content :searchTerm="$route.params.searchTerm" />
     
   </div>
