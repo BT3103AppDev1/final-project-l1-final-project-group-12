@@ -188,7 +188,7 @@ curl http://<your-server-url>/api/delete/trade/john.doe@example.com/AAPL
 
 ## API Endpoints for optimising the portfolio
 
-### 1. Delete Trade
+### 1. Optimise Trade
 
 - Endpoint: `/optimise/:userEmail/:objectiveForUpdate`
 - Method: `POST`
@@ -205,4 +205,33 @@ curl http://<your-server-url>/api/delete/trade/john.doe@example.com/AAPL
 curl http://<your-server-url>/api/optimise/john.doe@example.com/alpha
 curl http://<your-server-url>/api/optimise/john.doe@example.com/beta
 curl http://<your-server-url>/api/optimise/john.doe@example.com/balance
+```
+
+## API Endpoints for Watchlist
+
+### 1. Read the watchlist
+
+- Endpoint: `/watch/read/:userEmail`
+- Method: `GET`
+- URL Params:
+  - `userEmail` (**required**)
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/watch/read/john.doe@example.com
+```
+
+### 2. Add a stock to the watchlist
+
+- Endpoint: `/watch/add/:userEmail/:ticker`
+- Method: `POST`
+- URL Params:
+  - `userEmail` (**required**)
+  - `ticker` (**required**)
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/watch/add/john.doe@example.com/AAPL
 ```

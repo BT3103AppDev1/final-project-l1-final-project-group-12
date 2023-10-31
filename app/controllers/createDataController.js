@@ -126,6 +126,7 @@ async function updatePortfolio(userEmail) {
   const portfolioRef = doc(db, "portfolios", portfolioId);
   await setDoc(portfolioRef, portfolioData); //  overwrite the document
 }
+
 module.exports = {
   updateUserInfo,
   createPortfolio,
