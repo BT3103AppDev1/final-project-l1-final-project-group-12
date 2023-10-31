@@ -96,7 +96,7 @@
             };
 
             const apiUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
-            console.log(apiUrl)
+
             try {
                 // Make a POST request to updateTrade endpoint
                 await axios.put(apiUrl, tradeData);

@@ -81,6 +81,9 @@
         if (user) {
           this.useremail = user.email;
           this.fetchData()
+            .then(() => {
+              this.getStockPrice()
+            });
         } else {
           console.error('User not authenticated')
         }
@@ -96,6 +99,7 @@
 
       async refresh() {
         this.fetchData();
+        
         this.$emit('refresh-request');
       },
 
@@ -104,7 +108,7 @@
             const apiUrl = `http://localhost:3000/api/read/allTrades/${this.useremail}`;
             const querySnapshot = await axios.get(apiUrl);
             this.portfolioData = querySnapshot.data;
-            this.getStockPrice();
+            //this.getStockPrice();
 
             this.hasData = this.portfolioData.length > 0;
 
@@ -114,7 +118,9 @@
       }, 
 
       async getStockPrice() {   
+        console.log("fetching stock price")
         this.fetchingStockPrice = true;
+
         for (const item of this.portfolioData) {
             const apiUrl = `http://localhost:3000/api/yfinance/curentPrice/${item.ticker}`;
             const response = await axios.get(apiUrl);

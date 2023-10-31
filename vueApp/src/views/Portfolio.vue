@@ -111,7 +111,7 @@
 
       updateSelectedTabIndex(index) {
       this.selectedTabIndex = index; // Update selectedTabIndex in the parent component
-      this.change()
+      //this.change()
     },
           
       toggleStatistics() {
@@ -168,7 +168,7 @@
       async updateStatistics() {
         try {
           const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`;
-          console.log(apiUrl)
+          
           await axios.put(apiUrl);
           
 
