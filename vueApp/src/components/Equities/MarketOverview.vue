@@ -1,10 +1,20 @@
 <template>
   <div class="market-overview">
     <h1>Market Overview</h1>
-    <button class="view-watchlist-button">View Watchlist</button>
+    <button class="view-watchlist-button" @click="goToWatchlist()">View Watchlist</button>
   </div>
   <br />
 </template>
+
+<script>
+export default {
+  methods: {
+    goToWatchlist() {
+      this.$router.push({ name: 'Watchlist' });
+    }
+  }
+}
+</script>
 
 <style>
 h1 {
