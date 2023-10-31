@@ -145,12 +145,19 @@ export default {
         buyQty: this.updatedBuyQuantity,
       };
       
-      const apiUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
-      this.deleteItem(item.ticker);
-      console.log(updatedData)                    //TODO: edit
-      await axios.put(apiUrl, updatedData);
+      const apiAddUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
+      const apiDeleteUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${item.ticker}`;
       
-      this.$emit('refresh-request');
+      axios.delete(apiDeleteUrl).then(() => {
+        axios.put(apiAddUrl, updatedData).then(() => {
+          this.$emit('refresh-request');
+     
+          });
+      })
+
+      // Update the data in the Vue component
+      item.buyPrice = this.updatedBuyPrice;
+      item.buyQty = this.updatedBuyQuantity;
       item.editing = false;
     },
 

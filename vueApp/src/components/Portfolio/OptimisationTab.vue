@@ -49,7 +49,7 @@ import axios from 'axios';
               this.useremail = user.email;
 
           } else {
-              this.useremail = ''; // Ensure it's cleared when the user signs out
+              this.useremail = ''; 
           }
       });
     },

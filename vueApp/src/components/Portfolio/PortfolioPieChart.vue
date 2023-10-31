@@ -74,7 +74,7 @@ export default {
     initializeChartData() {
       this.portfolioData.forEach((item) => {
         const stock = item.name;
-        const buyPrice = parseFloat(item.buyPrice * this.getSuggestedQty(item.buyQty, stock));
+        const buyPrice = parseFloat(item.buyPrice * item.buyQty);
         this.series.push(buyPrice);
         this.chartOptions.labels.push(stock);
       });

@@ -27,6 +27,7 @@ async function readPortfolioInfo(userEmail) {
   const portfolioId = `${userEmail}_portfolio`;
   const portfolioRef = doc(db, "portfolios", portfolioId);
   const portfolioDoc = await getDoc(portfolioRef);
+
   if (!portfolioDoc.exists()) {
     console.log("No such portfolio found!");
     return;

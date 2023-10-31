@@ -132,7 +132,6 @@
 
 
       async SuggestedQty(tabIndex) {            //TODO: PUT OPTIMIZED QTY HERE
-        console.log(apiURL)
         let objective = "";
 
         if (this.selectedTabIndex == 2) {

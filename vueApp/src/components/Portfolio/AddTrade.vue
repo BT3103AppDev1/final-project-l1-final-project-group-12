@@ -19,7 +19,7 @@
 
         <div id = "profitContainer">
             <h3>Expected Return  </h3>
-            <h1 id="totalProfit">SGD$ {{ this.totalPL.toFixed(2) }}</h1>    <!-- TODO: Total up Profit--> 
+            <h1 id="totalProfit">SGD$ {{ this.totalPL.toFixed(2) }}</h1>     
         </div>
       
         
@@ -73,7 +73,7 @@
         
         // Save to Firebase
         async savetofs() {
-            console.log(this.totalPL)
+
             // Get input from placeholder
             let ticker = document.getElementById("ticker1").value
             let buyPrice = document.getElementById("buy1").value
@@ -89,8 +89,10 @@
             }      
 
             // Add Trade
+            alert('Adding... Please wait.');               //TODO: Add pop up window
+
             const tradeData = {
-                ticker: ticker,                          // TO BE EDITED
+                ticker: ticker,                          
                 buyQty: parseFloat(buyQuantity),
                 buyPrice: parseFloat(buyPrice),
             };
