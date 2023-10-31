@@ -16,7 +16,7 @@
       <tbody>
         <tr v-for="(item, index) in portfolioData" :key="item.ticker">
           <td>{{ index + 1 }}</td>
-          <td>{{ item.ticker }}</td>
+          <td>{{ item.name }}</td>
                                                     <!-- TODO: Add ticker -->
           <!-- Buy Price -->
           <td>
@@ -30,7 +30,7 @@
             </template>
           </td>
 
-          <td>{{ getStockPrice(item.ticker) }}</td>        <!-- TODO: Update Price -->
+          <td>{{ parseFloat(this.stockPrices[item.ticker]).toFixed(2) }}</td>        <!-- TODO: Update Price -->
 
           <!-- Buy Quantity -->
           <td>
@@ -100,11 +100,14 @@ export default {
     };
   },
 
+  
+
   async mounted() {
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
           if (user) {
               this.useremail = user.email;
+
           } else {
               this.useremail = ''; // Ensure it's cleared when the user signs out
           }
@@ -114,14 +117,14 @@ export default {
   props: {
     SuggestedQty: Function,
     portfolioData: Array,
+    stockPrices: Object,
     hasData: Boolean,
   },
-
 
   methods: {
     editItem(index) {
       const item = this.portfolioData[index];
-
+      
       item.editing = true;
       this.updatedBuyQuantity = item.buyQty;
       this.updatedBuyPrice = item.buyPrice;
@@ -163,12 +166,7 @@ export default {
       this.$emit('refresh-request');
     },
 
-    getStockPrice(ticker) {
-      const apiUrl = `http://localhost:3000/api/yfinance/curentPrice/${ticker}`;
-      //const price = axios.get(apiUrl);      //ERROR
-      //console.log(price)
-      return ticker; 
-    },
+    
 
     emitTotalPL() {
       this.$emit('total-pl-updated', this.totalPL);
@@ -178,20 +176,21 @@ export default {
 
   computed: {
     calculateProfitLoss() {
-    return (item) => {
-      return (item.buyQty * item.buyPrice) - (item.buyQty * 0);   //TODO: update price
-    };
+      return (item) => {
+        return (item.buyQty * this.stockPrices[item.ticker]) - (item.buyQty * item.buyPrice);   //TODO: update price
+      };
     },
     totalPL() {
       return this.portfolioData.reduce((total, item) => {
         return total + this.calculateProfitLoss(item);
       }, 0);
     },
+
   },
 
   watch: {
-totalPL: 'emitTotalPL',
-},
+    totalPL: 'emitTotalPL',
+  },
 
 };
 </script>

@@ -22,6 +22,7 @@
         :SuggestedQty="SuggestedQty"
         :key="refreshComp"
         :portfolioData="portfolioData"
+        :stockPrices="stockPrices"
         :hasData="hasData"
         @refresh-request="fetchData"
         @total-pl-updated="emitTotalPL"
@@ -66,6 +67,7 @@
         isChecked: false,
         refreshComp: 0,
         portfolioData: [],
+        stockPrices: {},
         hasData: true,
 
         useremail: '',
@@ -96,6 +98,7 @@
             const apiUrl = `http://localhost:3000/api/read/allTrades/${this.useremail}`;
             const querySnapshot = await axios.get(apiUrl);
             this.portfolioData = querySnapshot.data;
+            this.getStockPrice();
 
             this.hasData = this.portfolioData.length > 0;
 
@@ -103,6 +106,17 @@
             console.error("Error fetching data:", error);
           }
       }, 
+
+      async getStockPrice() {   
+        for (const item of this.portfolioData) {
+            const apiUrl = `http://localhost:3000/api/yfinance/curentPrice/${item.ticker}`;
+            const response = await axios.get(apiUrl);
+            const price = response.data;
+            this.stockPrices[item.ticker] = price;          
+        };
+
+      },
+
 
       SuggestedQty(qty, stock) {            //TODO: PUT OPTIMIZED QTY HERE
           if (this.selectedTabIndex == 1) {

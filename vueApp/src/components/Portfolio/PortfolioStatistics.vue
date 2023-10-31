@@ -94,7 +94,7 @@ export default {
         try {
           const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`;
           console.log(apiUrl)
-       //   const querySnapshot = await axios.put(apiUrl);
+          const querySnapshot = await axios.put(apiUrl);
        //   this.test = querySnapshot.data;
         //  console.log(this.test);
 
