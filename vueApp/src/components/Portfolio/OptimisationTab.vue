@@ -1,4 +1,5 @@
 <template>
+
     <button
             v-for="(tab, index) in buttons"
             :key="index"
@@ -10,64 +11,79 @@
             <span class="Optimisation-tab-line">{{ tab.split(' ')[1] }}</span>
     </button>
 
-    <!-- Optimisation Slider For Customize Risk -->
-    <div v-if="showOptimisationSlider" class="right-icon">
-        <OptimisationSlider 
-          :showPopup="showOptimisationSlider" 
-          @slider-value-updated="updateSliderValue" 
-          @closePopup="showOptimisationSlider = false" />
-    </div>
-
 
 </template>
 
 <script>
-    import OptimisationSlider from '@/components/Portfolio/OptimisationSliderPopup.vue'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import axios from 'axios';
 
-    const TABS = [
+  const TABS = [
   "Current Portfolio",
   "Maximize Returns",
   "Minimize Risk",
-  "Balance Portfolio",
-  "Customize Risk",
+  "Balance Portfolio"
   ];
 
 
     export default {
         name: 'App',
         components: {
-            OptimisationSlider
+
         },
-        emits: ['update-selected-tab-index', 'slider-value-updated'],
+        
 
         data() {
       return {
         buttons: TABS,
         selectedButton: TABS[0],
         selectedTabIndex: 1,
-        showOptimisationSlider: false,
+        useremail: '',
       };
     },
+
+    async mounted() {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+          if (user) {
+              this.useremail = user.email;
+
+          } else {
+              this.useremail = ''; // Ensure it's cleared when the user signs out
+          }
+      });
+    },
+
     methods: {
       selectButton(index) {
         this.selectedButton = this.buttons[index];
         this.selectedTabIndex = index + 1;
-        
-        if (index === 4) {
-          this.showOptimisationSlider = true;
-          
-        } else {
-          this.showOptimisationSlider = false;
-          
-        }
+        this.SuggestedQty(this.selectedTabIndex);
         this.$emit('update-selected-tab-index', this.selectedTabIndex);
       },
 
-    updateSliderValue(sliderValue) {
-        this.$emit('slider-value-updated', sliderValue);
-    },
+      async SuggestedQty(selectedTabIndex) {            //TODO: PUT OPTIMIZED QTY HERE
+        let objective = "";
+
+        if (this.selectedTabIndex == 2) {
+          objective = "alpha";
+        
+        } else if (this.selectedTabIndex == 3) {
+          objective = "beta";
+
+        } else{
+          objective = "balance";
+        }
+
+        const apiUrl = `http://localhost:3000/api/optimise/${this.useremail}/${objective}`;
+        console.log(apiUrl)
+        const response = await axios.post(apiUrl);
+        console.log(response)
+          
+      },
 
     },
+    emits: ['update-selected-tab-index'],
 }
 
 

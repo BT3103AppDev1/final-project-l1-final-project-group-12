@@ -30,7 +30,11 @@
             </template>
           </td>
 
-          <td>{{ parseFloat(this.stockPrices[item.ticker]).toFixed(2) }}</td>        <!-- TODO: Update Price -->
+          <!-- Stock Price -->
+          <td>
+            <template v-if="fetchingStockPrice">Loading..</template>
+            <template v-else>{{ parseFloat(this.stockPrices[item.ticker]).toFixed(2) }}</template>
+          </td>        
 
           <!-- Buy Quantity -->
           <td>
@@ -40,14 +44,15 @@
             </template>
             <!-- Display Buy Quantity if not in editing state -->
             <template v-else>
-              {{ SuggestedQty(item.buyQty, item.name) }}
+              {{ item.buyQty }}
             </template>
           </td>
 
 
           <!-- P/L -->
           <td>
-            {{ calculateProfitLoss(item).toFixed(2) }}
+            <template v-if="fetchingStockPrice">Loading..</template>
+            <template v-else>{{ calculateProfitLoss(item).toFixed(2) }}</template>
           </td>
 
 
@@ -119,6 +124,7 @@ export default {
     portfolioData: Array,
     stockPrices: Object,
     hasData: Boolean,
+    fetchingStockPrice: Boolean,
   },
 
   methods: {

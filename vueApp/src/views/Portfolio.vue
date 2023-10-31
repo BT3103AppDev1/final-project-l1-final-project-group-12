@@ -14,7 +14,7 @@
         <div class="Optimisation-container">
           <OptimisationTab 
             @update-selected-tab-index="updateSelectedTabIndex" 
-            @slider-value-updated="handleSliderValue"/>
+          />
         </div>
 
 
@@ -22,8 +22,7 @@
     <div v-if="!showStatistics" class="portfolioDisplay">
         <div class="table">
             <PortfolioAssetView 
-              :selectedTabIndex="selectedTabIndex" 
-              :sliderValue="sliderValue" 
+              :selectedTabIndex="selectedTabIndex"  
               :key="refreshComp" 
               @total-pl-updated = "emitTotalPL"/>
         </div>
@@ -57,8 +56,6 @@
   import { getAuth, onAuthStateChanged } from 'firebase/auth'
   import axios from 'axios';
 
-
-  
   export default {
     name: 'App',
     components: {
@@ -75,7 +72,6 @@
         refreshComp: 0,
         showStatistics: false,
         selectedTabIndex: 1,
-        sliderValue: 0,
         totalPL: 0,
 
         useremail: '',
@@ -118,10 +114,6 @@
         this.showStatistics = !this.showStatistics;
         },
 
-      handleSliderValue(sliderValue) {
-        this.sliderValue = sliderValue;
-        console.log('Slider value received:', sliderValue);
-      },
 
       emitTotalPL(totalPL) {
         this.totalPL = totalPL;
@@ -149,9 +141,29 @@
           } 
       },
 
+      async SuggestedQty() {            //TODO: PUT OPTIMIZED QTY HERE
+        console.log(apiURL)
+        let objective = "";
+
+        if (this.selectedTabIndex == 2) {
+          objective = "alpha";
+        
+        } else if (this.selectedTabIndex == 3) {
+          objective = "beta";
+
+        } else{
+          objective = "balance";
+        }
+        const apiUrl = `http://localhost:3000/api/optimise/${this.useremail}/${objective}`;
+        
+        const response = await axios.post(apiUrl);
+        console.log(response)
+          
+      },
+
     },
 
-    emits: ['slider-value-updated', "total-pl-updated"],
+    emits: ["total-pl-updated"],
 
     
     

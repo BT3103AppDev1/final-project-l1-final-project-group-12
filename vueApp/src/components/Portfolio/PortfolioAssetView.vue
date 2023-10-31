@@ -24,6 +24,7 @@
         :portfolioData="portfolioData"
         :stockPrices="stockPrices"
         :hasData="hasData"
+        :fetchingStockPrice="fetchingStockPrice"
         @refresh-request="fetchData"
         @total-pl-updated="emitTotalPL"
       />
@@ -59,7 +60,6 @@
 
     props: {
       selectedTabIndex: Number,
-      sliderValue: Number,
     },
 
     data() {
@@ -69,6 +69,7 @@
         portfolioData: [],
         stockPrices: {},
         hasData: true,
+        fetchingStockPrice: true,
 
         useremail: '',
       };
@@ -108,35 +109,37 @@
       }, 
 
       async getStockPrice() {   
+        this.fetchingStockPrice = true;
         for (const item of this.portfolioData) {
             const apiUrl = `http://localhost:3000/api/yfinance/curentPrice/${item.ticker}`;
             const response = await axios.get(apiUrl);
             const price = response.data;
+
             this.stockPrices[item.ticker] = price;          
         };
+        this.fetchingStockPrice = false;
 
       },
 
 
-      SuggestedQty(qty, stock) {            //TODO: PUT OPTIMIZED QTY HERE
-          if (this.selectedTabIndex == 1) {
-            return parseFloat(qty) * this.selectedTabIndex;
+      async SuggestedQty(tabIndex) {            //TODO: PUT OPTIMIZED QTY HERE
+        console.log(apiURL)
+        let objective = "";
 
-          } else if (this.selectedTabIndex == 2) {
-            return {};
+        if (this.selectedTabIndex == 2) {
+          objective = "alpha";
+        
+        } else if (this.selectedTabIndex == 3) {
+          objective = "beta";
+
+        } else{
+          objective = "balance";
+        }
+        const apiUrl = `http://localhost:3000/api/optimise/${this.useremail}/${objective}`;
+        
+        const response = await axios.post(apiUrl);
+        console.log(response)
           
-          } else if (this.selectedTabIndex == 3) {
-            return {};
-
-          } else if (this.selectedTabIndex == 4) {
-            return {};
-
-          } else {
-            console.log(this.sliderValue)
-
-            return {};
-
-          }
       },
 
       emitTotalPL(totalPL) {

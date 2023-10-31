@@ -2,25 +2,12 @@
 
   <div class="statistics-table">
       
-      <!-- Button -->
-      <div class="time-view-button">
-      <button
-        v-for="button in buttons"
-        :key="button"
-        class="top-button"
-        :class="{ active: selectedButton === button }"
-        @click="selectButton(button)"
-      >
-        {{ button }}
-      </button>
-    </div>
-
     <!-- Content -->
     <div class="statistics-content">
       <div class="column" v-for="(column, columnIndex) in columns" :key="columnIndex">
         <div class="row" v-for="(row, rowIndex) in column" :key="rowIndex">
           <div class="cell">{{ row.label }}</div>
-          <div class="cell">{{ statisticsData[row.header] }}</div>
+          <div class="cell">{{ parseFloat(statisticsData[row.header]).toFixed(2) }} {{ row.symbol }}</div>
         </div>
       </div>
     </div>
@@ -35,25 +22,26 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      fetching: true,
       useremail: '',
       selectedButton: '1Y',
       buttons: ['1Y', '6M', '7D'],   
       columns: [
         [
-          { label: 'Expected Alpha',  header: 'alpha'},
-          { label: "Overall Beta",  header: 'beta'},
-          { label: 'Market Return' ,  header: 'marketReturn'},
-          { label: 'Portfolio Return' ,  header: 'portfolioReturn'},
+          { label: 'Expected Alpha',  header: 'alpha', symbol: ''},
+          { label: "Overall Beta",  header: 'beta', symbol: ''},
+          { label: 'Market Return' ,  header: 'marketReturn', symbol: '%'},
+          { label: 'Portfolio Return' ,  header: 'portfolioReturn', symbol: '%'},
         ],
 
         [
-          { label: 'Portfolio Value' ,  header: 'portfolioValue'},
-          { label: 'Risk-Free Rate' ,  header: 'rfRate'},
-          { label: 'Sharpe Ratio' ,  header: 'sharpeRatio'},
-          { label: 'Std Deviation' ,  header: 'stdDev'},
+          { label: 'Portfolio Value' ,  header: 'portfolioValue', symbol: ''},
+          { label: 'Risk-Free Rate' ,  header: 'rfRate', symbol: '%'},
+          { label: 'Sharpe Ratio' ,  header: 'sharpeRatio', symbol: ''},
+          { label: 'Std Deviation' ,  header: 'stdDev', symbol: ''},
         ],
         [
-          { label: 'Variance' ,  header: 'variance'},
+          { label: 'Variance' ,  header: 'variance', symbol: ''},
         ],
       ],
       statisticsData: {},
@@ -66,8 +54,8 @@ export default {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         this.useremail = user.email;
-        this.fetchStatistics();
-        this.updateStatistics()
+        this.updateStatistics();
+
       } else {
         console.error('User not authenticated')
       }
@@ -75,9 +63,6 @@ export default {
   },
 
   methods: {
-    selectButton(button) {
-      this.selectedButton = button;
-    },
 
     async fetchStatistics() {
         try {
@@ -94,9 +79,9 @@ export default {
         try {
           const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`;
           console.log(apiUrl)
-          const querySnapshot = await axios.put(apiUrl);
-       //   this.test = querySnapshot.data;
-        //  console.log(this.test);
+          await axios.put(apiUrl);
+          this.fetching = false;
+          this.fetchStatistics();
 
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -122,6 +107,8 @@ export default {
   font-weight: bold;
   font-size:120%;
   margin-top:1%;
+  
+  padding-top: 2%;
 }
 
 .column {
@@ -135,7 +122,7 @@ export default {
 }
 
 .cell {
-  padding-top: 20%;
+  padding-top: 30%;
 
   border-right: 1px solid #ccc; /* Add right border */
 }
@@ -144,32 +131,4 @@ export default {
   border-right: none;
 }
 
-/* button */
-.time-view-button {
-padding-left: 2%;
-padding-top: 2%;
-}
-
-.top-button {
-background-color: #D9D9D9;
-color: black;
-font-weight:bold;
-font-size: 100%;
-border: none;
-border-radius: 2vh;
-padding: 1% 1%;
-margin-right: 0.5%;
-cursor: pointer;
-}
-
-.top-button.active {
-background-color: #272F51; /* Change to the desired color when clicked */
-color: white;
-}
-
-/* Add a hover animation */
-.top-button:hover {
-background-color: #A5A5A5; /* Change to the desired hover color */
-transition: background-color 0.3s;
-}
 </style>
