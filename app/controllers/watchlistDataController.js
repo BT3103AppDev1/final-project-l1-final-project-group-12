@@ -6,6 +6,7 @@ const {
   query,
   collection,
   getDocs,
+  deleteDoc,
 } = require("firebase/firestore");
 const { convertTradeData } = require("./changeTradeStructureController"); // Import the function to convert JS object to Python Trade class
 
@@ -45,7 +46,6 @@ async function addTradeToWatchlist(userEmail, ticker) {
 
   // Add/Update the returned trade data in Firestore
   await setDoc(watchlistRef, newWatchlistData);
-  console.log("Watchlist updated or created!");
 }
 
 async function readWatchlist(userEmail) {
@@ -61,7 +61,23 @@ async function readWatchlist(userEmail) {
   return stocks;
 }
 
+async function deleteTradeFromWatchlist(userEmail, ticker) {
+  const watchlistId = `${userEmail}_watchlist`;
+  const watchedStock = `${userEmail}_${ticker}`;
+
+  // Delete the trade from Firestore
+  const watchlistRef = doc(
+    db,
+    "watchlist",
+    watchlistId,
+    "watchedStocks",
+    watchedStock
+  );
+  await deleteDoc(watchlistRef);
+}
+
 module.exports = {
   readWatchlist,
   addTradeToWatchlist,
+  deleteTradeFromWatchlist,
 };
