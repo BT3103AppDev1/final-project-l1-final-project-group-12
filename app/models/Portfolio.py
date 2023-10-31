@@ -54,7 +54,11 @@ class Portfolio:
     def _sharpeRatio(self):
         excessReturn = self.portfolioReturn - self.rfRate  # Excess Return of Portfolio
         portfolioStdDev = self.stddev
-        return float(excessReturn/portfolioStdDev)
+
+        if portfolioStdDev == 0:
+            return 0
+        else:
+            return float(excessReturn/portfolioStdDev)
 
     # Public Getter Methods
 
