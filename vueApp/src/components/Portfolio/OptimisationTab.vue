@@ -58,7 +58,9 @@ import axios from 'axios';
       selectButton(index) {
         this.selectedButton = this.buttons[index];
         this.selectedTabIndex = index + 1;
+
         this.SuggestedQty(this.selectedTabIndex);
+        
         this.$emit('update-selected-tab-index', this.selectedTabIndex);
       },
 

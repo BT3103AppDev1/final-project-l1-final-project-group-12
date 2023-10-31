@@ -24,7 +24,6 @@
         :portfolioData="portfolioData"
         :stockPrices="stockPrices"
         :hasData="hasData"
-        :fetchingStockPrice="fetchingStockPrice"
         @refresh-request="refresh"
         @total-pl-updated="emitTotalPL"
       />
@@ -69,7 +68,6 @@
         portfolioData: [],
         stockPrices: {},
         hasData: true,
-        fetchingStockPrice: true,
 
         useremail: '',
       };
@@ -82,8 +80,11 @@
           this.useremail = user.email;
           this.fetchData()
             .then(() => {
-              this.getStockPrice()
+              this.getStockPrice();
             });
+            // Call fetchData every 5 seconds
+            setInterval(this.getStockPrice, 5000);
+
         } else {
           console.error('User not authenticated')
         }
@@ -99,7 +100,7 @@
 
       async refresh() {
         this.fetchData();
-        
+
         this.$emit('refresh-request');
       },
 
@@ -118,8 +119,6 @@
       }, 
 
       async getStockPrice() {   
-        console.log("fetching stock price")
-        this.fetchingStockPrice = true;
 
         for (const item of this.portfolioData) {
             const apiUrl = `http://localhost:3000/api/yfinance/curentPrice/${item.ticker}`;
@@ -128,7 +127,6 @@
 
             this.stockPrices[item.ticker] = price;          
         };
-        this.fetchingStockPrice = false;
 
       },
 

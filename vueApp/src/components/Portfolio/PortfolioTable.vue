@@ -32,7 +32,7 @@
 
           <!-- Stock Price -->
           <td>
-            <template v-if="fetchingStockPrice">Loading..</template>
+            <template v-if="isNaN(this.stockPrices[item.ticker]) ">Loading..</template>
             <template v-else>{{ parseFloat(this.stockPrices[item.ticker]).toFixed(2) }}</template>
           </td>        
 
@@ -51,7 +51,7 @@
 
           <!-- P/L -->
           <td>
-            <template v-if="fetchingStockPrice">Loading..</template>
+            <template v-if="isNaN(this.stockPrices[item.ticker])">Loading..</template>
             <template v-else>{{ calculateProfitLoss(item).toFixed(2) }}</template>
           </td>
 
@@ -124,7 +124,6 @@ export default {
     portfolioData: Array,
     stockPrices: Object,
     hasData: Boolean,
-    fetchingStockPrice: Boolean,
   },
 
   methods: {
