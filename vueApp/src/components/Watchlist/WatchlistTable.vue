@@ -12,13 +12,13 @@
       </thead>
 
       <tbody>
-        <tr v-for="(item, index) in watchlistData" :key="item.Stock">
+        <tr v-for="(item, index) in watchlistData" :key="item.ticker">
           <td>{{ index + 1 }}</td>
-          <td>{{ item.Stock }}</td>
+          <td>{{ item.name }}</td>
 
           <td>
-            <!-- Display Delete button if not in editing state -->
-            <button class="btw" @click="deleteItem(item)">
+
+            <button class="btw" @click="deleteItem(item.ticker)">
               <img src="@/assets/deleteIcon.png" alt="Delete" />
             </button>
           </td>
@@ -34,16 +34,16 @@
 </template>
 
 <script>
-import { editInstrument, deleteInstrument } from "@/firebasefunc.js";
+import { deleteInstrument } from "@/firebasefunc.js";
 import { COLLECTION_NAMES } from "@/firebaseConfig.js";
 import firebaseApp from "@/firebase.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import axios from 'axios';
 
 export default {
   data() {
     return {
-      stockName: "",
-      wishlistData: [],
+      ticker: "",
       useremail: "",
     };
   },
@@ -53,10 +53,9 @@ export default {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         this.useremail = user.email;
-        this.fetchWishlistData();
+
       } else {
         this.useremail = ""; // Ensure it's cleared when the user signs out
-        this.wishlistData = [];
       }
     });
   },
@@ -67,25 +66,27 @@ export default {
   },
 
   methods: {
-    async deleteItem(stock) {
-      await deleteInstrument(COLLECTION_NAMES.WISHLIST, this.useremail, stock);
+    async deleteItem(ticker) {
+      const apiUrl = `http://localhost:3000/api/watch/delete/${this.useremail}/${ticker}`;
+      await axios.delete(apiUrl);
 
-      this.$emit("refresh-request");
+      this.$emit('refresh-request');
     },
+    
 
-    async fetchWishlistData() {
-      const db = firebaseApp.firestore(); // Assuming you have already initialized the Firestore instance
+    // async fetchWatchlistData() {
+    //   const db = firebaseApp.firestore(); // Assuming you have already initialized the Firestore instance
 
-      const subcollectionRef = collection(db, "wishlist");
+    //   const subcollectionRef = collection(db, "watchlist");
 
-      const querySnapshot = await getDocs(subcollectionRef);
+    //   const querySnapshot = await getDocs(subcollectionRef);
 
-      this.wishlistData = [];
+    //   this.watchlistData = [];
 
-      querySnapshot.forEach((doc) => {
-        this.wishlistData.push(doc.data());
-      });
-    },
+    //   querySnapshot.forEach((doc) => {
+    //     this.watchlistData.push(doc.data());
+    //   });
+    // },
   },
 };
 </script>

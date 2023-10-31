@@ -26,9 +26,19 @@ export default {
       ticker: "",
 
       // User info
-      useremail: "joleneganyuzhen@gmail.com",
+      useremail: "",
     };
   },
+  async mounted() {
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                this.useremail = user.email;
+            } else {
+                this.useremail = ''; // Ensure it's cleared when the user signs out
+            }
+        });
+    },
   methods: {
     async saveToWatchlist() {
       
