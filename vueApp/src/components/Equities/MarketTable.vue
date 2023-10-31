@@ -5,8 +5,8 @@
   </template>
   
   <script>
+import ScrollableTable from './ScrollableTable.vue';
 
-  import ScrollableTable from '@/components/Common/ScrollableTable.vue';
   
   export default {
     components: {

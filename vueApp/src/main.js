@@ -1,6 +1,5 @@
-
 import { createApp } from 'vue'
 import App from './App.vue'
-import Equities from './views/Equities.vue'
+import router from './router/equity_router/index.js'
 
-createApp(App).component('Equities', Equities).mount('#app')
+createApp(App).use(router).mount('#app')

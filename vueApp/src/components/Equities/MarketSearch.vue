@@ -7,11 +7,13 @@
         id="searchInput"
         required=""
         placeholder="Search by company name/code"
+        v-model="searchTerm"
       />
       <br /><br />
 
       <button id="searchButton" type="button" @click="runMarketSearch()">
         Search</button
+        
       ><br /><br />
     </form>
   </div>
@@ -20,11 +22,20 @@
 
 <script>
 export default {
+  data() {
+    return {
+      searchTerm: "",
+    };
+  },
   methods: {
     runMarketSearch() {
-      // Define search functionality 
-
-    }
+      console.log("Button Clicked")
+      // Redirect to a new page and pass the search term as a parameter
+      this.$router.push({
+        name: "SearchResults",
+        params: { searchTerm: this.searchTerm },
+      });
+    },
   },
 };
 </script>
