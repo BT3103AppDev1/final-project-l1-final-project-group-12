@@ -131,22 +131,22 @@
       async checkAndCreatePortfolio() {
         const apiReadPortfolioUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}`;
         const apiCreatePortfolioUrl = `http://localhost:3000/api/update/createPortfolio/${this.useremail}`;
-        
+        let existingPortfolio = null;
         try {
-            const existingPortfolio = await axios.get(apiReadPortfolioUrl);
-             if (!existingPortfolio.data) { // Check if the portfolio doesn't exist
-              try {
-                console.log(apiCreatePortfolioUrl)
-                await axios.post(apiCreatePortfolioUrl);
-                // Now that you've created the portfolio, you can proceed to load other data or perform other actions if needed.
-              } catch (error) {
-                alert('Error: ' + error.response.data);
-              }
-            } 
-              
-        } catch (error) {
-            alert('Error: ' + error.response.data);
-        }
+            existingPortfolio = await axios.get(apiReadPortfolioUrl);
+
+          } catch (error) {
+            console.error('Error during GET request:', error);
+          }
+
+          if (!existingPortfolio) { // Check if the portfolio doesn't exist
+            try {
+              await axios.post(apiCreatePortfolioUrl);
+               
+            } catch (error) {
+              alert('Error: ' + error.response.data);
+            }
+          } 
       },
 
     },

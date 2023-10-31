@@ -44,6 +44,7 @@
   import { COLLECTION_NAMES } from '@/firebaseConfig.js';
   import firebaseApp from '@/firebase.js'
   import { getAuth, onAuthStateChanged } from 'firebase/auth'
+  import axios from 'axios';
 
   import PortfolioTable from '@/components/Portfolio/PortfolioTable.vue'
   import PieChart from '@/components/Portfolio/PortfolioPieChart.vue'
@@ -91,8 +92,11 @@
       },
 
       async fetchData() {
-          try {
-            this.portfolioData = await extractData(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.useremail);
+        try {
+            const apiUrl = `http://localhost:3000/api/read/allTrades/${this.useremail}`;
+            const querySnapshot = await axios.get(apiUrl);
+            this.portfolioData = querySnapshot.data;
+
             this.hasData = this.portfolioData.length > 0;
 
           } catch (error) {

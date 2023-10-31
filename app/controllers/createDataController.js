@@ -91,7 +91,7 @@ async function updateTrade(userEmail, ticker, buyQty, buyPrice) {
     buyQty: tradeData.buyQty,
     beta: tradeData.beta,
   };
-  console.log("lupdateTradeupdateTrade")
+  
   // Add/Update the returned trade data in Firestore
   await setDoc(tradeRef, newTrade);
   console.log("Trade data updated or created!");
