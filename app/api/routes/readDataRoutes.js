@@ -26,9 +26,12 @@ router.get("/userInfo/:userEmail", async (req, res) => {
 });
 
 // Endpoint to read portfolio information
-router.get("/portfolioInfo/:userEmail", async (req, res) => {
+router.get("/portfolioInfo/:userEmail/:objectiveOfRead", async (req, res) => {
   try {
-    const data = await readPortfolioInfo(req.params.userEmail);
+    const data = await readPortfolioInfo(
+      req.params.userEmail,
+      req.params.objectiveOfRead
+    );
     if (data) {
       res.json(data);
     } else {

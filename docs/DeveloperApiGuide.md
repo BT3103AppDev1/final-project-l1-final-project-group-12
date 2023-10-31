@@ -86,14 +86,20 @@ curl http://<your-server-url>/api/read/userInfo/john.doe@example.com
 
 ### 2. Get Portfolio Information
 
-- Endpoint: `/read/portfolioInfo/:userEmail`
+- Endpoint: `/read/portfolioInfo/:userEmail/:objectiveOfRead`
 - Method: `GET`
-- URL Params: `userEmail`(**required**)
+- URL Params:
+  - `userEmail`(**required**)
+  - `objectiveOfRead` (**required**)
+    - standard
+    - alpha
+    - beta
+    - balance
 
 #### Usage:
 
 ```
-curl http://<your-server-url>/api/read/portfolioInfo/john.doe@example.com
+curl http://<your-server-url>/api/read/portfolioInfo/john.doe@example.com/standard
 ```
 
 ### 3. Get All Trades for a User
