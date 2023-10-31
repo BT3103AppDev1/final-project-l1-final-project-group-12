@@ -24,7 +24,7 @@
   }
   </script>
   
-  <style>
+  <style scoped>
 
   html {
     background-color: #f6f6f6;

@@ -48,7 +48,7 @@ export default {
   background-color: #ffffff;
   font-weight: bold;
   font-size: 1.5vw;
-  width: 90%; 
+  width: 40vw; 
   padding: 0px 0px 10px 15px; 
 }
 

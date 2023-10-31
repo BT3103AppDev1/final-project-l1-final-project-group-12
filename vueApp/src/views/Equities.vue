@@ -2,7 +2,6 @@
   <div class="body">
     <MarketOverview />
     <div class="side-by-side-container">
-      <Trending />
       <TopGainers />
       <TopLosers />
     </div>
@@ -15,7 +14,6 @@
 
 <script>
 import MarketOverview from "../components/Equities/MarketOverview.vue";
-import Trending from "../components/Equities/Trending.vue";
 import TopGainers from "../components/Equities/TopGainers.vue";
 import TopLosers from "../components/Equities/TopLosers.vue";
 import MarketSearch from "../components/Equities/MarketSearch.vue";
@@ -24,7 +22,6 @@ import MarketTable from '../components/Equities/MarketTable.vue';
 export default {
   components: {
     MarketOverview,
-    Trending,
     TopGainers,
     TopLosers,
     MarketSearch,
@@ -38,8 +35,9 @@ export default {
 .side-by-side-container {
   display: flex;
   gap: 8%;
-  width: 120%;
+  width: 60%;
 }
+
 html {
   background-color: #f6f6f6;
 }

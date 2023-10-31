@@ -90,7 +90,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* Box */
 .table-container {
   height: 33vw;
