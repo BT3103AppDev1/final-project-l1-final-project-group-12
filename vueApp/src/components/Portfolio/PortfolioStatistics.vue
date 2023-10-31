@@ -54,7 +54,7 @@ export default {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         this.useremail = user.email;
-        this.updateStatistics();
+        this.fetchStatistics();
 
       } else {
         console.error('User not authenticated')
@@ -75,18 +75,7 @@ export default {
         }
     }, 
 
-    async updateStatistics() {
-        try {
-          const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`;
-          console.log(apiUrl)
-          await axios.put(apiUrl);
-          this.fetching = false;
-          this.fetchStatistics();
-
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-    }, 
+    
 
   },
 };

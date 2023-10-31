@@ -24,7 +24,10 @@
             <PortfolioAssetView 
               :selectedTabIndex="selectedTabIndex"  
               :key="refreshComp" 
-              @total-pl-updated = "emitTotalPL"/>
+              @total-pl-updated = "emitTotalPL"
+              @refresh-request = "updateStatistics"
+              />
+              
         </div>
         <div class="addTrade">
             <AddTrade 
@@ -103,6 +106,7 @@
     methods: {
       change() {
         this.refreshComp += 1
+        this.updateStatistics();
       },
 
       updateSelectedTabIndex(index) {
@@ -160,6 +164,18 @@
         console.log(response)
           
       },
+
+      async updateStatistics() {
+        try {
+          const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`;
+          console.log(apiUrl)
+          await axios.put(apiUrl);
+          
+
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+    }, 
 
     },
 

@@ -25,7 +25,7 @@
         :stockPrices="stockPrices"
         :hasData="hasData"
         :fetchingStockPrice="fetchingStockPrice"
-        @refresh-request="fetchData"
+        @refresh-request="refresh"
         @total-pl-updated="emitTotalPL"
       />
 
@@ -34,7 +34,7 @@
         :SuggestedQty="SuggestedQty"
         :portfolioData="portfolioData"
         :hasData="hasData"
-        @refresh-request="fetchData"
+        @refresh-request="refresh"
       />
 
     </div>
@@ -94,6 +94,11 @@
         this.isChecked = !this.isChecked;
       },
 
+      async refresh() {
+        this.fetchData();
+        this.$emit('refresh-request');
+      },
+
       async fetchData() {
         try {
             const apiUrl = `http://localhost:3000/api/read/allTrades/${this.useremail}`;
@@ -147,7 +152,7 @@
       },
 
     },
-    emits: ["total-pl-updated"],
+    emits: ["total-pl-updated", "refresh-request"],
 
 
 
