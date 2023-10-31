@@ -235,3 +235,17 @@ curl http://<your-server-url>/api/watch/read/john.doe@example.com
 ```
 curl http://<your-server-url>/api/watch/add/john.doe@example.com/AAPL
 ```
+
+### 2. Delete a stock from the watchlist
+
+- Endpoint: `/watch/delete/:userEmail/:ticker`
+- Method: `DELETE`
+- URL Params:
+  - `userEmail` (**required**)
+  - `ticker` (**required**)
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/watch/delete/john.doe@example.com/AAPL
+```

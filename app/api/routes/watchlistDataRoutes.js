@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   addTradeToWatchlist,
   readWatchlist,
+  deleteTradeFromWatchlist,
   // Add more exported functions if needed
 } = require("../../controllers/watchlistDataController");
 
@@ -31,6 +32,19 @@ router.get("/read/:userEmail", async (req, res) => {
     res.status(200).json(stocks);
   } catch (error) {
     console.error("Error reading watchlist:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// Route to delete stocks from the watchlist
+router.delete("/delete/:userEmail/:ticker", async (req, res) => {
+  try {
+    const { userEmail, ticker } = req.params;
+
+    await deleteTradeFromWatchlist(userEmail, ticker);
+    res.status(200).send("Deleted successfully");
+  } catch (error) {
+    console.error("Error deleting trade from watchlist:", error);
     res.status(500).send("Internal Server Error");
   }
 });
