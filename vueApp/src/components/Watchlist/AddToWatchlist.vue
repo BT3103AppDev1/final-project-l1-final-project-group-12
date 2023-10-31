@@ -1,14 +1,14 @@
 <template>
   <div id="addToWatchlist">
-    <form id="watchlistForm">
+    <form id="watchlistForm" @submit.prevent="saveToWatchlist">
       <h2 class="titleOfWatchlistForm">Add to Watchlist</h2>
       <input
         type="text"
-        id="ticker1"
-        required="yes"
+        v-model="ticker"
+        required
         placeholder="Search by company name/code"
       />
-      <button type="button" class="add-button" @click="saveToWatchlist()">
+      <button type="submit" class="add-button">
         <img src="@/assets/starIcon.png" alt="" class="star-icon" />
         <span class="add-text">Add</span>
       </button>
@@ -17,7 +17,6 @@
 </template>
 
 <script>
-
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 
@@ -27,28 +26,18 @@ export default {
       ticker: "",
 
       // User info
-      useremail: "",
+      useremail: "joleneganyuzhen@gmail.com",
     };
-  },
-  async mounted() {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        this.useremail = user.email;
-      } else {
-        this.useremail = ""; // Ensure it's cleared when the user signs out
-      }
-    });
   },
   methods: {
     async saveToWatchlist() {
-      console.log("Saving to Watchlist");
-      let ticker = document.getElementById("ticker1").value;
+      
 
       const watchData = {
-        ticker: ticker,
+        ticker: this.ticker,
         // Add other data fields as needed
       };
+      console.log("Saving " + this.ticker + " to Watchlist");
 
       const apiUrl = `http://localhost:3000/api/watch/add/${this.useremail}/${this.ticker}`;
       console.log(apiUrl);
@@ -56,18 +45,17 @@ export default {
       try {
         // Make a POST request to updateTrade endpoint
         await axios.put(apiUrl, watchData);
+        // Reset placeholder
+        this.ticker = ""; // Clear the input field
+        this.$emit("added");
       } catch (error) {
         alert("Error: " + error.response.data);
       }
-
-      // Reset placeholder
-      document.getElementById("watchlistForm").reset();
-
-      this.$emit("added");
     },
   },
 };
 </script>
+
 
 <style scoped>
 /* Your styles remain the same */
