@@ -1,15 +1,21 @@
 <template>
-  <div class="body">
-    <h1>{{ $route.params.searchTerm }}</h1>
-    <!-- Display search results here -->
+  <div>
+    <!-- Show searched stock name on indiv stock page -->
+    <search-results-content :searchTerm="$route.params.searchTerm" />
+    
   </div>
 </template>
 
 <script>
+import SearchResultsContent from "@/components/Equities/SearchResultsContent.vue";
+
 export default {
-  // Your code for displaying search results...
+  components: {
+    SearchResultsContent,
+  },
 };
 </script>
+
 
 <style scoped>
 .body {
