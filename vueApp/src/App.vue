@@ -5,6 +5,7 @@
 <script>
 import Equities from "./views/Equities.vue";
 import SearchResults from "./views/SearchResults.vue";
+import Watchlist from './views/Watchlist.vue';
 
 export default {
   name: "App",
@@ -16,4 +17,3 @@ export default {
 /* Your scoped styles */
 </style>
 
-<style scoped></style>
