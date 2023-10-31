@@ -128,6 +128,7 @@
         const apiReadPortfolioUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}`;
         const apiCreatePortfolioUrl = `http://localhost:3000/api/update/createPortfolio/${this.useremail}`;
         let existingPortfolio = null;
+        
         try {
             existingPortfolio = await axios.get(apiReadPortfolioUrl);
 
@@ -137,6 +138,7 @@
 
           if (!existingPortfolio) { // Check if the portfolio doesn't exist
             try {
+              console.log(apiCreatePortfolioUrl)
               await axios.post(apiCreatePortfolioUrl);
                
             } catch (error) {

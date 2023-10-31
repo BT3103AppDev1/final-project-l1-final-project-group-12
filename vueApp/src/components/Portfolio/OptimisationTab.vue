@@ -58,7 +58,9 @@ import axios from 'axios';
       selectButton(index) {
         this.selectedButton = this.buttons[index];
         this.selectedTabIndex = index + 1;
+
         this.SuggestedQty(this.selectedTabIndex);
+        
         this.$emit('update-selected-tab-index', this.selectedTabIndex);
       },
 
@@ -77,7 +79,7 @@ import axios from 'axios';
 
         const apiUrl = `http://localhost:3000/api/optimise/${this.useremail}/${objective}`;
         console.log(apiUrl)
-        const response = await axios.post(apiUrl);
+        //const response = await axios.post(apiUrl);
         console.log(response)
           
       },
