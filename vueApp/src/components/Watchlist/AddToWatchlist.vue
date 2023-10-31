@@ -4,11 +4,11 @@
       <h2 class="titleOfWatchlistForm">Add to Watchlist</h2>
       <input
         type="text"
-        id="stock1"
+        id="ticker1"
         required="yes"
         placeholder="Search by company name/code"
       />
-      <button type="button" class="add-button"  @click="savetofs()">
+      <button type="button" class="add-button" @click="saveToWatchlist()">
         <img src="@/assets/starIcon.png" alt="" class="star-icon" />
         <span class="add-text">Add</span>
       </button>
@@ -17,16 +17,16 @@
 </template>
 
 <script>
-import { addInstrument } from "@/firebasefunc.js";
-import { COLLECTION_NAMES } from "@/firebaseConfig.js";
-import firebaseApp from "@/firebase.js";
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import axios from "axios";
 
 export default {
   data() {
     return {
-      stockName: "",
+      ticker: "",
 
+      // User info
       useremail: "",
     };
   },
@@ -41,16 +41,24 @@ export default {
     });
   },
   methods: {
-    async savetofs() {
-      console.log("Saving");
-      let stock = document.getElementById("stock1").value;
+    async saveToWatchlist() {
+      console.log("Saving to Watchlist");
+      let ticker = document.getElementById("ticker1").value;
 
-      const stockData = {
-        Stock: stock,
+      const watchData = {
+        ticker: ticker,
         // Add other data fields as needed
       };
 
-      await addInstrument(COLLECTION_NAMES.WISHLIST, this.useremail, stockData);
+      const apiUrl = `http://localhost:3000/api/watch/add/${this.useremail}/${this.ticker}`;
+      console.log(apiUrl);
+
+      try {
+        // Make a POST request to updateTrade endpoint
+        await axios.put(apiUrl, watchData);
+      } catch (error) {
+        alert("Error: " + error.response.data);
+      }
 
       // Reset placeholder
       document.getElementById("watchlistForm").reset();

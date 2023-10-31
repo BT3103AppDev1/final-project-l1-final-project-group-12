@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@firebase/firestore": "^4.3.2",
+    "axios": "^1.6.0",
     "chart.js": "^4.4.0",
     "firebase": "^10.5.2",
     "vue": "^3.3.4",
