@@ -1,4 +1,7 @@
 
+.env
+
+
 # Logs
 logs
 *.log
@@ -19,4 +22,16 @@ coverage
 
 /cypress/videos/
 /cypress/screenshots/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+/node_modules
+.vscode
 
