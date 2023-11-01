@@ -23,9 +23,7 @@ export default {
   data() {
     return {
       fetching: true,
-      useremail: '',
-      selectedButton: '1Y',
-      buttons: ['1Y', '6M', '7D'],   
+      useremail: '', 
       columns: [
         [
           { label: 'Expected Alpha',  header: 'alpha', symbol: ''},
@@ -65,6 +63,7 @@ export default {
   methods: {
 
     async fetchStatistics() {
+      console.log("Fetching Statistics")
         try {
           const apiUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}`;
           const querySnapshot = await axios.get(apiUrl);

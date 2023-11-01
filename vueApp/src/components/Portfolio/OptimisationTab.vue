@@ -15,16 +15,12 @@
 </template>
 
 <script>
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import axios from 'axios';
-
   const TABS = [
   "Current Portfolio",
   "Maximize Returns",
   "Minimize Risk",
   "Balance Portfolio"
   ];
-
 
     export default {
         name: 'App',
@@ -33,56 +29,23 @@ import axios from 'axios';
         },
         
 
-        data() {
-      return {
-        buttons: TABS,
-        selectedButton: TABS[0],
-        selectedTabIndex: 1,
-        useremail: '',
-      };
-    },
+      data() {
+        return {
+          buttons: TABS,
+          selectedButton: TABS[0],
+          selectedTabIndex: 1,
 
-    async mounted() {
-      const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-          if (user) {
-              this.useremail = user.email;
-
-          } else {
-              this.useremail = ''; 
-          }
-      });
-    },
+        };
+      },
 
     methods: {
       selectButton(index) {
         this.selectedButton = this.buttons[index];
         this.selectedTabIndex = index + 1;
-
-        this.SuggestedQty(this.selectedTabIndex);
         
         this.$emit('update-selected-tab-index', this.selectedTabIndex);
       },
 
-      async SuggestedQty(selectedTabIndex) {            //TODO: PUT OPTIMIZED QTY HERE
-        let objective = "";
-
-        if (this.selectedTabIndex == 2) {
-          objective = "alpha";
-        
-        } else if (this.selectedTabIndex == 3) {
-          objective = "beta";
-
-        } else{
-          objective = "balance";
-        }
-
-        const apiUrl = `http://localhost:3000/api/optimise/${this.useremail}/${objective}`;
-        console.log(apiUrl)
-        //const response = await axios.post(apiUrl);
-        console.log(response)
-          
-      },
 
     },
     emits: ['update-selected-tab-index'],

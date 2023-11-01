@@ -19,7 +19,6 @@
       <!-- Table / PieChart  -->
       <PortfolioTable
         v-if="!isChecked"
-        :SuggestedQty="SuggestedQty"
         :key="refreshComp"
         :portfolioData="portfolioData"
         :stockPrices="stockPrices"
@@ -30,7 +29,6 @@
 
       <PieChart
         v-else
-        :SuggestedQty="SuggestedQty"
         :portfolioData="portfolioData"
         :hasData="hasData"
         @refresh-request="refresh"
@@ -41,9 +39,6 @@
   
   
   <script>
-  import { extractData } from '@/firebasefunc.js'
-  import { COLLECTION_NAMES } from '@/firebaseConfig.js';
-  import firebaseApp from '@/firebase.js'
   import { getAuth, onAuthStateChanged } from 'firebase/auth'
   import axios from 'axios';
 
@@ -58,7 +53,7 @@
     },
 
     props: {
-      selectedTabIndex: Number,
+      objective: String,
     },
 
     data() {
@@ -109,7 +104,6 @@
             const apiUrl = `http://localhost:3000/api/read/allTrades/${this.useremail}`;
             const querySnapshot = await axios.get(apiUrl);
             this.portfolioData = querySnapshot.data;
-            //this.getStockPrice();
 
             this.hasData = this.portfolioData.length > 0;
 
@@ -119,35 +113,19 @@
       }, 
 
       async getStockPrice() {   
+        try {
+          for (const item of this.portfolioData) {
+              const apiUrl = `http://localhost:3000/api/yfinance/curentPrice/${item.ticker}`;
+              const response = await axios.get(apiUrl);
+              const price = response.data;
 
-        for (const item of this.portfolioData) {
-            const apiUrl = `http://localhost:3000/api/yfinance/curentPrice/${item.ticker}`;
-            const response = await axios.get(apiUrl);
-            const price = response.data;
+              this.stockPrices[item.ticker] = price;          
+          };
 
-            this.stockPrices[item.ticker] = price;          
-        };
-
-      },
-
-
-      async SuggestedQty(tabIndex) {            //TODO: PUT OPTIMIZED QTY HERE
-        let objective = "";
-
-        if (this.selectedTabIndex == 2) {
-          objective = "alpha";
-        
-        } else if (this.selectedTabIndex == 3) {
-          objective = "beta";
-
-        } else{
-          objective = "balance";
+        } catch (error) {
+          console.error("Error fetching stock price:", error);
         }
-        const apiUrl = `http://localhost:3000/api/optimise/${this.useremail}/${objective}`;
-        
-        const response = await axios.post(apiUrl);
-        console.log(response)
-          
+
       },
 
       emitTotalPL(totalPL) {

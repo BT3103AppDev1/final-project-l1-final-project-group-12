@@ -27,7 +27,6 @@ router.get("/userInfo/:userEmail", async (req, res) => {
 
 // Endpoint to read portfolio information
 router.get("/portfolioInfo/:userEmail", async (req, res) => {
-  console.log("here")
   try {
     const data = await readPortfolioInfo(req.params.userEmail);
     if (data) {

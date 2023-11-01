@@ -13,7 +13,7 @@
         <!-- Optimisation Tabs  -->
         <div class="Optimisation-container">
           <OptimisationTab 
-            @update-selected-tab-index="updateSelectedTabIndex" 
+            @update-selected-tab-index="getObjective" 
           />
         </div>
 
@@ -22,7 +22,7 @@
     <div v-if="!showStatistics" class="portfolioDisplay">
         <div class="table">
             <PortfolioAssetView 
-              :selectedTabIndex="selectedTabIndex"  
+              :objective="objective"  
               :key="refreshComp" 
               @total-pl-updated = "emitTotalPL"
               @refresh-request = "updateStatistics"
@@ -40,7 +40,8 @@
     <!-- Statistic Table  -->
     <div v-else class="right-icon">
         <PortfolioStatistics 
-          :key="refreshComp"/>
+          :key="refreshComp"
+          :objective="objective" />
         
     </div>
 
@@ -74,8 +75,8 @@
         isChecked: false,
         refreshComp: 0,
         showStatistics: false,
-        selectedTabIndex: 1,
         totalPL: 0,
+        objective: "",
 
         useremail: '',
       };
@@ -107,11 +108,22 @@
       change() {
         this.refreshComp += 1
         this.updateStatistics();
+        
       },
 
-      updateSelectedTabIndex(index) {
-      this.selectedTabIndex = index; // Update selectedTabIndex in the parent component
-      //this.change()
+    getObjective(index) {
+      if (index == 1) {
+          this.objective = "";
+
+        } else if (index == 2) {
+          this.objective = "alpha";
+        
+        } else if (index == 3) {
+          this.objective = "beta";
+
+        } else{
+          this.objective = "balance";
+        }
     },
           
       toggleStatistics() {
@@ -131,14 +143,15 @@
         
         try {
             existingPortfolio = await axios.get(apiReadPortfolioUrl);
-
+            console.log("Current Portfolio: ",existingPortfolio);
+          
           } catch (error) {
-            console.error('Error during GET request:', error);
+            console.log("No Portfolio found");
           }
 
           if (!existingPortfolio) { // Check if the portfolio doesn't exist
             try {
-              console.log(apiCreatePortfolioUrl)
+              console.log("Creating Portfolio..")
               await axios.post(apiCreatePortfolioUrl);
                
             } catch (error) {
@@ -147,37 +160,36 @@
           } 
       },
 
-      async SuggestedQty() {            //TODO: PUT OPTIMIZED QTY HERE
-        console.log(apiURL)
-        let objective = "";
-
-        if (this.selectedTabIndex == 2) {
-          objective = "alpha";
-        
-        } else if (this.selectedTabIndex == 3) {
-          objective = "beta";
-
-        } else{
-          objective = "balance";
-        }
-        const apiUrl = `http://localhost:3000/api/optimise/${this.useremail}/${objective}`;
-        
-        const response = await axios.post(apiUrl);
-        console.log(response)
-          
-      },
+      
 
       async updateStatistics() {
+        console.log("Updating Portfolio")
         try {
-          const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`;
-          
+          const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`; 
           await axios.put(apiUrl);
           
-
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error("Error Updated Portfolio:", error);
         }
     }, 
+
+    async updateOptimisePortfolio() {
+      console.log("Updating Optimised Portfolio..")
+      const apiAlphaUrl = `http://localhost:3000/api/optimise/${this.useremail}/alpha`;
+      const apiBetaUrl = `http://localhost:3000/api/optimise/${this.useremail}/beta`;
+      const apiBalanceUrl = `http://localhost:3000/api/optimise/${this.useremail}/balance`;
+      
+      try {
+        await axios.post(apiAlphaUrl);
+        await axios.post(apiBetaUrl);
+        await axios.post(apiBalanceUrl);
+      } catch (error) {
+        console.error("Error Updated Optimised Portfolio:", error);
+      }
+      
+    },
+
+    
 
     },
 

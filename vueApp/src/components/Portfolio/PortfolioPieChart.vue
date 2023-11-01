@@ -24,7 +24,6 @@ import VueApexCharts from 'vue3-apexcharts';
 
 export default {
   props: {
-    SuggestedQty: Function,
     portfolioData: Array,
     hasData: Boolean,
   },
@@ -80,9 +79,7 @@ export default {
       });
     },
 
-    getSuggestedQty(qty, stock) {
-      return this.SuggestedQty(qty, stock);
-    },
+  
   },
 
   }

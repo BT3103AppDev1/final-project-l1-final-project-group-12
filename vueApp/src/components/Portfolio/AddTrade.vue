@@ -27,9 +27,6 @@
   </template>
   
   <script>
-  import { addInstrument } from '@/firebasefunc.js';
-  import { COLLECTION_NAMES } from '@/firebaseConfig.js';
-  import firebaseApp from '@/firebase.js'
   import { getAuth, onAuthStateChanged } from 'firebase/auth'
   import axios from 'axios';
 
@@ -89,7 +86,7 @@
             }      
 
             // Add Trade
-            alert('Adding... Please wait.');               //TODO: Add pop up window
+            alert('Adding:', ticker);               //TODO: Add pop up window
 
             const tradeData = {
                 ticker: ticker,                          
@@ -107,8 +104,6 @@
                 alert('Error: ' + error.response.data);
             
             }
-
-            //await addInstrument(COLLECTION_NAMES.EQUITY_PORTFOLIO, this.useremail, tradeData);
 
             // Reset placeholder
             document.getElementById('userForm').reset();

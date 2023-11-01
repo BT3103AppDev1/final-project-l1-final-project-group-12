@@ -120,7 +120,6 @@ export default {
   },
 
   props: {
-    SuggestedQty: Function,
     portfolioData: Array,
     stockPrices: Object,
     hasData: Boolean,
@@ -148,16 +147,22 @@ export default {
       const apiAddUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
       const apiDeleteUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${item.ticker}`;
       
-      axios.delete(apiDeleteUrl).then(() => {
+      try {
+        axios.delete(apiDeleteUrl).then(() => {
         axios.put(apiAddUrl, updatedData).then(() => {
           this.$emit('refresh-request');
      
           });
-      })
+        })
 
-      // Update the data in the Vue component
-      item.buyPrice = this.updatedBuyPrice;
-      item.buyQty = this.updatedBuyQuantity;
+        // Update the data in the Vue component
+        item.buyPrice = this.updatedBuyPrice;
+        item.buyQty = this.updatedBuyQuantity;
+
+      } catch (error) {
+        console.error('Fail to updating trade: ', error )
+      }
+      
       item.editing = false;
     },
 
@@ -172,10 +177,16 @@ export default {
     },
 
     async deleteItem(ticker) {
-      const apiUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}`;
-      await axios.delete(apiUrl);
+      console.alert("Deleting", ticker);
+      try {
+        const apiUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}`;
+        await axios.delete(apiUrl);
 
-      this.$emit('refresh-request');
+        this.$emit('refresh-request');
+
+      } catch (error) {
+        console.error('Fail to delete trade: ', error )
+      }
     },
 
     
