@@ -12,7 +12,7 @@
           <th></th>
         </tr>
       </thead>
-
+ 
       <tbody>
         <tr v-for="(item, index) in portfolioData" :key="item.ticker">
           <td>{{ index + 1 }}</td>
