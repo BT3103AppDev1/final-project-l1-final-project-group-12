@@ -1,18 +1,35 @@
 {
-  "name": "vue-project",
-  "version": "0.0.0",
-  "private": true,
+  "name": "final-project-l1-final-project-group-12",
+  "version": "1.0.0",
+  "description": "[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/WcPKYd5y)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
   "scripts": {
+    "test": "jest --detectOpenHandles",
+    "server": "cd app/api && node server.js",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "child_process": "^1.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "firebase": "^10.5.2",
+    "firebase-admin": "^11.11.0",
+    "router": "^1.3.8",
     "vue": "^3.3.4",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
     "@vitejs/plugin-vue": "^4.3.4",
     "vite": "^4.4.9"
   }
