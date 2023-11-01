@@ -1,4 +1,6 @@
+
 .env
+
 
 # Logs
 logs
@@ -9,6 +11,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Node Modules
+vueApp/node_modules/  # Ignore the node_modules directory
 node_modules
 .DS_Store
 dist
@@ -30,3 +34,4 @@ coverage
 *.sw?
 /node_modules
 .vscode
+
