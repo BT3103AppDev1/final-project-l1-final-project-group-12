@@ -17,7 +17,6 @@
 </template>
 
 <script> 
-import '@/style/Login/Login.css'
 import {sendPasswordResetEmail} from "firebase/auth"
 import { auth } from './../../firebasefunc.js'
 import {ref} from 'vue'

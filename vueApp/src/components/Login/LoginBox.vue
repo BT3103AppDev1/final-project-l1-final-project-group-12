@@ -34,7 +34,6 @@
 </template>
 
 <script> 
-import '@/style/Login/Login.css'
 import ForgetPasswordPopup from './ForgetPassword.vue'
 import {ref} from 'vue'
 import firebase from '@/uifire.js'
@@ -73,8 +72,8 @@ export default {
         }
     },
     methods: {
-        toggleForm() {
-            this.currentForm = this.currentForm === 'login' ? 'register' : 'login'
+        toggleForm(params) {
+            this.currentForm = params
         },
 
         togglePopup() {

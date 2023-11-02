@@ -1,10 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { auth } from './../firebasefunc.js'
+import { auth } from '../firebasefunc.js'
 import Home from '@/views/Home.vue'
-import Portfolio from '@/views/Portfolio.vue'
-import Equities from '@/views/Equities.vue'
 import Login from '@/views/Login.vue'
-import Register from '@/views/Register.vue'
 
 
 
@@ -12,35 +9,13 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: Home,
+        component: Home, Login
     },
-
     {
         path:'/login',
         name:'Login',
         component:Login
     },
-
-    {
-        path:'/user',
-        name:'User',
-        component:Portfolio,
-        meta: { auth:true }
-    },
-
-    {
-        path: '/portfolio',
-        name: 'Portfolio',
-        component: Portfolio,
-        meta: { auth:true }
-    },
-
-    {
-        path: '/equities',
-        name: 'Equities',
-        component: Equities,
-        meta: { auth:true }
-    }
 ]
 
 const router = createRouter ({
@@ -54,6 +29,7 @@ router.beforeEach(async (to, from, next)=>{
         if (auth.currentUser) {
             //check if token is valid 
              next()
+             console.log("Authenticated User")
         }
         next('/login')
     }
