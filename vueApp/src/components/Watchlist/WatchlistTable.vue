@@ -12,16 +12,17 @@
       </thead>
 
       <tbody>
-        <tr v-for="(item, index) in watchlistData" :key="item.ticker">
+        <tr v-for="(item, index) in this.watchlistData" :key="item.ticker">
           <td>{{ index + 1 }}</td>
           <td>{{ item.name }}</td>
+          
 
           <td>
-
             <button class="btw" @click="deleteItem(item.ticker)">
               <img src="@/assets/deleteIcon.png" alt="Delete" />
             </button>
           </td>
+          <td>{{this.stockPrices[item.ticker]}}</td>
         </tr>
       </tbody>
     </table>
@@ -34,9 +35,6 @@
 </template>
 
 <script>
-import { deleteInstrument } from "@/firebasefunc.js";
-import { COLLECTION_NAMES } from "@/firebaseConfig.js";
-import firebaseApp from "@/firebase.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import axios from 'axios';
 
@@ -45,25 +43,35 @@ export default {
     return {
       ticker: "",
       useremail: "",
+      watchlistData: [],
+      hasData: false,
+      stockPrices: {} // Initialize stockPrices
+
     };
   },
 
-  async mounted() {
+  async created() {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        
         this.useremail = user.email;
+        console.log(this.useremail)
+        this.fetchData()
+          .then(() => {
+            // this.getStockPrice();
+            console.log(this.watchlistData)
+          });
 
+        // Call fetchData every 5 seconds
+        setInterval(this.getStockPrice, 5000);
       } else {
-        this.useremail = ""; // Ensure it's cleared when the user signs out
+        console.error('User not authenticated');
       }
     });
   },
 
-  props: {
-    watchlistData: Array,
-    hasData: Boolean,
-  },
+
 
   methods: {
     async deleteItem(ticker) {
@@ -72,24 +80,41 @@ export default {
 
       this.$emit('refresh-request');
     },
-    
+  
+  async fetchData() {
+    console.log(this.useremail)
+    try {
+      
+      const apiUrl = `http://localhost:3000/api/watch/read/${this.useremail}`;
+      console.log(apiUrl);
+      const querySnapshot = await axios.get(apiUrl);
+      this.watchlistData = querySnapshot.data;
 
-    // async fetchWatchlistData() {
-    //   const db = firebaseApp.firestore(); // Assuming you have already initialized the Firestore instance
+      this.hasData = this.watchlistData.length > 0;
+      console.log(this.watchlistData)
 
-    //   const subcollectionRef = collection(db, "watchlist");
-
-    //   const querySnapshot = await getDocs(subcollectionRef);
-
-    //   this.watchlistData = [];
-
-    //   querySnapshot.forEach((doc) => {
-    //     this.watchlistData.push(doc.data());
-    //   });
-    // },
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   },
-};
+
+  async getStockPrice() {
+    try {
+      for (const item of this.watchlistData) {
+        const apiUrl = `http://localhost:3000/api/yfinance/curentPrice/${item.ticker}`;
+        const response = await axios.get(apiUrl);
+        const price = response.data;
+
+        this.stockPrices[item.ticker] = price;
+      }
+    } catch (error) {
+      console.error("Error fetching stock price:", error);
+    }
+  },
+}};
+
 </script>
+
 
 <style scoped>
 /* Box */

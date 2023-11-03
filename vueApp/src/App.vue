@@ -21,7 +21,7 @@ export default {
   <div class="topnav" :class="{ 'responsive': isResponsive }" id="myTopnav">
     <!-- Logo -->
     <div class="logo-container">
-       <router-link to="/" class="logo"><img src="./assets/logo/whiteLogo.png" alt="Logo"></router-link> 
+       <router-link to="/" class="logo"><img src="" alt="Logo"></router-link> 
     </div>
 
 

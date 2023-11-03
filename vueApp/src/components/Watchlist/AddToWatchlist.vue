@@ -54,7 +54,7 @@ export default {
 
       try {
         // Make a POST request to updateTrade endpoint
-        await axios.put(apiUrl, watchData);
+        await axios.post(apiUrl, watchData);
         // Reset placeholder
         this.ticker = ""; // Clear the input field
         this.$emit("added");
