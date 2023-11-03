@@ -25,7 +25,9 @@ export default {
 </script>
 
 <style scoped>
-
+html {
+  background-color: #f6f6f6;
+}
 .watchlist-container {
   display: flex;
   margin: 2% 2.5% 0% 3%;

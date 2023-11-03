@@ -30,7 +30,13 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
+.side-by-side-container {
+  display: flex;
+  gap: 8%;
+  width: 60%;
+}
 
 html {
   background-color: #f6f6f6;
@@ -40,13 +46,5 @@ html {
   margin: 2% 3.5% 0% 2%;
   padding: 0 0 3% 1.5%; 
   font-family: Arial, Helvetica, sans-serif;
-}
-</style>
-
-<style scoped>
-.side-by-side-container {
-  display: flex;
-  gap: 8%;
-  width: 60%;
 }
 </style>

@@ -15,3 +15,12 @@ export default {
   },
 };
 </script>
+
+
+<style scoped>
+.body {
+  margin: 4% 3.5% 0% 2%;
+  padding: 0 0 3% 1.5%; 
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
