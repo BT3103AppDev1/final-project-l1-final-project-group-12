@@ -23,7 +23,7 @@ async function updateUserInfo(userEmail, userData) {
 async function createPortfolio(userEmail) {
   const portfolioId = `${userEmail}_portfolio`;
   const portfolioRef = doc(db, "portfolios", portfolioId);
-  
+
   // Generate an empty portfolio data object
   const portfolioData = {
     alpha: 0,
@@ -38,8 +38,7 @@ async function createPortfolio(userEmail) {
     userId: userEmail,
     variance: 0,
   };
-  console.log(portfolioRef)
-  console.log(portfolioData)
+
   await setDoc(portfolioRef, portfolioData);
   console.log("Portfolio data updated or created!");
 
@@ -91,7 +90,7 @@ async function updateTrade(userEmail, ticker, buyQty, buyPrice) {
     buyQty: tradeData.buyQty,
     beta: tradeData.beta,
   };
-  
+
   // Add/Update the returned trade data in Firestore
   await setDoc(tradeRef, newTrade);
   console.log("Trade data updated or created!");
@@ -127,6 +126,7 @@ async function updatePortfolio(userEmail) {
   const portfolioRef = doc(db, "portfolios", portfolioId);
   await setDoc(portfolioRef, portfolioData); //  overwrite the document
 }
+
 module.exports = {
   updateUserInfo,
   createPortfolio,

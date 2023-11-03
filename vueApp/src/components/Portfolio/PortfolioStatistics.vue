@@ -47,12 +47,20 @@ export default {
     };
   },
 
+  props: {
+      objective: String,
+    },
+
   async created() {
     const auth = getAuth()
     onAuthStateChanged(auth, (user) => {
       if (user) {
         this.useremail = user.email;
         this.fetchStatistics();
+
+        this.$watch('objective', () => {
+              this.fetchStatistics();
+        });
 
       } else {
         console.error('User not authenticated')
@@ -63,9 +71,15 @@ export default {
   methods: {
 
     async fetchStatistics() {
-      console.log("Fetching Statistics")
+      console.log("Fetching Statistics: ", this.objective)
+      let apiUrl;
         try {
-          const apiUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}`;
+          if (this.objective) {
+            apiUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}/${this.objective}`;
+          } else {
+            apiUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}/""`;
+          }
+
           const querySnapshot = await axios.get(apiUrl);
           this.statisticsData = querySnapshot.data;
 

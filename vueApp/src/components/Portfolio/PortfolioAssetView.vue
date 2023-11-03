@@ -80,6 +80,10 @@
             // Call fetchData every 5 seconds
             setInterval(this.getStockPrice, 5000);
 
+            this.$watch('objective', () => {
+              this.fetchData();
+            });
+
         } else {
           console.error('User not authenticated')
         }
@@ -102,6 +106,7 @@
       async fetchData() {
         try {
             const apiUrl = `http://localhost:3000/api/read/allTrades/${this.useremail}`;
+            console.log(apiUrl)
             const querySnapshot = await axios.get(apiUrl);
             this.portfolioData = querySnapshot.data;
 

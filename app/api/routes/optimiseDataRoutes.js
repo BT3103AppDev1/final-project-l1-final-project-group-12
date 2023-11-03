@@ -4,7 +4,7 @@ const router = express.Router();
 const {
   optimisePortfolio,
   // Add more exported functions if needed
-} = require("../../controllers/optimiseDataController"); // Make sure you provide the right path
+} = require("../../controllers/optimiseDataController");
 
 // Route to optimise a user's portfolio
 router.post("/:userEmail/:objectiveOfUpdate", async (req, res) => {

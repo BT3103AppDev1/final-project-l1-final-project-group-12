@@ -108,6 +108,7 @@
       change() {
         this.refreshComp += 1
         this.updateStatistics();
+        this.updateOptimisePortfolio();
         
       },
 
@@ -137,7 +138,7 @@
       },
 
       async checkAndCreatePortfolio() {
-        const apiReadPortfolioUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}`;
+        const apiReadPortfolioUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}/""`;
         const apiCreatePortfolioUrl = `http://localhost:3000/api/update/createPortfolio/${this.useremail}`;
         let existingPortfolio = null;
         
@@ -162,7 +163,7 @@
 
       
 
-      async updateStatistics() {
+    async updateStatistics() {
         console.log("Updating Portfolio")
         try {
           const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`; 

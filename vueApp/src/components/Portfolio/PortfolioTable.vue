@@ -177,7 +177,7 @@ export default {
     },
 
     async deleteItem(ticker) {
-      console.alert("Deleting", ticker);
+      alert("Deleting", ticker);
       try {
         const apiUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}`;
         await axios.delete(apiUrl);

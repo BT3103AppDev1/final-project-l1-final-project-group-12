@@ -23,11 +23,18 @@ async function readUserInfo(userEmail) {
   return userDoc.data();
 }
 
-async function readPortfolioInfo(userEmail) {
-  const portfolioId = `${userEmail}_portfolio`;
+async function readPortfolioInfo(userEmail, objectiveOfRead) {
+  let portfolioId = `${userEmail}_portfolio`;
+  if (objectiveOfRead == "alpha") {
+    portfolioId = `${userEmail}_portfolio_alpha`;
+  } else if (objectiveOfRead == "beta") {
+    portfolioId = `${userEmail}_portfolio_beta`;
+  } else if (objectiveOfRead == "balance") {
+    portfolioId = `${userEmail}_portfolio_balance`;
+  }
+
   const portfolioRef = doc(db, "portfolios", portfolioId);
   const portfolioDoc = await getDoc(portfolioRef);
-
   if (!portfolioDoc.exists()) {
     console.log("No such portfolio found!");
     return;
