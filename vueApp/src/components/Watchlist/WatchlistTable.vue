@@ -7,6 +7,8 @@
           <th>Name</th>
           <th>Ticker</th>
           <th>Price</th>
+          <th>Beta</th>
+          <th></th>
           <th></th>
         </tr>
       </thead>
@@ -15,14 +17,14 @@
         <tr v-for="(item, index) in this.watchlistData" :key="item.ticker">
           <td>{{ index + 1 }}</td>
           <td>{{ item.name }}</td>
-          
-
+          <td>{{ item.ticker }}</td>
+          <td>{{this.stockPrices[item.ticker]}}</td>
+          <td>{{ item.beta }}</td>
           <td>
             <button class="btw" @click="deleteItem(item.ticker)">
               <img src="@/assets/deleteIcon.png" alt="Delete" />
             </button>
           </td>
-          <td>{{this.stockPrices[item.ticker]}}</td>
         </tr>
       </tbody>
     </table>
@@ -56,10 +58,9 @@ export default {
       if (user) {
         
         this.useremail = user.email;
-        console.log(this.useremail)
         this.fetchData()
           .then(() => {
-            // this.getStockPrice();
+            this.getStockPrice();
             console.log(this.watchlistData)
           });
 
@@ -71,15 +72,21 @@ export default {
     });
   },
 
-
-
   methods: {
     async deleteItem(ticker) {
+      const confirmation = window.confirm("Are you sure you want to delete this ticker?");
+      
+      if (confirmation) {
+
+      
       const apiUrl = `http://localhost:3000/api/watch/delete/${this.useremail}/${ticker}`;
       await axios.delete(apiUrl);
 
-      this.$emit('refresh-request');
-    },
+      this.fetchData();
+    } else {
+
+    }
+  },
   
   async fetchData() {
     console.log(this.useremail)
@@ -173,7 +180,7 @@ export default {
   border-color: #007bff; /* Change border color when focused */
 }
 
-/* No Trades message */
+/* No Stocks message */
 .no-stocks-message {
   color: #bfbfbf; /* Change the color to your desired color */
   border-bottom: none !important;

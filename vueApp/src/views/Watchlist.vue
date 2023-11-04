@@ -2,10 +2,10 @@
   <div class="watchlist-container">
     <div class="watchlist-left">
       <WatchlistHeader />
-      <WatchlistTable />
+      <WatchlistTable :key="refreshComp"/>
     </div>
     <div class="watchlist-right">
-      <AddToWatchlist />
+      <AddToWatchlist @added="change" />
     </div>
   </div>
 </template>
@@ -21,6 +21,18 @@ export default {
     AddToWatchlist,
     WatchlistTable,
   },
+
+  data() {
+    return {
+      refreshComp: 0
+    }
+  },
+
+  methods: {
+    change() {
+      this.refreshComp += 1;
+    }
+  }
 };
 </script>
 
