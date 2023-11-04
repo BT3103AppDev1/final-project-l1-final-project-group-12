@@ -90,9 +90,6 @@
 </template>
 
 <script>
-import { editInstrument, deleteInstrument } from '@/firebasefunc.js';
-import { COLLECTION_NAMES } from '@/firebaseConfig.js';
-import firebaseApp from '@/firebase.js'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import axios from 'axios';
 
@@ -144,26 +141,33 @@ export default {
         buyQty: this.updatedBuyQuantity,
       };
       
-      const apiAddUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
-      const apiDeleteUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${item.ticker}`;
+      const userConfirmed = window.confirm("Are you sure you want to proceed?");
       
-      try {
-        axios.delete(apiDeleteUrl).then(() => {
-        axios.put(apiAddUrl, updatedData).then(() => {
-          this.$emit('refresh-request');
-     
-          });
-        })
+      if (userConfirmed) {
+        const apiAddUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
+        const apiDeleteUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${item.ticker}`;
+        
+        try {
+          axios.delete(apiDeleteUrl).then(() => {
+          axios.put(apiAddUrl, updatedData).then(() => {
+            this.$emit('refresh-request');
+      
+            });
+          })
 
-        // Update the data in the Vue component
-        item.buyPrice = this.updatedBuyPrice;
-        item.buyQty = this.updatedBuyQuantity;
+          // Update the data in the Vue component
+          item.buyPrice = this.updatedBuyPrice;
+          item.buyQty = this.updatedBuyQuantity;
 
-      } catch (error) {
-        console.error('Fail to updating trade: ', error )
+        } catch (error) {
+          console.error('Fail to updating trade: ', error )
+        }
+        item.editing = false;
+      } else {
+        this.cancelEdit(index)
       }
       
-      item.editing = false;
+      
     },
 
     cancelEdit(index) {
@@ -177,15 +181,17 @@ export default {
     },
 
     async deleteItem(ticker) {
-      alert("Deleting", ticker);
-      try {
-        const apiUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}`;
-        await axios.delete(apiUrl);
+      const userConfirmed = window.confirm("Are you sure you want to proceed?");
+      if (userConfirmed) {
+        try {
+          const apiUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}`;
+          await axios.delete(apiUrl);
 
-        this.$emit('refresh-request');
+          this.$emit('refresh-request');
 
-      } catch (error) {
-        console.error('Fail to delete trade: ', error )
+        } catch (error) {
+          console.error('Fail to delete trade: ', error )
+        }
       }
     },
 
