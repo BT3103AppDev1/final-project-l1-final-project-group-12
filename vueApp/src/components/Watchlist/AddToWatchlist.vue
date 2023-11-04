@@ -1,6 +1,6 @@
 <template>
   <div id="addToWatchlist">
-    <form id="watchlistForm" @submit.prevent="saveToWatchlist">
+    <form id="watchlistForm" @submit.prevent="confirmAndAdd">
       <h2 class="titleOfWatchlistForm">Add to Watchlist</h2>
       <input
         type="text"
@@ -30,19 +30,26 @@ export default {
     };
   },
   async mounted() {
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                this.useremail = user.email;
-            } else {
-                this.useremail = ''; // Ensure it's cleared when the user signs out
-            }
-        });
-    },
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.useremail = user.email;
+      } else {
+        this.useremail = ""; // Ensure it's cleared when the user signs out
+      }
+    });
+  },
   methods: {
-    async saveToWatchlist() {
-      
+    confirmAndAdd() {
+      const confirmation = window.confirm(
+        "Are you sure you want to add this ticker to your watchlist?"
+      );
+      if (confirmation) {
+        this.saveToWatchlist();
+      }
+    },
 
+    async saveToWatchlist() {
       const watchData = {
         ticker: this.ticker,
         // Add other data fields as needed
@@ -65,11 +72,6 @@ export default {
   },
 };
 </script>
-
-
-<style scoped>
-/* Your styles remain the same */
-</style>
 
 <style scoped>
 .titleOfWatchlistForm {
