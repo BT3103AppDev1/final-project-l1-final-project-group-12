@@ -18,8 +18,16 @@
           <td>{{ index + 1 }}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.ticker }}</td>
-          <td>{{this.stockPrices[item.ticker]}}</td>
-          <td>{{ item.beta }}</td>
+          <td>
+            <template v-if="isNaN(this.stockPrices[item.ticker]) ">Loading..</template>
+            <template v-else>{{ parseFloat(this.stockPrices[item.ticker]).toFixed(2) }}</template>
+          </td>     
+
+          <td>
+            <template v-if="isNaN(item.beta) ">Loading..</template>
+            <template v-else>{{ parseFloat(item.beta).toFixed(2) }}</template>
+          </td>  
+          <td>{{  }}</td>
           <td>
             <button class="btw" @click="deleteItem(item.ticker)">
               <img src="@/assets/deleteIcon.png" alt="Delete" />
