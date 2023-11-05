@@ -72,7 +72,7 @@
         async savetofs() {
 
             // Get input from placeholder
-            let ticker = document.getElementById("ticker1").value
+            let ticker = document.getElementById("ticker1").value.toUpperCase()
             let buyPrice = document.getElementById("buy1").value
             let buyQuantity = document.getElementById("quant1").value
 
