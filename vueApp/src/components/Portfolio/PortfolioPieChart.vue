@@ -4,7 +4,11 @@
     <!-- Conditionally render the chart or grey circle -->
     <div v-if="hasData">
       <div id="chart-container" class="center">
-        <apexchart ref="chart" type="pie" width="550" :options="chartOptions" :series="series"></apexchart>
+        <apexchart ref="chart" 
+          type="pie" 
+          width="550" 
+          :options="chartOptions" 
+          :series="series"></apexchart>
       </div>
     </div>
     
@@ -65,16 +69,23 @@ export default {
     };
   },
 
-  created() {
-    this.initializeChartData();
+  async created() {
+    await this.initializeChartData();
+  },
+
+  watch: {
+    portfolioData: 'initializeChartData',
   },
 
   methods: {
-    initializeChartData() {
+    async initializeChartData() {
+      this.series = [];
+      this.chartOptions.labels = [];
+      
       this.portfolioData.forEach((item) => {
         const stock = item.name;
-        const buyPrice = parseFloat(item.buyPrice * item.buyQty);
-        this.series.push(buyPrice);
+        const value = parseFloat(item.buyPrice * item.buyQty);
+        this.series.push(value);
         this.chartOptions.labels.push(stock);
       });
     },

@@ -270,7 +270,7 @@ export default {
     
   #scrollable-table th,
   #scrollable-table td {
-    padding: 0.3vw;
+    padding: 1vw;
     text-align: center;
     border-bottom: 2px solid #D0D0D0;
     padding-bottom: 2.7%;
@@ -306,17 +306,12 @@ export default {
 }
 
 .wrapped-cell {
-  max-width: 10vh; /* Set the maximum width of the cell */
+  max-width: 16vh; /* Set the maximum width of the cell */
   max-height: 4em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: wrap;
 }
-
-
-
-
-
 
 
 /* No Trades message */
