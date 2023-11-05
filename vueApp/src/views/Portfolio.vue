@@ -128,19 +128,24 @@
       },
 
     // Called when portfolio changes
-      async change(hasData) {
-        const portfolioAssetView = this.$refs.PortfolioAssetView;
+    async change(hasData) {
+      const portfolioAssetView = this.$refs.PortfolioAssetView;
 
-        if (portfolioAssetView) {
-          await portfolioAssetView.fetchData();
-          await portfolioAssetView.getStockPrice();
-        }
-        
-        if (hasData) {
-          await this.updateStatistics();
-          await this.updateOptimisePortfolio();
-        }       
-      },
+      if (portfolioAssetView) {
+        await Promise.all([
+          portfolioAssetView.fetchData(),
+          portfolioAssetView.getStockPrice(),
+        ]);
+      }
+
+      if (hasData) {
+        await Promise.all([
+          this.updateStatistics(),
+          this.updateOptimisePortfolio(),
+        ]);
+      }
+    },
+
        
 
       async checkAndCreatePortfolio() {
@@ -168,8 +173,7 @@
           } 
       },
 
-  
-//Update
+//Update functions
     async updateStatistics() {
         console.log("Updating Portfolio")
         try {

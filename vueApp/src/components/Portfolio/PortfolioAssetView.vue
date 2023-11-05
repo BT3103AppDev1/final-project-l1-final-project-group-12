@@ -81,7 +81,7 @@
           // Get stock price every 5 seconds
           setInterval(async () => {
             await this.getStockPrice();
-            await this.fetchData();
+            //await this.fetchData();
           }, 5000);
 
           const watchCallback = async () => {

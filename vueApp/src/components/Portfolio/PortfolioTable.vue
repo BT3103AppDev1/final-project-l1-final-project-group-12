@@ -16,7 +16,7 @@
       <tbody>
         <tr v-for="(item, index) in portfolioData" :key="item.ticker">
           <td>{{ index + 1 }}</td>
-          <td>{{ item.name }}</td>
+          <td class="wrapped-cell">{{ item.name }}</td>
                                                     <!-- TODO: Add ticker -->
           <!-- Buy Price -->
           <td>
@@ -227,7 +227,7 @@ export default {
         return (item.buyQty * this.stockPrices[item.ticker]) - (item.buyQty * item.buyPrice); 
       };
     },
-    
+
     totalPL() {
       return this.portfolioData.reduce((total, item) => {
         return total + this.calculateProfitLoss(item);
@@ -304,6 +304,19 @@ export default {
   outline: none; /* Remove the default focus outline */
   border-color: #007BFF; /* Change border color when focused */
 }
+
+.wrapped-cell {
+  max-width: 10vh; /* Set the maximum width of the cell */
+  max-height: 4em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: wrap;
+}
+
+
+
+
+
 
 
 /* No Trades message */
