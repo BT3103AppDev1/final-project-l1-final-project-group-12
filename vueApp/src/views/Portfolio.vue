@@ -76,6 +76,7 @@
         objective: "",
 
         useremail: '',
+        existingPortfolio: null,
       };
     },
 
@@ -151,17 +152,20 @@
       async checkAndCreatePortfolio() {
         const apiReadPortfolioUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}/""`;
         const apiCreatePortfolioUrl = `http://localhost:3000/api/update/createPortfolio/${this.useremail}`;
-        let existingPortfolio = null;
-        
-        try {
-            existingPortfolio = await axios.get(apiReadPortfolioUrl);
-            console.log("Current Portfolio: ",existingPortfolio.data);
-          
-          } catch (error) {
-            console.log("No Portfolio found");
+        console.log(this.existingPortfolio)
+        if (this.existingPortfolio) {
+          console.log("Using cached portfolio data:", this.existingPortfolio.data);
+        } else {
+          try {
+              this.existingPortfolio = await axios.get(apiReadPortfolioUrl);
+              console.log("Current Portfolio: ",this.existingPortfolio.data);
+            
+            } catch (error) {
+              console.log("No Portfolio found");
+            }
           }
 
-          if (!existingPortfolio) { // Check if the portfolio doesn't exist
+          if (!this.existingPortfolio) { // Check if the portfolio doesn't exist
             try {
               console.log("Creating Portfolio..")
               await axios.post(apiCreatePortfolioUrl);
