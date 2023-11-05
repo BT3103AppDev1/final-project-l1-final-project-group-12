@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/views/Home.vue'
+
 import Portfolio from '@/views/Portfolio.vue'
-import Equities from '@/views/Equities.vue'
-import User from '@/views/User.vue'
+import NotFound from '@/views/NotFound.vue'
+import LogIn from '@/components/Portfolio/Login.vue'
 
 const routes = [
     {
         path: '/',
-        name: 'Home',
-        component: Home
+        name: 'Login',
+        component: LogIn
     },
 
     {
@@ -16,18 +16,12 @@ const routes = [
         name: 'Portfolio',
         component: Portfolio
     },
-
     {
-        path: '/equities',
-        name: 'Equities',
-        component: Equities
-    },
+        path: '/:catchAll(.*)',
+        name: 'NotFound',
+        component: NotFound
+      }
 
-    {
-        path: '/user',
-        name: 'User',
-        component: User
-    }
 ]
 
 const router = createRouter ({

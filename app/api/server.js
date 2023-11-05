@@ -16,7 +16,7 @@ const readDataRoutes = require("./routes/readDataRoutes");
 const updateDataRoutes = require("./routes/updateDataRoutes");
 const deleteDataRoutes = require("./routes/deleteDataRoutes");
 const optimiseDataRoutes = require("./routes/optimiseDataRoutes");
-const watchlistDataRoutes = require("./routes/watchlistDataRoutes");
+//const watchlistDataRoutes = require("./routes/watchlistDataRoutes");
 
 // Use the routes with a prefix (if you desire)
 
@@ -25,7 +25,7 @@ app.use("/api/read", readDataRoutes);
 app.use("/api/update", updateDataRoutes);
 app.use("/api/delete", deleteDataRoutes);
 app.use("/api/optimise", optimiseDataRoutes);
-app.use("/api/watch", watchlistDataRoutes);
+//app.use("/api/watch", watchlistDataRoutes);
 
 //... Your other server configurations ...
 

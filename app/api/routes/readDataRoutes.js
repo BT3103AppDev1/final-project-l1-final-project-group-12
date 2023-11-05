@@ -43,12 +43,9 @@ router.get("/portfolioInfo/:userEmail/:objectiveOfRead", async (req, res) => {
 });
 
 // Endpoint to read all trades of a user
-router.get("/allTrades/:userEmail/:objectiveOfRead", async (req, res) => {
+router.get("/allTrades/:userEmail", async (req, res) => {
   try {
-    const data = await readAllTrades(
-      req.params.userEmail,
-      req.params.objectiveOfRead
-    );
+    const data = await readAllTrades(req.params.userEmail);
     if (data) {
       res.json(data);
     } else {
@@ -60,12 +57,11 @@ router.get("/allTrades/:userEmail/:objectiveOfRead", async (req, res) => {
 });
 
 // Endpoint to read a specific trade's details
-router.get("/trade/:userEmail/:ticker/:objectiveOfRead", async (req, res) => {
+router.get("/trade/:userEmail/:ticker", async (req, res) => {
   try {
     const data = await readSpecificTrade(
       req.params.userEmail,
-      req.params.ticker,
-      req.params.objectiveOfRead
+      req.params.ticker
     );
     if (data) {
       res.json(data);
