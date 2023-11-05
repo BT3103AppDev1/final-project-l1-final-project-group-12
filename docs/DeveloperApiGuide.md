@@ -86,21 +86,33 @@ curl http://<your-server-url>/api/read/userInfo/john.doe@example.com
 
 ### 2. Get Portfolio Information
 
-- Endpoint: `/read/portfolioInfo/:userEmail`
+- Endpoint: `/read/portfolioInfo/:userEmail/:objectiveOfRead`
 - Method: `GET`
-- URL Params: `userEmail`(**required**)
+- URL Params:
+  - `userEmail`(**required**)
+  - `objectiveOfRead` (**required**)
+    - standard (`returns the portfolio the user made`)
+    - alpha (`returns the portfolio that maximises alpha`)
+    - beta (`returns the portfolio that minimises beta`)
+    - balance (`returns the portfolio that maximises Sharpe Ratio`)
 
 #### Usage:
 
 ```
-curl http://<your-server-url>/api/read/portfolioInfo/john.doe@example.com
+curl http://<your-server-url>/api/read/portfolioInfo/john.doe@example.com/standard
 ```
 
 ### 3. Get All Trades for a User
 
-- Endpoint: `/read/allTrades/:userEmail`
+- Endpoint: `/read/allTrades/:userEmail/:objectiveOfRead`
 - Method: `GET`
-- URL Params: `userEmail`(**required**)
+- URL Params:
+  - `userEmail`(**required**)
+  - `objectiveOfRead` (**required**)
+    - standard (`returns the portfolio the user made`)
+    - alpha (`returns the portfolio that maximises alpha`)
+    - beta (`returns the portfolio that minimises beta`)
+    - balance (`returns the portfolio that maximises Sharpe Ratio`)
 
 #### Usage:
 
@@ -110,11 +122,16 @@ curl http://<your-server-url>/api/read/allTrades/john.doe@example.com
 
 ### 4. Get Specific Trade Details
 
-- Endpoint: `/read/trade/:userEmail/:ticker`
+- Endpoint: `/read/trade/:userEmail/:ticker/:objectiveOfRead`
 - Method: `GET`
 - URL Params:
   - `userEmail` (**required**)
   - `ticker` (**required**)
+  - `objectiveOfRead` (**required**)
+    - standard (`returns the portfolio the user made`)
+    - alpha (`returns the portfolio that maximises alpha`)
+    - beta (`returns the portfolio that minimises beta`)
+    - balance (`returns the portfolio that maximises Sharpe Ratio`)
 
 #### Usage:
 
@@ -149,6 +166,13 @@ This method uses both post and put because I am lazy. Live with it
   - `buyQty` (**required**)
   - `buyPrice` (**required**)
 
+**Error responses**:
+| Code | Status | Client Side Action |
+| ---- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 500 | Error | Throw an error to ask user check their stock ticker and form values |
+
+---
+
 #### Usage:
 
 ```
@@ -174,11 +198,16 @@ curl http://<your-server-url>/api/update/updatePortfolio/john.doe@example.com
 
 ### 1. Delete Trade
 
-- Endpoint: `/delete/trade/:userEmail/:ticker`
+- Endpoint: `/delete/trade/:userEmail/:ticker/:objectiveOfDelete`
 - Method: `DELETE`
 - URL Params:
   - `userEmail` (**required**)
   - `ticker` (**required**)
+  - `objectiveOfRead` (**required**)
+    - standard (`returns the portfolio the user made`)
+    - alpha (`returns the portfolio that maximises alpha`)
+    - beta (`returns the portfolio that minimises beta`)
+    - balance (`returns the portfolio that maximises Sharpe Ratio`)
 
 #### Usage:
 
@@ -188,7 +217,7 @@ curl http://<your-server-url>/api/delete/trade/john.doe@example.com/AAPL
 
 ## API Endpoints for optimising the portfolio
 
-### 1. Delete Trade
+### 1. Optimise Trade
 
 - Endpoint: `/optimise/:userEmail/:objectiveForUpdate`
 - Method: `POST`
@@ -205,4 +234,47 @@ curl http://<your-server-url>/api/delete/trade/john.doe@example.com/AAPL
 curl http://<your-server-url>/api/optimise/john.doe@example.com/alpha
 curl http://<your-server-url>/api/optimise/john.doe@example.com/beta
 curl http://<your-server-url>/api/optimise/john.doe@example.com/balance
+```
+
+## API Endpoints for Watchlist
+
+### 1. Read the watchlist
+
+- Endpoint: `/watch/read/:userEmail`
+- Method: `GET`
+- URL Params:
+  - `userEmail` (**required**)
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/watch/read/john.doe@example.com
+```
+
+### 2. Add a stock to the watchlist
+
+- Endpoint: `/watch/add/:userEmail/:ticker`
+- Method: `POST`
+- URL Params:
+  - `userEmail` (**required**)
+  - `ticker` (**required**)
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/watch/add/john.doe@example.com/AAPL
+```
+
+### 2. Delete a stock from the watchlist
+
+- Endpoint: `/watch/delete/:userEmail/:ticker`
+- Method: `DELETE`
+- URL Params:
+  - `userEmail` (**required**)
+  - `ticker` (**required**)
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/watch/delete/john.doe@example.com/AAPL
 ```
