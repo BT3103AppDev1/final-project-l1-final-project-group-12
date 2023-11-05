@@ -58,18 +58,20 @@
 
           <!-- Button -->
           <td>
-            <!-- Display Edit button only if not in editing state -->
-            <button v-if="!item.editing" @click="editItem(index)" class="btw">
-              <img src="@/assets/editIcon.png" alt="Edit" />
-            </button>
-            <!-- Display Save and Cancel buttons if in editing state -->
-            <template v-else>
-              <button @click="saveItem(index)" class="btw" id="saveButton">
-                <img src="@/assets/tickIcon.png" alt="Save" />
+            <template v-if="objective==''">
+              <!-- Display Edit button only if not in editing state -->
+              <button v-if="!item.editing" @click="editItem(index)" class="btw">
+                <img src="@/assets/editIcon.png" alt="Edit" />
               </button>
-              <button @click="cancelEdit(index)" class="btw" id="cancelButton">
-                <img src="@/assets/crossIcon.png" alt="Cancel" />
-              </button>
+              <!-- Display Save and Cancel buttons if in editing state -->
+              <template v-else>
+                <button @click="saveItem(index)" class="btw" id="saveButton">
+                  <img src="@/assets/tickIcon.png" alt="Save" />
+                </button>
+                <button @click="cancelEdit(index)" class="btw" id="cancelButton">
+                  <img src="@/assets/crossIcon.png" alt="Cancel" />
+                </button>
+              </template>
             </template>
             <!-- Display Delete button if not in editing state -->
             <button v-if="!item.editing" @click="deleteItem(item.ticker)" class="btw">
@@ -102,9 +104,6 @@ export default {
     };
   },
 
-  props: {
-      objective: String,
-    },
 
   async mounted() {
       const auth = getAuth();
@@ -116,12 +115,15 @@ export default {
               this.useremail = ''; // Ensure it's cleared when the user signs out
           }
       });
+      console.log('Objective value:', this.objective);
   },
 
   props: {
     portfolioData: Array,
     stockPrices: Object,
     hasData: Boolean,
+    status: Boolean,
+    objective: String,
   },
 
   methods: {
@@ -212,6 +214,8 @@ export default {
         console.error('Failed to delete trade: ', error);
       }
     },
+
+    
 
     
 

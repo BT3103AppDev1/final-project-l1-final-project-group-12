@@ -16,6 +16,7 @@
       </div>
     </div>
 
+    <div v-if="!status">
       <!-- Table / PieChart  -->
       <PortfolioTable
         v-if="!isChecked"
@@ -23,6 +24,7 @@
         :stockPrices="stockPrices"
         :hasData="hasData"
         :objective="objective"
+        :status="status"
         @refresh-request="refresh"
         @total-pl-updated="emitTotalPL"
       />
@@ -33,6 +35,12 @@
         :hasData="hasData"
         @refresh-request="refresh"
       />
+
+    </div>
+
+    <div v-else>
+      Optimising...
+    </div>
 
     </div>
     </template>
@@ -54,6 +62,7 @@
 
     props: {
       objective: String,
+      status: Boolean,
     },
 
     data() {

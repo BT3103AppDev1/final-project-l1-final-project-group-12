@@ -24,6 +24,7 @@
             <PortfolioAssetView 
               :objective="objective"   
               ref="PortfolioAssetView"
+              :status="getStatus()"
               @total-pl-updated = "emitTotalPL"
               @refresh-request = "change"
               />
@@ -39,7 +40,8 @@
     <!-- Statistic Table  -->
     <div v-else class="right-icon">
         <PortfolioStatistics 
-          :objective="objective" />
+          :objective="objective"
+          :isStatisticsOptimizing="isStatisticsOptimizing" />
         
     </div>
 
@@ -74,6 +76,10 @@
         showStatistics: false,
         totalPL: 0,
         objective: "",
+        isAlphaOptimizing: false,
+        isBetaOptimizing: false,
+        isBalanceOptimizing: false,
+        isStatisticsOptimizing: false,
 
         useremail: '',
         existingPortfolio: null,
@@ -131,6 +137,10 @@
     // Called when portfolio changes
     async change(hasData) {
       const portfolioAssetView = this.$refs.PortfolioAssetView;
+      this.isAlphaOptimizing = true;
+      this.isBetaOptimizing = true;
+      this.isBalanceOptimizing = true;
+      this.isStatisticsOptimizing = true;
 
       if (portfolioAssetView) {
         await Promise.all([
@@ -183,6 +193,8 @@
         try {
           const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`; 
           await axios.put(apiUrl);
+          this.isStatisticsOptimizing = false;
+          console.log(this.isStatisticsOptimizing)
           
         } catch (error) {
           console.error("Error Updated Portfolio:", error);
@@ -197,13 +209,33 @@
       
       try {
         await axios.post(apiAlphaUrl);
+        this.isAlphaOptimizing = false;
+      
         await axios.post(apiBetaUrl);
+        this.isBetaOptimizing = false;
+      
         await axios.post(apiBalanceUrl);
+        this.isBalanceOptimizing = false;
+
       } catch (error) {
         console.error("Error Updated Optimised Portfolio:", error);
       }
+
+      console.log("Update complete!")
       
     },    
+
+    getStatus() {
+      if(this.objective == 'alpha') {
+        return this.isAlphaOptimizing
+      } else if (this.objective == 'beta') {
+        return this.isBetaOptimizing
+      } else if (this.objective == 'balance') {
+        return this.isBalanceOptimizing
+      } else {
+        return false;
+      }
+    },
 
     },
 

@@ -1,7 +1,7 @@
 <template>
 
   <div class="statistics-table">
-      
+  <div v-if="!isStatisticsOptimizing">    
     <!-- Content -->
     <div class="statistics-content">
       <div class="column" v-for="(column, columnIndex) in columns" :key="columnIndex">
@@ -14,6 +14,13 @@
       </div>
     </div>
   </div>
+
+  <div v-else>
+      Optimising...
+  </div>
+  
+  </div>
+  
 
 </template>
 
@@ -51,6 +58,7 @@ export default {
 
   props: {
       objective: String,
+      isStatisticsOptimizing: Boolean,
     },
 
     async created() {
