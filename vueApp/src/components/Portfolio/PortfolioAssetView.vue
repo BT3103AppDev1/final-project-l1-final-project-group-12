@@ -19,10 +19,10 @@
       <!-- Table / PieChart  -->
       <PortfolioTable
         v-if="!isChecked"
-        :key="refreshComp"
         :portfolioData="portfolioData"
         :stockPrices="stockPrices"
         :hasData="hasData"
+        :objective="objective"
         @refresh-request="refresh"
         @total-pl-updated="emitTotalPL"
       />
@@ -59,7 +59,6 @@
     data() {
       return {
         isChecked: false,
-        refreshComp: 0,
         portfolioData: [],
         stockPrices: {},
         hasData: true,
@@ -68,28 +67,35 @@
       };
     },
 
-    async created() {
-      const auth = getAuth()
-      onAuthStateChanged(auth, (user) => {
+    created() {
+      const auth = getAuth();
+
+      // Create an async function to handle user authentication and data fetching
+      const handleUserAuthentication = async (user) => {
         if (user) {
           this.useremail = user.email;
-          this.fetchData()
-            .then(() => {
-              this.getStockPrice();
-            });
-            // Call fetchData every 5 seconds
-            setInterval(this.getStockPrice, 5000);
 
-            this.$watch('objective', () => {
-              this.fetchData();
-            });
+          await this.fetchData();
+          await this.getStockPrice();
 
+          // Get stock price every 5 seconds
+          setInterval(async () => {
+            await this.getStockPrice();
+          }, 5000);
+
+          const watchCallback = async () => {
+            await this.fetchData();
+          };
+
+          this.$watch('objective', watchCallback);
         } else {
-          console.error('User not authenticated')
+          console.error('User not authenticated');
         }
-      })
-    },
+      };
 
+      // Pass the async function as the callback to onAuthStateChanged
+      onAuthStateChanged(auth, handleUserAuthentication);
+    },
 
     methods: {
       
@@ -98,14 +104,22 @@
       },
 
       async refresh() {
-        this.fetchData();
+        await this.fetchData();
 
-        this.$emit('refresh-request');
+        console.log("emit",this.hasData)
+        this.$emit('refresh-request', this.hasData);
       },
 
       async fetchData() {
+        console.log("Fetching Portfolio Data: ", this.objective)
+
+        let apiUrl;
         try {
-            const apiUrl = `http://localhost:3000/api/read/allTrades/${this.useremail}`;
+            if (this.objective) {
+              apiUrl = `http://localhost:3000/api/read/allTrades/${this.useremail}/${this.objective}`;
+            } else {
+              apiUrl = `http://localhost:3000/api/read/allTrades/${this.useremail}/""`;
+            }
             console.log(apiUrl)
             const querySnapshot = await axios.get(apiUrl);
             this.portfolioData = querySnapshot.data;

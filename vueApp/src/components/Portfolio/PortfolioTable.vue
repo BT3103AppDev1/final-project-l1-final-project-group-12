@@ -44,7 +44,7 @@
             </template>
             <!-- Display Buy Quantity if not in editing state -->
             <template v-else>
-              {{ item.buyQty }}
+              {{ parseFloat(item.buyQty).toFixed(2) }}
             </template>
           </td>
 
@@ -102,7 +102,9 @@ export default {
     };
   },
 
-  
+  props: {
+      objective: String,
+    },
 
   async mounted() {
       const auth = getAuth();
@@ -145,19 +147,15 @@ export default {
       
       if (userConfirmed) {
         const apiAddUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
-        const apiDeleteUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${item.ticker}`;
         
         try {
-          axios.delete(apiDeleteUrl).then(() => {
-          axios.put(apiAddUrl, updatedData).then(() => {
-            this.$emit('refresh-request');
-      
-            });
-          })
 
-          // Update the data in the Vue component
-          item.buyPrice = this.updatedBuyPrice;
-          item.buyQty = this.updatedBuyQuantity;
+          await this.deleteFromDB(item.ticker);
+
+          console.log("Adding Updated Item");
+          await axios.put(apiAddUrl, updatedData);
+          
+          this.$emit('refresh-request', this.hasData);
 
         } catch (error) {
           console.error('Fail to updating trade: ', error )
@@ -166,7 +164,6 @@ export default {
       } else {
         this.cancelEdit(index)
       }
-      
       
     },
 
@@ -181,17 +178,38 @@ export default {
     },
 
     async deleteItem(ticker) {
+
       const userConfirmed = window.confirm("Are you sure you want to proceed?");
       if (userConfirmed) {
         try {
-          const apiUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}`;
-          await axios.delete(apiUrl);
+          await this.deleteFromDB(ticker);
 
+          console.log("refresh");
           this.$emit('refresh-request');
-
+          
         } catch (error) {
           console.error('Fail to delete trade: ', error )
         }
+      }
+    },
+
+    async deleteFromDB(ticker) {
+      const apiUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}/""`;
+      const apiAlphaUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}/alpha`;
+      const apiBetaUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}/beta`;
+      const apiBalanceUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}/balance`;
+
+      try {
+        await Promise.all([
+          axios.delete(apiUrl),
+          axios.delete(apiAlphaUrl),
+          axios.delete(apiBetaUrl),
+          axios.delete(apiBalanceUrl)
+        ]);
+        
+        console.log('Delete: All requests completed');
+      } catch (error) {
+        console.error('Failed to delete trade: ', error);
       }
     },
 
@@ -206,9 +224,10 @@ export default {
   computed: {
     calculateProfitLoss() {
       return (item) => {
-        return (item.buyQty * this.stockPrices[item.ticker]) - (item.buyQty * item.buyPrice);   //TODO: update price
+        return (item.buyQty * this.stockPrices[item.ticker]) - (item.buyQty * item.buyPrice); 
       };
     },
+    
     totalPL() {
       return this.portfolioData.reduce((total, item) => {
         return total + this.calculateProfitLoss(item);

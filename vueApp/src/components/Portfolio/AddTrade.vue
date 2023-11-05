@@ -19,7 +19,8 @@
 
         <div id = "profitContainer">
             <h3>Expected Return  </h3>
-            <h1 id="totalProfit">SGD$ {{ this.totalPL.toFixed(2) }}</h1>     
+            <h1 id="totalProfit" v-if="isNaN(totalPL)">Loading..</h1>
+            <h1 id="totalProfit" v-else>SGD$ {{ totalPL.toFixed(2) }}</h1>  
         </div>
       
         
@@ -43,6 +44,10 @@
       };
     },
 
+    props: {
+      totalPL: Number,
+    },
+
     async mounted() {
         const auth = getAuth();
         onAuthStateChanged(auth, (user) => {
@@ -54,15 +59,10 @@
         });
     },
 
-
-    props: {
-      totalPL: Number,
-    },
-
     computed: {
         // Calculate the trade profit based on tradeQuantity and pricePerTrade
         tradeCost() {
-        return (this.tradeQuantity || 0) * (this.pricePerTrade || 0);
+            return (this.tradeQuantity || 0) * (this.pricePerTrade || 0);
         },
     },
 
@@ -97,7 +97,6 @@
             const apiUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
 
             try {
-                // Make a POST request to updateTrade endpoint
                 await axios.put(apiUrl, tradeData);
             
             } catch (error) {
@@ -110,7 +109,8 @@
             this.tradeQuantity = null;
             this.pricePerTrade = null;
 
-            this.$emit("added")
+            this.$emit("added", true)
+            console.log("Added: ", ticker)
             
      }
 

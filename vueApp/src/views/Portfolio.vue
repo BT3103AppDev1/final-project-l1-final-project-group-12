@@ -22,16 +22,15 @@
     <div v-if="!showStatistics" class="portfolioDisplay">
         <div class="table">
             <PortfolioAssetView 
-              :objective="objective"  
-              :key="refreshComp" 
+              :objective="objective"   
+              ref="PortfolioAssetView"
               @total-pl-updated = "emitTotalPL"
-              @refresh-request = "updateStatistics"
+              @refresh-request = "change"
               />
               
         </div>
         <div class="addTrade">
-            <AddTrade 
-              :key="refreshComp" 
+            <AddTrade  
               :totalPL = "totalPL"
               @added = "change"/>
         </div>
@@ -40,7 +39,6 @@
     <!-- Statistic Table  -->
     <div v-else class="right-icon">
         <PortfolioStatistics 
-          :key="refreshComp"
           :objective="objective" />
         
     </div>
@@ -73,7 +71,6 @@
     data() {
       return {
         isChecked: false,
-        refreshComp: 0,
         showStatistics: false,
         totalPL: 0,
         objective: "",
@@ -105,37 +102,46 @@
     },
 
     methods: {
-      change() {
-        this.refreshComp += 1
-        this.updateStatistics();
-        this.updateOptimisePortfolio();
-        
-      },
 
-    getObjective(index) {
-      if (index == 1) {
-          this.objective = "";
-
-        } else if (index == 2) {
-          this.objective = "alpha";
-        
-        } else if (index == 3) {
-          this.objective = "beta";
-
-        } else{
-          this.objective = "balance";
-        }
-    },
-          
       toggleStatistics() {
         this.showStatistics = !this.showStatistics;
-        },
-
+      },
 
       emitTotalPL(totalPL) {
         this.totalPL = totalPL;
         this.$emit('total-pl-updated', totalPL);
       },
+
+      getObjective(index) {
+        if (index == 1) {
+            this.objective = "";
+
+          } else if (index == 2) {
+            this.objective = "alpha";
+          
+          } else if (index == 3) {
+            this.objective = "beta";
+
+          } else{
+            this.objective = "balance";
+          }
+      },
+
+    // Called when portfolio changes
+      async change(hasData) {
+        const portfolioAssetView = this.$refs.PortfolioAssetView;
+
+        if (portfolioAssetView) {
+          await portfolioAssetView.fetchData();
+          await portfolioAssetView.getStockPrice();
+        }
+        
+        if (hasData) {
+          await this.updateStatistics();
+          await this.updateOptimisePortfolio();
+        }       
+      },
+       
 
       async checkAndCreatePortfolio() {
         const apiReadPortfolioUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}/""`;
@@ -144,7 +150,7 @@
         
         try {
             existingPortfolio = await axios.get(apiReadPortfolioUrl);
-            console.log("Current Portfolio: ",existingPortfolio);
+            console.log("Current Portfolio: ",existingPortfolio.data);
           
           } catch (error) {
             console.log("No Portfolio found");
@@ -154,15 +160,16 @@
             try {
               console.log("Creating Portfolio..")
               await axios.post(apiCreatePortfolioUrl);
-               
+              this.updateOptimisePortfolio();
+                
             } catch (error) {
               alert('Error: ' + error.response.data);
             }
           } 
       },
 
-      
-
+  
+//Update
     async updateStatistics() {
         console.log("Updating Portfolio")
         try {
@@ -188,13 +195,11 @@
         console.error("Error Updated Optimised Portfolio:", error);
       }
       
-    },
-
-    
+    },    
 
     },
 
-    emits: ["total-pl-updated"],
+    emits: ["total-pl-updated", "refresh-request"],
 
     
     

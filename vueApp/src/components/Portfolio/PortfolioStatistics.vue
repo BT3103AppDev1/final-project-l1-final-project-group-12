@@ -7,7 +7,9 @@
       <div class="column" v-for="(column, columnIndex) in columns" :key="columnIndex">
         <div class="row" v-for="(row, rowIndex) in column" :key="rowIndex">
           <div class="cell">{{ row.label }}</div>
-          <div class="cell">{{ parseFloat(statisticsData[row.header]).toFixed(2) }} {{ row.symbol }}</div>
+
+          <div class="cell" v-if="isNaN(statisticsData[row.header])">Loading..</div>
+          <div class="cell" v-else>{{ parseFloat(statisticsData[row.header]).toFixed(2) }} {{ row.symbol }}</div>
         </div>
       </div>
     </div>
@@ -51,22 +53,22 @@ export default {
       objective: String,
     },
 
-  async created() {
-    const auth = getAuth()
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        this.useremail = user.email;
-        this.fetchStatistics();
+    async created() {
+      const auth = getAuth();
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          this.useremail = user.email;
+          await this.fetchStatistics();
 
-        this.$watch('objective', () => {
-              this.fetchStatistics();
-        });
+          this.$watch('objective', () => {
+            this.fetchStatistics(); 
+          });
 
-      } else {
-        console.error('User not authenticated')
-      }
-    })
-  },
+        } else {
+          console.error('User not authenticated');
+        }
+      });
+    },
 
   methods: {
 
