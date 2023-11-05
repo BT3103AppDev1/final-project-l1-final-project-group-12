@@ -1,21 +1,45 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { auth } from '../firebasefunc.js'
+import { getAuth,onAuthStateChanged } from 'firebase/auth'
+import {auth} from './../firebasefunc.js'
 import Home from '@/views/Home.vue'
+import Portfolio from '@/views/Portfolio.vue'
+import Equities from '@/views/Equities.vue'
+import User from '@/views/User.vue'
 import Login from '@/views/Login.vue'
-
-
 
 const routes = [
     {
         path: '/',
         name: 'Home',
-        component: Home, Login
+        component: Home
     },
     {
-        path:'/login',
-        name:'Login',
-        component:Login
+        path: '/login',
+        name: 'Login',
+        component: Login
     },
+
+    {
+        path: '/portfolio',
+        name: 'Portfolio',
+        component: Portfolio,
+        meta: { requiresAuth: true },
+    },
+
+    {
+        path: '/equities',
+        name: 'Equities',
+        component: Equities,
+        meta: { requiresAuth: true },
+    },
+
+    {
+        path: '/user',
+        name: 'User',
+        component: User,
+        meta: { requiresAuth: true },
+
+    }
 ]
 
 const router = createRouter ({
@@ -23,17 +47,23 @@ const router = createRouter ({
     routes
 })
 
-router.beforeEach(async (to, from, next)=>{
-    if (to.matched.some(record => record.meta.auth)){
-        // Auth check 
-        if (auth.currentUser) {
-            //check if token is valid 
-             next()
-             console.log("Authenticated User")
-        }
-        next('/login')
+
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if ( getAuth().currentUser) { 
+        console.log('accessibles')
+        next();
+        return;
     }
-    next() 
-})
+    console.log('restricted')
+    next('/login');
+  } else {
+    console.log('justgo')
+    next();
+    return;
+  }
+});
+
 
 export default router

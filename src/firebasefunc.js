@@ -81,4 +81,4 @@ async function editInstrument(stock, updatedData) {
 }
 
 
-export { extractData, deleteInstrument, editInstrument, addInstrument,auth };
+export { extractData, deleteInstrument, editInstrument, addInstrument, auth };

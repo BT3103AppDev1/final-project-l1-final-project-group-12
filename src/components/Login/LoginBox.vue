@@ -86,6 +86,7 @@ export default {
             .then((credential) => {
                 // registered and signed in
                 console.log(credential.user)
+                auth
                 this.$router.push('/portfolio');
             })
             .catch((error) => {
