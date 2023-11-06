@@ -26,14 +26,14 @@
             </template>
             <!-- Display Buy Price if not in editing st ate -->
             <template v-else>
-              {{ parseFloat(item.buyPrice).toFixed(2) }}
+              ${{ formatNumberWithCommas(item.buyPrice) }}
             </template>
           </td>
 
           <!-- Stock Price -->
           <td>
             <template v-if="isNaN(this.stockPrices[item.ticker]) ">Loading..</template>
-            <template v-else>{{ parseFloat(this.stockPrices[item.ticker]).toFixed(2) }}</template>
+            <template v-else>{{ formatNumberWithCommas(this.stockPrices[item.ticker]) }}</template>
           </td>        
 
           <!-- Buy Quantity -->
@@ -51,9 +51,14 @@
 
           <!-- P/L -->
           <td>
-            <template v-if="isNaN(this.stockPrices[item.ticker])">Loading..</template>
-            <template v-else>{{ calculateProfitLoss(item).toFixed(2) }}</template>
+            <template v-if="isNaN(this.stockPrices[item.ticker])" >Loading..</template>
+            <template v-else>
+              <span :style="{ color: calculateProfitLoss(item) < 0 ? '#DA5151' : '#62D639' }">
+                {{ calculateProfitLoss(item) >= 0 ? '+$' : '-$' }}{{ formatNumberWithCommas(Math.abs(calculateProfitLoss(item))) }}
+              </span>
+            </template>
           </td>
+
 
 
           <!-- Button -->
@@ -137,6 +142,13 @@ export default {
   },
 
   methods: {
+    formatNumberWithCommas(number) {
+    return number.toLocaleString(undefined, {
+      useGrouping: true,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  },
     editItem(index) {
       const item = this.portfolioData[index];
       

@@ -6,7 +6,7 @@
             <h1 class="titleOfDiv">Add Trade</h1>
 
             <!-- Add Coins Form -->
-            <input type="text" id="ticker1" required="yes" placeholder="ticker name/code"> <br><br>    
+            <input type="text" id="ticker1" required="yes" placeholder="Input Ticker Code"> <br><br>    
             <input type="number" id="quant1" required="yes" placeholder="Input Trade Quantity" v-model="tradeQuantity"> <br><br>   
             <input type="number" id="buy1" required="yes" placeholder="Input Price Per Trade" v-model="pricePerTrade"> <br><br>
   
@@ -20,7 +20,11 @@
         <div id = "profitContainer">
             <h3>Expected Return  </h3>
             <h1 id="totalProfit" v-if="isNaN(totalPL)">Loading..</h1>
-            <h1 id="totalProfit" v-else>SGD$ {{ totalPL.toFixed(2) }}</h1>  
+            <h1 id="totalProfit" v-else>SGD$ {{ totalPL.toLocaleString(undefined, {
+                                                                        useGrouping: true,
+                                                                        minimumFractionDigits: 2,
+                                                                        maximumFractionDigits: 2,
+                                                                        }) }}</h1>  
         </div>
       
         
