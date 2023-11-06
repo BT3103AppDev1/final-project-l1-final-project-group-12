@@ -1,7 +1,7 @@
 <template>
 
   <div class="statistics-table">
-  <div v-if="!status">    
+    <div v-if="!optimizingStatus">    
     <!-- Content -->
     <div class="statistics-content">
       <div class="column" v-for="(column, columnIndex) in columns" :key="columnIndex">
@@ -59,7 +59,7 @@ export default {
 
   props: {
       objective: String,
-      status: Boolean,
+      optimizingStatus: Boolean,
       hasData: Boolean,
       updateOptimisePortfolio: Function,
       getOptimizedStatus: Boolean,
@@ -75,9 +75,9 @@ export default {
 
           const watchCallback = async () => {
             if (!this.getOptimizedStatus && this.hasData){
-              console.log(this.status)
+              console.log(this.optimizingStatus)
               await this.updateOptimisePortfolio(this.objective);
-              console.log(this.status)
+              console.log(this.optimizingStatus)
             }
             await this.fetchStatistics(); 
           };

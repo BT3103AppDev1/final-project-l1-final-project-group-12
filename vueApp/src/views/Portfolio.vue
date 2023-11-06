@@ -45,6 +45,7 @@
         <div v-else class="right-icon">
             <PortfolioStatistics 
               :objective="objective"
+              :optimizingStatus="getStatus()"
               :isStatisticsOptimizing="updatingStatistics" 
               :getOptimizedStatus = "getOptimizedStatus()"
               :updateOptimisePortfolio = "updateOptimisePortfolio"
