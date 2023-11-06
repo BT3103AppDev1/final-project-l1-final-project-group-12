@@ -60,7 +60,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style>
 .popup {
   position: fixed;
   top: 0;

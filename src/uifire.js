@@ -1,10 +1,6 @@
 import firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
 
-// ------------------------------ Firebase Config ------------------------------ //
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+//Change
 const firebaseConfig = {
   apiKey: "AIzaSyCsdwvGXo3lwvM-TNOX_MuwFxAk97DfRQA",
   authDomain: "smartfolio-16224.firebaseapp.com",
