@@ -68,7 +68,7 @@
   import PortfolioStatistics from '@/components/Portfolio/PortfolioStatistics.vue'
   import OptimisationTab from '@/components/Portfolio/OptimisationTab.vue'
   import Loading from '@/components/Loading.vue'
-  import NavBar from '@/components/NavBar.vue'
+  import NavBar from '@/components/Navigation.vue'
 
   import { getAuth, onAuthStateChanged } from 'firebase/auth'
   import axios from 'axios';
