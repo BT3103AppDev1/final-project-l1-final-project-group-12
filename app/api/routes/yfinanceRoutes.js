@@ -9,7 +9,10 @@ const {
   getOptionsData,
   getTopGainersData,
   getTopLosersData,
-  getMostActivesData
+  getMostActivesData,
+  getMarketCapData,
+  getAvgVolumeData,
+  getPercentageChangeData
 } = require("../../controllers/yfinanceController");
 
 // Route to get stock statistics
@@ -32,5 +35,14 @@ router.get("/topLosersData", getTopLosersData)
 
 //Route to get most actives data 
 router.get("/mostActivesData", getMostActivesData)
+
+//Route to get market cap data 
+router.get("/marketCapData/:ticker", getMarketCapData)
+
+//Route to get volume data 
+router.get("/averageVolumeData/:ticker", getAvgVolumeData)
+
+//Route to get percentage change data 
+router.get("/percentageChange/:ticker", getPercentageChangeData)
 
 module.exports = router;

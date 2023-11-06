@@ -144,7 +144,6 @@ def get_top_gainers():
     @return: str
         A JSON string containing 'stock_name' for each loser.
     """
-
 def get_top_losers():
     url = 'https://finance.yahoo.com/losers'
     headers = {
@@ -176,7 +175,6 @@ def get_top_losers():
     @return: str
         A JSON string containing market data for the most active stocks
     """
-
 def get_most_actives():
     url = 'https://finance.yahoo.com/most-active'
     headers = {
@@ -209,6 +207,97 @@ def get_most_actives():
 
     return most_actives
 
+    """
+    get_market_cap Function:
+    Fetches information on market cap for a ticker from https://finance.yahoo.com/quote/:ticker
+    
+    Parameters:
+    @param ticker: str
+        The stock ticker symbol.
+
+    Returns:
+    @return: str
+        A str for market cap for specified ticker.
+    """
+def get_market_cap(ticker):
+    url = f'https://finance.yahoo.com/quote/{ticker}'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        doc = lxml.html.fromstring(response.content)
+
+        # Modify the XPath expression to match the location of the market cap data on the page
+        market_cap_element = doc.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[1]/td[2]')
+
+        if market_cap_element:
+            market_cap_value = market_cap_element[0].text  # Extract the text content of the element
+            return market_cap_value
+        else:
+            return "Data not found."
+    else:
+        return f"Failed to retrieve data. Status code: {response.status_code}"
+
+    """
+    get_avg_volume Function:
+    Fetches information on average volume for a ticker from https://finance.yahoo.com/quote/:ticker
+    
+    Parameters:
+    @param ticker: str
+        The stock ticker symbol.
+
+    Returns:
+    @return: str
+        A str for average volume for specified ticker.
+    """
+def get_avg_volume(ticker):
+    url = f'https://finance.yahoo.com/quote/{ticker}'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        doc = lxml.html.fromstring(response.content)
+
+        # Modify the XPath expression to match the location of the volume data on the page
+        volume_element = doc.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[8]/td[2]')
+        if volume_element:
+            volume_value = volume_element[0].text  # Extract the text content of the element
+            return volume_value
+        else:
+            return "Volume data not found on the page."
+    else:
+        return f"Failed to retrieve data. Status code: {response.status_code}"
+
+    """
+    get_percentage_change Function:
+    Fetches information on percentage change for a ticker from https://finance.yahoo.com/quote/:ticker
+    
+    Parameters:
+    @param ticker: str
+        The stock ticker symbol.
+
+    Returns:
+    @return: str
+        A str for percentage change for specified ticker.
+    """
+def get_percentage_change(ticker):
+    url = f'https://finance.yahoo.com/quote/{ticker}'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        doc = lxml.html.fromstring(response.content)
+
+        # Modify the XPath expression to match the location of the percentage change data on the page
+        percentage_change_element = doc.xpath('//*[@id="quote-header-info"]/div[3]/div[1]/div/fin-streamer[3]/span')
+
+        if percentage_change_element:
+            percentage_change_value = percentage_change_element[0].text  # Extract the text content of the element
+            # Remove brackets if they exist
+            percentage_change_value = percentage_change_value.strip('()')
+            return percentage_change_value
+        else:
+            return "Percentage Change data not found on the page."
+    else:
+        return f"Failed to retrieve data. Status code: {response.status_code}"
+
 if __name__ == "__main__":
     function_name = sys.argv[1]
     args = sys.argv[2:]
@@ -227,3 +316,11 @@ if __name__ == "__main__":
         print(json.dumps(get_top_losers()))
     elif function_name == 'get_most_actives' and len(args) == 1:
         print(json.dumps(get_most_actives()))
+    elif function_name == 'get_market_cap' and len(args) == 1:
+        print(json.dumps(get_market_cap(*args)))
+    elif function_name == 'get_avg_volume' and len(args) == 1:
+        print(json.dumps(get_avg_volume(*args)))
+    elif function_name == 'get_percentage_change' and len(args) == 1:
+        print(json.dumps(get_percentage_change(*args)))
+
+        

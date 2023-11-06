@@ -124,6 +124,52 @@ const getMostActivesData = async (req, res) => {
   }
 };
 
+
+// Connector method to get market cap data
+const getMarketCapData = async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_market_cap",
+      ticker,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+// Connector method to get stock volume data
+const getAvgVolumeData = async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_avg_volume",
+      ticker,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+// Connector method to get percentage change data
+const getPercentageChangeData = async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_percentage_change",
+      ticker,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
 module.exports = {
   getCurrentPrice,
   getStockStatistics,
@@ -131,5 +177,8 @@ module.exports = {
   getOptionsData,
   getTopGainersData,
   getTopLosersData,
-  getMostActivesData
+  getMostActivesData,
+  getMarketCapData,
+  getAvgVolumeData,
+  getPercentageChangeData
 };
