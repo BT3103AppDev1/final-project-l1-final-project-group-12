@@ -3,11 +3,11 @@
     <div class="vl-parent">
         <loading v-model:active="isLoading"
                  :is-full-page="fullPage"
-                 loader = "dots"
-                 color = "blue"
-                 background-color = "white"
-                 before = "test"
-                 lock-scroll = true
+                 :loader = "loader"
+                 :width = "width"
+                 :color = "color"
+                 :background-color = "backgroundColor"
+                 :lock-scroll = "lockScroll"
                  />
     </div>
 </template>
@@ -19,8 +19,15 @@
     export default {
         data() {
             return {
-                fullPage: true,
                 isLoading: false,
+                fullPage: true,
+                loader: "dots",
+                width: 95,
+                color: "blue",
+                backgroundColor: "white",
+                lockScroll: true,
+                test: "test",
+
             }
         },
 
