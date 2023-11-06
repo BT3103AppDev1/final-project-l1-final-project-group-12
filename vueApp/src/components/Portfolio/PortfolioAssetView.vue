@@ -16,6 +16,7 @@
       </div>
     </div>
 
+  
     <div v-if="!status">
       <!-- Table / PieChart  -->
       <PortfolioTable
@@ -38,7 +39,7 @@
 
     </div>
 
-    <div v-else>
+    <div class = assetView-container v-else>
       Optimising...
     </div>
 
@@ -245,4 +246,14 @@
     transform: translateX(2.7vw);
   }
 
+  .assetView-container {
+    height: 33vw;
+    margin-top: 0.1vw;
+    border-radius: 25px;
+    background-color: white;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column; /* Set flex-direction to column */
+    position: relative; /* Add relative positioning to the container */
+  }
 </style>
