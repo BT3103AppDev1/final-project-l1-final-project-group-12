@@ -23,7 +23,7 @@
 
   
 
-<script>
+<script scope>
 import VueApexCharts from 'vue3-apexcharts';
 
 export default {
@@ -104,7 +104,7 @@ export default {
 .pie-chart-container {
   height: 33vw;
   margin-top: 0.1vw;
-  padding-left: 23vw;
+  padding-left: 13vw;
   padding-right: 13vw;
   border-radius: 25px;
   background-color: white;
@@ -137,10 +137,11 @@ export default {
 
 .message {
   text-align: center;
-  margin-top: 58%; /* Use percentage for responsiveness */
+  margin-top: 60%; /* Use percentage for responsiveness */
   font-size: 1.6vw;
   font-weight: bold;
   color: #BFBFBF;
+  max-width: 100% !important;
 }
 </style>
   

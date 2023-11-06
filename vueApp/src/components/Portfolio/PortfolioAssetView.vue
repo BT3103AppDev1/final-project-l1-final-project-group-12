@@ -1,5 +1,5 @@
 <template>
-  <div>
+  
     <div class="toggleContainer">
 
       <!-- Toggle Switch -->
@@ -42,7 +42,7 @@
       Optimising...
     </div>
 
-    </div>
+   
     </template>
   
   
@@ -95,7 +95,7 @@
           }, 5000);
 
           const watchCallback = async () => {
-            if (!this.getOptimizedStatus){
+            if (!this.getOptimizedStatus && this.hasData){
               await this.updateOptimisePortfolio(this.objective);
             }
             await this.fetchData();
