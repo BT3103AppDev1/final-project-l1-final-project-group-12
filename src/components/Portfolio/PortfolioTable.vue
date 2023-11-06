@@ -158,7 +158,6 @@ export default {
     },
 
     async saveItem(index) {
-      this.$refs.Loading.onLoading()
       const item = this.portfolioData[index];
       
       // Update item data with the new values
@@ -171,6 +170,7 @@ export default {
       const userConfirmed = window.confirm("Are you sure you want to proceed?");
       
       if (userConfirmed) {
+        this.$refs.Loading.onLoading()
         const apiAddUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
         
         try {
