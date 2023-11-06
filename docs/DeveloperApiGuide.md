@@ -91,10 +91,10 @@ curl http://<your-server-url>/api/read/userInfo/john.doe@example.com
 - URL Params:
   - `userEmail`(**required**)
   - `objectiveOfRead` (**required**)
-    - standard
-    - alpha
-    - beta
-    - balance
+    - standard (`returns the portfolio the user made`)
+    - alpha (`returns the portfolio that maximises alpha`)
+    - beta (`returns the portfolio that minimises beta`)
+    - balance (`returns the portfolio that maximises Sharpe Ratio`)
 
 #### Usage:
 
@@ -104,9 +104,15 @@ curl http://<your-server-url>/api/read/portfolioInfo/john.doe@example.com/standa
 
 ### 3. Get All Trades for a User
 
-- Endpoint: `/read/allTrades/:userEmail`
+- Endpoint: `/read/allTrades/:userEmail/:objectiveOfRead`
 - Method: `GET`
-- URL Params: `userEmail`(**required**)
+- URL Params:
+  - `userEmail`(**required**)
+  - `objectiveOfRead` (**required**)
+    - standard (`returns the portfolio the user made`)
+    - alpha (`returns the portfolio that maximises alpha`)
+    - beta (`returns the portfolio that minimises beta`)
+    - balance (`returns the portfolio that maximises Sharpe Ratio`)
 
 #### Usage:
 
@@ -116,11 +122,16 @@ curl http://<your-server-url>/api/read/allTrades/john.doe@example.com
 
 ### 4. Get Specific Trade Details
 
-- Endpoint: `/read/trade/:userEmail/:ticker`
+- Endpoint: `/read/trade/:userEmail/:ticker/:objectiveOfRead`
 - Method: `GET`
 - URL Params:
   - `userEmail` (**required**)
   - `ticker` (**required**)
+  - `objectiveOfRead` (**required**)
+    - standard (`returns the portfolio the user made`)
+    - alpha (`returns the portfolio that maximises alpha`)
+    - beta (`returns the portfolio that minimises beta`)
+    - balance (`returns the portfolio that maximises Sharpe Ratio`)
 
 #### Usage:
 
@@ -155,6 +166,13 @@ This method uses both post and put because I am lazy. Live with it
   - `buyQty` (**required**)
   - `buyPrice` (**required**)
 
+**Error responses**:
+| Code | Status | Client Side Action |
+| ---- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 500 | Error | Throw an error to ask user check their stock ticker and form values |
+
+---
+
 #### Usage:
 
 ```
@@ -180,11 +198,16 @@ curl http://<your-server-url>/api/update/updatePortfolio/john.doe@example.com
 
 ### 1. Delete Trade
 
-- Endpoint: `/delete/trade/:userEmail/:ticker`
+- Endpoint: `/delete/trade/:userEmail/:ticker/:objectiveOfDelete`
 - Method: `DELETE`
 - URL Params:
   - `userEmail` (**required**)
   - `ticker` (**required**)
+  - `objectiveOfRead` (**required**)
+    - standard (`returns the portfolio the user made`)
+    - alpha (`returns the portfolio that maximises alpha`)
+    - beta (`returns the portfolio that minimises beta`)
+    - balance (`returns the portfolio that maximises Sharpe Ratio`)
 
 #### Usage:
 

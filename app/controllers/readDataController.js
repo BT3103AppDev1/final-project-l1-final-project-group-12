@@ -23,7 +23,7 @@ async function readUserInfo(userEmail) {
   return userDoc.data();
 }
 
-async function readPortfolioInfo(userEmail, objectiveOfRead) {
+async function readPortfolioInfo(userEmail, objectiveOfRead = "") {
   let portfolioId = `${userEmail}_portfolio`;
   if (objectiveOfRead == "alpha") {
     portfolioId = `${userEmail}_portfolio_alpha`;
@@ -42,8 +42,15 @@ async function readPortfolioInfo(userEmail, objectiveOfRead) {
   return portfolioDoc.data();
 }
 
-async function readAllTrades(userEmail) {
-  const tradesId = `${userEmail}_trades`;
+async function readAllTrades(userEmail, objectiveOfRead = "") {
+  let tradesId = `${userEmail}_trades`;
+  if (objectiveOfRead == "alpha") {
+    tradesId = `${userEmail}_trades_alpha`;
+  } else if (objectiveOfRead == "beta") {
+    tradesId = `${userEmail}_trades_beta`;
+  } else if (objectiveOfRead == "balance") {
+    tradesId = `${userEmail}_trades_balance`;
+  }
   const tradesQuery = query(collection(db, "trades", tradesId, "trades"));
   const tradesSnapshot = await getDocs(tradesQuery);
   const trades = [];
@@ -53,8 +60,15 @@ async function readAllTrades(userEmail) {
   return trades;
 }
 
-async function readSpecificTrade(userEmail, ticker) {
-  const tradesId = `${userEmail}_trades`;
+async function readSpecificTrade(userEmail, ticker, objectiveOfRead = "") {
+  let tradesId = `${userEmail}_trades`;
+  if (objectiveOfRead == "alpha") {
+    tradesId = `${userEmail}_trades_alpha`;
+  } else if (objectiveOfRead == "beta") {
+    tradesId = `${userEmail}_trades_beta`;
+  } else if (objectiveOfRead == "balance") {
+    tradesId = `${userEmail}_trades_balance`;
+  }
   const tradeId = `${userEmail}_${ticker}`;
   const tradeRef = doc(db, "trades", tradesId, "trades", tradeId);
   const tradeDoc = await getDoc(tradeRef);
