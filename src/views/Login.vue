@@ -118,15 +118,7 @@ input{
       align-self: center;
     }
 
-button{
-  font-size: 1.2vw;
-  border-radius: 10px;
-  width: 200px;
-  height: 50px;
-  align-self: center;
-  background-color: #00FF7F;
-}
-button.SignwithGoogle{
+.SignwithGoogle{
   font-size: 1.2vw;
   border-radius: 35px;
   width: 290px;

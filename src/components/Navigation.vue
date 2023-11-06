@@ -13,7 +13,7 @@
         <b v-if="isLoggedIn">{{this.displayName}}</b>
         <b v-else>User</b>
       </router-link>
-      <button v-if="isLoggedIn" @click="signOut"> signOut</button>         
+      <button class = "sign-out-button" v-if="isLoggedIn" @click="signOut"> Sign Out</button>         
     </div>
   </div>
   <router-view/>
@@ -122,4 +122,23 @@ export default {
     text-align: left;
   }
 }
+
+.sign-out-button {
+  margin-top: 2%;
+  background-color: #4fa4ff; /* Choose your desired background color */
+  color: #020669; /* Text color */
+  padding: 10px 20px; /* Adjust padding as needed */
+  border: none;
+  border-radius: 5px;
+  font-size: 16px; /* Adjust font size as needed */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Add a smooth transition effect */
+
+
+  &:hover {
+    background-color: #0759b1; /* Change the background color on hover */
+    color: #ffffff;
+  }
+}
+
 </style>

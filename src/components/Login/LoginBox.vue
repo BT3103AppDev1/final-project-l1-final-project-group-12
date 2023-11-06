@@ -2,7 +2,7 @@
   <div class="container">
     <div class="titlecontainer">
       <div class="flex-item">
-        <a
+        <a 
           href="#"
           v-bind:style="{
             color: currentForm === 'login' ? '#38D3B4' : 'white',
@@ -65,7 +65,7 @@
         </svg>
         <h2>Login with Google</h2>
       </button>
-      <button>Sign Up</button>
+      <button class="custom-button">Sign Up</button>
     </form>
 
     <form v-else class="register-form" @submit.prevent="loginuser">
@@ -104,7 +104,7 @@
         </svg>
         <h2>Login with Google</h2>
       </button>
-      <button>Login</button>
+      <button class = "custom-button" >Login</button>
     </form>
 
     <a ref="#" class="flex-item" @click="togglePopup"> Forget Password ? </a>
@@ -215,17 +215,17 @@ export default {
 
 
 <style scoped>
-button {
+.SignwithGoogle {
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-button:hover {
+.SignwithGoogle:hover {
   transform: translateY(-2px);
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
-button:active {
+.SignwithGoogle:active {
   transform: translateY(1px);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -245,5 +245,23 @@ button:active {
 
 .flex-item {
   cursor: pointer;
+}
+
+.custom-button {
+  background-color: #00FF7F; /* Choose your desired background color */
+  color: #000000; /* Text color */
+  padding: 7%; /* Adjust padding as needed */
+  border: none;
+  border-radius: 100vh;
+  font-size: 3vh; /* Adjust font size as needed */
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Add a smooth transition effect */
+  width: 95%;
+  margin-left:3%;
+  /* Hover effect */
+  &:hover {
+    background-color: #009349; /* Change the background color on hover */
+  }
 }
 </style>

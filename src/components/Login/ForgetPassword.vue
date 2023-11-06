@@ -85,7 +85,7 @@ export default {
   height: 40vh;
   width: 80vh;
 }
-button.popup-close {
+.popup-close {
   height: 6vh;
   width: 70%;
   color: white;
@@ -94,13 +94,24 @@ button.popup-close {
   background-color: #272f51;
   width: 75%;
 }
-button.close-button {
+
+.popup-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
   height: 30px;
   width: 30px;
   margin-left: 90%;
   color: black;
   font-size: 1vw;
   background-color: white;
+}
+
+.close-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 .InsertEmail {
   margin-top: 0px;
@@ -119,8 +130,7 @@ button.close-button {
   content: "\a";
   display: block;
 }
-
-button {
+/* button {
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -133,5 +143,6 @@ button:hover {
 button:active {
   transform: translateY(1px);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
+} */
+
 </style>

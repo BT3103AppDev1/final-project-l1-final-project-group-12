@@ -315,7 +315,7 @@
   
 
 
-  <style>
+  <style scoped>
   .app-container {
     padding: 1.6vw;
     margin-top: 1.3%;
