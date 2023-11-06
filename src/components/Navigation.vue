@@ -9,16 +9,50 @@
     <div class="nav-links">
       <router-link to="/equities" :class="{ 'active': $route.path === '/equities' }"><b>Equities</b></router-link>
       <router-link to="/portfolio" :class="{ 'active': $route.path === '/portfolio' }"><b>Portfolio</b></router-link>
-      <router-link to="/user" :class="{ 'active': $route.path === '/user' }"><b>User</b></router-link>      
+      <router-link to="/user" :class="{ 'active': $route.path === '/user' }">
+        <b v-if="isLoggedIn">{{this.displayName}}</b>
+        <b v-else>User</b>
+      </router-link>
+      <button v-if="isLoggedIn" @click="signOut"> signOut</button>         
     </div>
   </div>
   <router-view/>
 </template>
 
 <script>
-//import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { auth } from './../firebasefunc.js'
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 export default {
-  name: 'Navigation'
+  name: 'Navigation',
+  methods: {
+    signOut() {
+      signOut(auth)
+      .then(() => {
+        // user signed-out
+        this.isLoggedIn = false
+        this.displayName =  ""
+        this.$router.push('/login');
+      })
+    }
+  },
+  data() {
+    return {
+      isResponsive: false,
+      isLoggedIn: false,
+      displayName: '',
+    };
+  },
+  mounted(){
+      const auth = getAuth()
+      onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.user = user
+        this.isLoggedIn = true
+        this.displayName = auth.currentUser.email
+      }
+    })
+  }
+}
   // data() {
   //   return {
   //     user: false,
@@ -39,7 +73,6 @@ export default {
   //     }
   //   })
   // }
-}
 </script>
 
 
