@@ -1,6 +1,8 @@
 import yfinance as yf
 import json
 import sys
+import lxml.html
+import requests
 
 """
 get_current_price Function:
@@ -100,61 +102,32 @@ def get_options_data(ticker):
     
     return options_data_json
 
-
-
-
-
     """
     get_top_gainers Function:
-    Fetches information on the top 3 stock gainers in the S&P 500 index based on their closing prices.
+    Fetches information on the top 5 stock gainers from https://finance.yahoo.com/gainers
 
     Parameters:
     @param None
 
     Returns:
     @return: str
-        A JSON string containing information on the top 3 gainers in the S&P 500.
-        The JSON structure includes 'symbol' (stock ticker symbol) and 'closing_price' (latest closing price) for each gainer.
-        The list of gainers is sorted in descending order of closing price.
+    str: A JSON string containing information on the top 5 gainers in the S&P 500.
+    The JSON structure includes 'stock_name' (stock ticker symbol) for each gainer.
 
     Example JSON Output:
     ```
     [
         {
-            "symbol": "AAPL",
-            "closing_price": 150.98
+            "stock_name": "Company A",
         },
         {
-            "symbol": "GOOGL",
-            "closing_price": 2750.65
+            "stock_name": "Company B",
         },
         {
-            "symbol": "AMZN",
-            "closing_price": 3345.43
+            "stock_name": "Company C",
         }
     ]
     """
-# def get_top_gainers():
-#     top_gainers = [
-#         {
-#             "symbol": "AAPL",
-#             "closing_price": 150.98
-#         },
-#         {
-#             "symbol": "GOOGL",
-#             "closing_price": 2750.65
-#         },
-#         {
-#             "symbol": "AMZN",
-#             "closing_price": 3345.43
-#         }
-#     ]
-    
-#     return json.dumps(top_gainers)
-
-
-import lxml.html
-import requests
 def get_top_gainers():
     url = 'https://finance.yahoo.com/gainers'
     headers = {

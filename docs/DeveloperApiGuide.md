@@ -68,6 +68,18 @@ curl http://<your-server-url>/api/yfinance/optionsData/AAPL
 curl http://<your-server-url>/api/yfinance/curentPrice/AAPL
 ```
 
+### 5. Get Top 5 Gainers 
+
+- Endpoint: `/topGainersData`
+- Method: `GET`
+- URL Params: `NONE`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/yfinance/topGainersData
+```
+
 ## API Endpoints for Reading Firestore Data
 
 ### 1. Get User Information [`DEPRECATED`]
