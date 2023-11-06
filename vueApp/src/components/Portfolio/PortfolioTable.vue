@@ -1,6 +1,6 @@
 <template>
   <div class="table-container">
-    <table id="scrollable-table" class="auto-index">
+        <table id="scrollable-table" class="auto-index">
       <thead>
         <tr>
           <th>#</th>
@@ -81,19 +81,19 @@
 
         </tr>
       </tbody>
-    </table>
-
+        </table>
+    
     <!-- Display message if portfolioData is empty -->
     <p v-if="hasData == false" class="no-trades-message">
       You have not added any trades to your portfolio. To gain portfolio insights, please add your open trades.
     </p>
-  
-    
+
+
   </div>
-  <Loading 
+    <Loading 
     ref="Loading"/>
   
-
+    
 </template>
 
 <script>
@@ -195,10 +195,11 @@ export default {
       const userConfirmed = window.confirm("Are you sure you want to proceed?");
       if (userConfirmed) {
         try {
-          this.$refs.Loading.onLoading()
-          await this.deleteFromDB(ticker);
-          this.$refs.Loading.offLoading()
+          this.$refs.Loading.onLoading("Deleting Trade..")
 
+          await this.deleteFromDB(ticker);
+
+          this.$refs.Loading.offLoading()
           console.log("refresh");
           this.$emit('refresh-request');
           

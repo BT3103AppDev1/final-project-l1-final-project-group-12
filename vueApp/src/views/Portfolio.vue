@@ -127,18 +127,15 @@
           portfolioAssetView.fetchData(),
           portfolioAssetView.getStockPrice(),
         ]);
-
-        if (hasData) {
-          this.updatingStatistics = true;
-          await this.updateStatistics();
-        }
       }
 
       if (hasData) {
+        this.updatingStatistics = true;
         this.isAlphaOptimizing = true;
         this.isBetaOptimizing = true;
         this.isBalanceOptimizing = true;
-        
+
+        await this.updateStatistics();
         await this.updateOptimisePortfolio();
         await portfolioAssetView.fetchData();
       }

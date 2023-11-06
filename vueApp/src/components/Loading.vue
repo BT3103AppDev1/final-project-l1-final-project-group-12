@@ -26,7 +26,6 @@
                 color: "blue",
                 backgroundColor: "white",
                 lockScroll: true,
-                test: "test",
 
             }
         },
@@ -37,9 +36,9 @@
 
         methods: {
 
-            onLoading(fullPage) {
+            onLoading() {
                 this.isLoading = true;
-                this.fullPage = fullPage;
+
             },
 
             offLoading() {

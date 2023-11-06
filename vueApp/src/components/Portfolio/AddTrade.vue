@@ -104,10 +104,11 @@
             };
 
             const apiUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
-            this.$refs.Loading.offLoading()
+            
             try {
                 await axios.put(apiUrl, tradeData);
-            
+                
+                this.$refs.Loading.offLoading()
             } catch (error) {
                 alert('Error: ' + error.response.data);
             
