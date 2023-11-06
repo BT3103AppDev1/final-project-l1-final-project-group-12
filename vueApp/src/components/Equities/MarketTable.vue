@@ -26,7 +26,7 @@ export default {
         "Market Cap",
         "PE Ratio (TTM)",
       ],
-      tableRows: Array.from({ length: 25 }, () => Array(9).fill("Loading")),
+      tableRows: Array.from({ length: 25 }, () => Array(9).fill(" ")),
     };
   },
 
