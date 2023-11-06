@@ -1,7 +1,7 @@
 <template>
 
   <div class="statistics-table">
-  <div v-if="!isStatisticsOptimizing">    
+  <div v-if="!status">    
     <!-- Content -->
     <div class="statistics-content">
       <div class="column" v-for="(column, columnIndex) in columns" :key="columnIndex">
@@ -9,7 +9,7 @@
           <div class="cell">{{ row.label }}</div>
 
           <div class="cell" v-if="!hasData">0</div>
-          <div class="cell" v-else-if="isNaN(statisticsData[row.header])">Loading..</div>
+          <div class="cell" v-else-if="isNaN(statisticsData[row.header] && !isStatisticsOptimizing)">Loading..</div>
           <div class="cell" v-else>{{ parseFloat(statisticsData[row.header]).toFixed(2) }} {{ row.symbol }}</div>
         </div>
       </div>
@@ -59,8 +59,11 @@ export default {
 
   props: {
       objective: String,
-      isStatisticsOptimizing: Boolean,
+      status: Boolean,
       hasData: Boolean,
+      updateOptimisePortfolio: Function,
+      getOptimizedStatus: Boolean,
+      isStatisticsOptimizing: Boolean,
     },
 
     async created() {
@@ -70,9 +73,14 @@ export default {
           this.useremail = user.email;
           await this.fetchStatistics();
 
-          this.$watch('objective', () => {
-            this.fetchStatistics(); 
-          });
+          const watchCallback = async () => {
+            if (!this.getOptimizedStatus){
+              await this.updateOptimisePortfolio(this.objective);
+            }
+            await this.fetchStatistics(); 
+          };
+
+          this.$watch('objective', watchCallback);
 
         } else {
           console.error('User not authenticated');

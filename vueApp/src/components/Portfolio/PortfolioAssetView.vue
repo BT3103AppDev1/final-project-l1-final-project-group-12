@@ -63,6 +63,8 @@
     props: {
       objective: String,
       status: Boolean,
+      updateOptimisePortfolio: Function,
+      getOptimizedStatus: Boolean,
     },
 
     data() {
@@ -93,6 +95,9 @@
           }, 5000);
 
           const watchCallback = async () => {
+            if (!this.getOptimizedStatus){
+              await this.updateOptimisePortfolio(this.objective);
+            }
             await this.fetchData();
           };
 

@@ -25,6 +25,8 @@
                   :objective="objective"   
                   ref="PortfolioAssetView"
                   :status="getStatus()"
+                  :getOptimizedStatus = "getOptimizedStatus()"
+                  :updateOptimisePortfolio = "updateOptimisePortfolio"
                   @total-pl-updated = "emitTotalPL"
                   @refresh-request = "change"
                   @has-data = "updateHasData"
@@ -44,6 +46,8 @@
             <PortfolioStatistics 
               :objective="objective"
               :isStatisticsOptimizing="updatingStatistics" 
+              :getOptimizedStatus = "getOptimizedStatus()"
+              :updateOptimisePortfolio = "updateOptimisePortfolio"
               :hasData="hasData"/>
               
         </div>
@@ -89,6 +93,9 @@
         isBetaOptimizing: false,
         isBalanceOptimizing: false,
         updatingStatistics: false,
+        alphaOptimized: false,
+        betaOptimized: false,
+        balanceOptimized: false,
         hasData: false,
 
         useremail: '',
@@ -129,6 +136,9 @@
     // Called when portfolio changes
     async change(hasData) {
       const portfolioAssetView = this.$refs.PortfolioAssetView;
+      this.alphaOptimized = false;
+      this.betaOptimized = false;
+      this.balanceOptimized = false;
       
       if (portfolioAssetView) {
         await Promise.all([
@@ -139,13 +149,14 @@
 
       if (hasData) {
         this.updatingStatistics = true;
-        this.isAlphaOptimizing = true;
-        this.isBetaOptimizing = true;
-        this.isBalanceOptimizing = true;
-
+        
         await this.updateStatistics();
-        await this.updateOptimisePortfolio();
-        await portfolioAssetView.fetchData();
+        
+        if(this.objective != "") {
+          await this.updateOptimisePortfolio(this.objective);
+          await portfolioAssetView.fetchData();
+        }
+        
       }
     },
 
@@ -197,21 +208,34 @@
         }
     }, 
 
-    async updateOptimisePortfolio() {
+    async updateOptimisePortfolio(objective) {
       console.log("Updating Optimised Portfolio..")
-      const apiAlphaUrl = `http://localhost:3000/api/optimise/${this.useremail}/alpha`;
-      const apiBetaUrl = `http://localhost:3000/api/optimise/${this.useremail}/beta`;
-      const apiBalanceUrl = `http://localhost:3000/api/optimise/${this.useremail}/balance`;
-      
+
       try {
-        await axios.post(apiAlphaUrl);
-        this.isAlphaOptimizing = false;
-      
-        await axios.post(apiBetaUrl);
-        this.isBetaOptimizing = false;
-      
-        await axios.post(apiBalanceUrl);
-        this.isBalanceOptimizing = false;
+        if (objective == "alpha") {
+          this.isAlphaOptimizing = true;
+                
+          const apiAlphaUrl = `http://localhost:3000/api/optimise/${this.useremail}/alpha`;
+          await axios.post(apiAlphaUrl);
+          this.isAlphaOptimizing = false;
+          this.alphaOptimized = true;
+        
+        } else if (objective == "beta") {
+          this.isBetaOptimizing = true;
+              
+          const apiBetaUrl = `http://localhost:3000/api/optimise/${this.useremail}/beta`;
+          await axios.post(apiBetaUrl);
+          this.isBetaOptimizing = false;
+          this.betaOptimized = true;
+
+        } else if (objective == "balance") {
+          this.isBalanceOptimizing = true;
+          
+          const apiBalanceUrl = `http://localhost:3000/api/optimise/${this.useremail}/balance`;
+          await axios.post(apiBalanceUrl);
+          this.isBalanceOptimizing = false;
+          this.balanceOptimized = true;
+        }
 
       } catch (error) {
         console.error("Error Updated Optimised Portfolio:", error);
@@ -231,6 +255,22 @@
       } else {
         return false;
       }
+    },
+
+    getOptimizedStatus() {
+      if(this.objective == 'alpha') {
+        return this.alphaOptimized
+      
+      } else if (this.objective == 'beta') {
+        return this.betaOptimized
+
+      } else if (this.objective == 'balance') {
+        return this.balanceOptimized
+
+      } else {
+        return true;
+      }
+
     },
 
     toggleStatistics() {
