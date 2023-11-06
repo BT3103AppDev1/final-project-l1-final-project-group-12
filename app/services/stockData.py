@@ -101,6 +101,80 @@ def get_options_data(ticker):
     return options_data_json
 
 
+
+
+
+    """
+    get_top_gainers Function:
+    Fetches information on the top 3 stock gainers in the S&P 500 index based on their closing prices.
+
+    Parameters:
+    @param None
+
+    Returns:
+    @return: str
+        A JSON string containing information on the top 3 gainers in the S&P 500.
+        The JSON structure includes 'symbol' (stock ticker symbol) and 'closing_price' (latest closing price) for each gainer.
+        The list of gainers is sorted in descending order of closing price.
+
+    Example JSON Output:
+    ```
+    [
+        {
+            "symbol": "AAPL",
+            "closing_price": 150.98
+        },
+        {
+            "symbol": "GOOGL",
+            "closing_price": 2750.65
+        },
+        {
+            "symbol": "AMZN",
+            "closing_price": 3345.43
+        }
+    ]
+    """
+# def get_top_gainers():
+#     top_gainers = [
+#         {
+#             "symbol": "AAPL",
+#             "closing_price": 150.98
+#         },
+#         {
+#             "symbol": "GOOGL",
+#             "closing_price": 2750.65
+#         },
+#         {
+#             "symbol": "AMZN",
+#             "closing_price": 3345.43
+#         }
+#     ]
+    
+#     return json.dumps(top_gainers)
+
+
+import lxml.html
+import requests
+def get_top_gainers():
+    url = 'https://finance.yahoo.com/gainers'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0'
+    }
+    ytext = requests.get(url, headers=headers).text
+    yroot = lxml.html.fromstring(ytext)
+
+    top_gainers = []
+
+    for i, x in enumerate(yroot.xpath('//*[@id="fin-scr-res-table"]//td[@aria-label="Name"]')):
+        stock_name = x.text_content().strip()
+        top_gainers.append({"stock_name": stock_name})
+
+        # Limit to the top 5 gainers
+        if i == 4:
+            break
+
+    return top_gainers
+
 if __name__ == "__main__":
     function_name = sys.argv[1]
     args = sys.argv[2:]
@@ -113,3 +187,5 @@ if __name__ == "__main__":
         print(json.dumps(get_options_data(*args)))
     elif function_name == 'get_current_price' and len(args) == 1:
         print(json.dumps(get_current_price(*args)))
+    elif function_name == 'get_top_gainers' and len(args) == 1:
+        print(json.dumps(get_top_gainers()))

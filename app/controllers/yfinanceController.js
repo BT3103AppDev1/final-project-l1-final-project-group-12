@@ -72,15 +72,31 @@ const getOptionsData = async (req, res) => {
       "get_options_data",
       ticker,
     ]);
+  
     res.json(JSON.parse(output));
   } catch (error) {
     res.status(500).send(error);
   }
 };
 
+// Connector method to get options data
+const getTopGainersData = async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_top_gainers",
+      ticker,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
 module.exports = {
   getCurrentPrice,
   getStockStatistics,
   getHistoricalData,
   getOptionsData,
+  getTopGainersData
 };
