@@ -88,14 +88,24 @@
       You have not added any trades to your portfolio. To gain portfolio insights, please add your open trades.
     </p>
   
+    
   </div>
+  <Loading 
+    ref="Loading"/>
+  
+
 </template>
 
 <script>
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import axios from 'axios';
+import Loading from '@/components/Loading.vue'
 
 export default {
+  components: {
+        Loading,
+    },
+
   data() {
     return {
       updatedBuyQuantity: 0,
@@ -136,6 +146,7 @@ export default {
     },
 
     async saveItem(index) {
+      this.$refs.Loading.onLoading()
       const item = this.portfolioData[index];
       
       // Update item data with the new values
@@ -151,12 +162,12 @@ export default {
         const apiAddUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
         
         try {
-
           await this.deleteFromDB(item.ticker);
 
           console.log("Adding Updated Item");
           await axios.put(apiAddUrl, updatedData);
-          
+
+          this.$refs.Loading.offLoading()
           this.$emit('refresh-request');
 
         } catch (error) {
@@ -184,7 +195,9 @@ export default {
       const userConfirmed = window.confirm("Are you sure you want to proceed?");
       if (userConfirmed) {
         try {
+          this.$refs.Loading.onLoading()
           await this.deleteFromDB(ticker);
+          this.$refs.Loading.offLoading()
 
           console.log("refresh");
           this.$emit('refresh-request');
@@ -243,6 +256,8 @@ export default {
   watch: {
     totalPL: 'emitTotalPL',
   },
+
+  emits: ["total-pl-updated", "refresh-request"],
 
 };
 </script>

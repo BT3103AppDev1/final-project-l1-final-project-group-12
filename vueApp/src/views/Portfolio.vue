@@ -18,37 +18,38 @@
         </div>
 
 
-    <!-- Asset View & Add Trade  -->
-    <div v-if="!showStatistics" class="portfolioDisplay">
-        <div class="table">
-            <PortfolioAssetView 
-              :objective="objective"   
-              ref="PortfolioAssetView"
-              :status="getStatus()"
-              @total-pl-updated = "emitTotalPL"
-              @refresh-request = "change"
-              @has-data = "updateHasData"
-              />
+        <!-- Asset View & Add Trade  -->
+        <div v-if="!showStatistics" class="portfolioDisplay">
+            <div class="table">
+                <PortfolioAssetView 
+                  :objective="objective"   
+                  ref="PortfolioAssetView"
+                  :status="getStatus()"
+                  @total-pl-updated = "emitTotalPL"
+                  @refresh-request = "change"
+                  @has-data = "updateHasData"
+                  />
+                  
+            </div>
+            <div class="addTrade">
+                <AddTrade  
+                  :totalPL = "totalPL"
+                  @added = "change"/>
+            </div>
+        </div>
+
+        <!-- Statistic Table  -->
+        <div v-else class="right-icon">
+            <PortfolioStatistics 
+              :objective="objective"
+              :isStatisticsOptimizing="updatingStatistics" 
+              :hasData="hasData"/>
               
         </div>
-        <div class="addTrade">
-            <AddTrade  
-              :totalPL = "totalPL"
-              @added = "change"/>
-        </div>
-    </div>
 
-    <!-- Statistic Table  -->
-    <div v-else class="right-icon">
-        <PortfolioStatistics 
-          :objective="objective"
-          :isStatisticsOptimizing="updatingStatistics" 
-          :hasData="hasData"/>
-          
     </div>
 
   </div>
-</div>
 </template>
   
 
@@ -57,6 +58,7 @@
   import AddTrade from '@/components/Portfolio/AddTrade.vue'
   import PortfolioStatistics from '@/components/Portfolio/PortfolioStatistics.vue'
   import OptimisationTab from '@/components/Portfolio/OptimisationTab.vue'
+  import Loading from '@/components/Loading.vue'
   import NavBar from '@/components/NavBar.vue'
 
   import { getAuth, onAuthStateChanged } from 'firebase/auth'
@@ -70,6 +72,7 @@
         PortfolioStatistics,
         OptimisationTab,
         NavBar,
+        Loading,
     },
 
     data() {
@@ -113,49 +116,22 @@
 
     methods: {
 
-      toggleStatistics() {
-        this.showStatistics = !this.showStatistics;
-      },
-
-      emitTotalPL(totalPL) {
-        this.totalPL = totalPL;
-        this.$emit('total-pl-updated', totalPL);
-      },
-
-      updateHasData(newHasData) {
-        this.hasData = newHasData;
-      },
-
-      getObjective(index) {
-        if (index == 1) {
-            this.objective = "";
-
-          } else if (index == 2) {
-            this.objective = "alpha";
-          
-          } else if (index == 3) {
-            this.objective = "beta";
-
-          } else{
-            this.objective = "balance";
-          }
-      },
+      
 
     // Called when portfolio changes
     async change(hasData) {
       const portfolioAssetView = this.$refs.PortfolioAssetView;
       
       if (portfolioAssetView) {
-        if (hasData) {
-          this.updatingStatistics = true;
-          await this.updateStatistics();
-        }
-
-        // Then fetch data and get stock prices
         await Promise.all([
           portfolioAssetView.fetchData(),
           portfolioAssetView.getStockPrice(),
         ]);
+
+        if (hasData) {
+          this.updatingStatistics = true;
+          await this.updateStatistics();
+        }
       }
 
       if (hasData) {
@@ -247,6 +223,34 @@
         return false;
       }
     },
+
+    toggleStatistics() {
+        this.showStatistics = !this.showStatistics;
+      },
+
+      emitTotalPL(totalPL) {
+        this.totalPL = totalPL;
+        this.$emit('total-pl-updated', totalPL);
+      },
+
+      updateHasData(newHasData) {
+        this.hasData = newHasData;
+      },
+
+      getObjective(index) {
+        if (index == 1) {
+            this.objective = "";
+
+          } else if (index == 2) {
+            this.objective = "alpha";
+          
+          } else if (index == 3) {
+            this.objective = "beta";
+
+          } else{
+            this.objective = "balance";
+          }
+      },
 
     },
 

@@ -25,13 +25,22 @@
       
         
     </div>
+
+    <Loading 
+    ref="Loading"/>
+
   </template>
   
   <script>
   import { getAuth, onAuthStateChanged } from 'firebase/auth'
   import axios from 'axios';
+  import Loading from '@/components/Loading.vue'
 
   export default {
+    components: {
+        Loading,
+    },
+
     data() {
       return {
         tickerName: '',
@@ -86,7 +95,7 @@
             }      
 
             // Add Trade
-            alert('Adding:', ticker);               //TODO: Add pop up window
+            this.$refs.Loading.onLoading()
 
             const tradeData = {
                 ticker: ticker,                          
@@ -95,7 +104,7 @@
             };
 
             const apiUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
-
+            this.$refs.Loading.offLoading()
             try {
                 await axios.put(apiUrl, tradeData);
             
@@ -115,6 +124,7 @@
      }
 
     },
+    emits: ["added"],
   };
 </script>
 
