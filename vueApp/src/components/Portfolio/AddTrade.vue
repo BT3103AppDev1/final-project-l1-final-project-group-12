@@ -86,7 +86,7 @@
             let buyQuantity = document.getElementById("quant1").value
 
             //Define valid input
-            if (isNaN(parseFloat(buyPrice)) || isNaN(parseFloat(buyQuantity)) ) {   //TODO: ADD CONTRAINT FOR INVALID ticker
+            if (isNaN(parseFloat(buyPrice)) || isNaN(parseFloat(buyQuantity)) ) {   
                 alert("Buy Price or Buy Quantity must be valid numbers.");          //TODO: Add PopUp Window
                 return;
             } else if (ticker.trim() === "" || buyPrice.trim() === "" || buyQuantity.trim() === "") {
@@ -96,6 +96,16 @@
 
             // Add Trade
             this.$refs.Loading.onLoading()
+            try {
+                const apiCheckValidTickerUrl = `http://localhost:3000/api/yfinance/curentPrice/${ticker}`;
+                const response = await axios.get(apiCheckValidTickerUrl);
+                console.log(response.data)
+
+            } catch (error) {
+                alert("Please enter a valid ticker!");
+                this.$refs.Loading.offLoading()
+                return;
+            }
 
             const tradeData = {
                 ticker: ticker,                          
@@ -111,7 +121,7 @@
                 this.$refs.Loading.offLoading()
             } catch (error) {
                 alert('Error: ' + error.response.data);
-            
+                            
             }
 
             // Reset placeholder
