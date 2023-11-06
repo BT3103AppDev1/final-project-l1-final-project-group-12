@@ -255,5 +255,9 @@
     display: flex;
     flex-direction: column; /* Set flex-direction to column */
     position: relative; /* Add relative positioning to the container */
+    text-align: center;
+    justify-content: center;
+    font-size:2vw;
+    color: rgb(101, 100, 100);
   }
 </style>

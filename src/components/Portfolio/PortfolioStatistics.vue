@@ -16,7 +16,7 @@
     </div>
   </div>
 
-  <div v-else>
+  <div class="optimising-item" v-else>
       Optimising...
   </div>
 
@@ -153,5 +153,20 @@ export default {
 .row .cell:last-child {
   border-right: none;
 }
+
+.optimising-item {
+    height: 33vw;
+    margin-top: 0.1vw;
+    border-radius: 25px;
+    background-color: white;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column; /* Set flex-direction to column */
+    position: relative; /* Add relative positioning to the container */
+    text-align: center;
+    justify-content: center;
+    font-size:2vw;
+    color: rgb(101, 100, 100);
+  }
 
 </style>
