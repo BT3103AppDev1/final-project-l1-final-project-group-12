@@ -12,7 +12,8 @@
   </template>
   
   <script>
-  import Box from "@/components/Equities/Box.vue"; 
+  import Box from "@/components/Equities/Box.vue";
+  import axios from "axios";
   
   export default {
     name: "Equities",
@@ -24,13 +25,25 @@
         containers: [
           {
             imageSrc: "./src/assets/loseIcon.png",
-            header: "Top Losers",
-            rows: [["Apple"], ["Apple"], ["Apple"]],
+            header: "Top Losers Today",
+            rows: Array(5).fill(["Loading..."]) 
           },
           
         ],
       };
     },
-  };
-  </script>
-  
+    mounted() {
+    // Make an HTTP GET request to the API endpoint
+    axios
+      .get("http://localhost:3000/api/yfinance/topLosersData")
+      .then((response) => {
+        // Update the rows of the "Top Gainers" container with the API data
+        this.containers[0].rows = response.data;
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  },
+};
+</script>
+ 

@@ -7,7 +7,8 @@ const {
   getStockStatistics,
   getHistoricalData,
   getOptionsData,
-  getTopGainersData
+  getTopGainersData,
+  getTopLosersData
 } = require("../../controllers/yfinanceController");
 
 // Route to get stock statistics
@@ -22,8 +23,10 @@ router.get("/historicalData/:ticker", getHistoricalData);
 // Route to get options data
 router.get("/optionsData/:ticker", getOptionsData);
 
-
 //Route to get top gainers data 
 router.get("/topGainersData", getTopGainersData)
+
+//Route to get top losers data 
+router.get("/topLosersData", getTopLosersData)
 
 module.exports = router;

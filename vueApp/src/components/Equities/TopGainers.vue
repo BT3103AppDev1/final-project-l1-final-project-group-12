@@ -26,7 +26,7 @@ export default {
         {
           imageSrc: "./src/assets/gainIcon.png",
 
-          header: "Top Gainers",
+          header: "Top Gainers Today",
           rows: Array(5).fill(["Loading..."]) 
         },
       ],

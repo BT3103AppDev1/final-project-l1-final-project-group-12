@@ -111,8 +111,8 @@ def get_options_data(ticker):
 
     Returns:
     @return: str
-    str: A JSON string containing information on the top 5 gainers in the S&P 500.
-    The JSON structure includes 'stock_name' (stock ticker symbol) for each gainer.
+    str: A JSON string containing information on the top 5 gainers.
+    The JSON structure includes 'stock_name' for each gainer.
 
     Example JSON Output:
     ```
@@ -148,6 +148,53 @@ def get_top_gainers():
 
     return top_gainers
 
+    """
+    get_top_losers Function:
+    Fetches information on the top 5 stock losers from https://finance.yahoo.com/gainers
+
+    Parameters:
+    @param None
+
+    Returns:
+    @return: str
+    str: A JSON string containing information on the top 5 losers.
+    The JSON structure includes 'stock_name' for each gainer.
+
+    Example JSON Output:
+    ```
+    [
+        {
+            "stock_name": "Company A",
+        },
+        {
+            "stock_name": "Company B",
+        },
+        {
+            "stock_name": "Company C",
+        }
+    ]
+    """
+
+def get_top_losers():
+    url = 'https://finance.yahoo.com/losers'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0'
+    }
+    ytext = requests.get(url, headers=headers).text
+    yroot = lxml.html.fromstring(ytext)
+
+    top_losers = []
+
+    for i, x in enumerate(yroot.xpath('//*[@id="fin-scr-res-table"]//td[@aria-label="Name"]')):
+        stock_name = x.text_content().strip()
+        top_losers.append({"stock_name": stock_name})
+
+        # Limit to the top 5 losers
+        if i == 4:
+            break
+
+    return top_losers
+
 if __name__ == "__main__":
     function_name = sys.argv[1]
     args = sys.argv[2:]
@@ -162,3 +209,5 @@ if __name__ == "__main__":
         print(json.dumps(get_current_price(*args)))
     elif function_name == 'get_top_gainers' and len(args) == 1:
         print(json.dumps(get_top_gainers()))
+    elif function_name == 'get_top_losers' and len(args) == 1:
+        print(json.dumps(get_top_losers()))
