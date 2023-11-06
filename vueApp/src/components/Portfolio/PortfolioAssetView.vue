@@ -90,7 +90,6 @@
           // Get stock price every 5 seconds
           setInterval(async () => {
             await this.getStockPrice();
-            //await this.fetchData();
           }, 5000);
 
           const watchCallback = async () => {
@@ -116,13 +115,10 @@
       async refresh() {
         await this.fetchData();
 
-        console.log("emit",this.hasData)
         this.$emit('refresh-request', this.hasData);
       },
 
       async fetchData() {
-        console.log("Fetching Portfolio Data: ", this.objective)
-
         let apiUrl;
         try {
             if (this.objective) {
@@ -130,11 +126,12 @@
             } else {
               apiUrl = `http://localhost:3000/api/read/allTrades/${this.useremail}/""`;
             }
-            console.log(apiUrl)
+            console.log("Fetching Portfolio Data: ", apiUrl)
             const querySnapshot = await axios.get(apiUrl);
             this.portfolioData = querySnapshot.data;
 
             this.hasData = this.portfolioData.length > 0;
+            this.$emit('has-data', this.hasData);
 
           } catch (error) {
             console.error("Error fetching data:", error);
@@ -162,7 +159,7 @@
       },
 
     },
-    emits: ["total-pl-updated", "refresh-request"],
+    emits: ["total-pl-updated", "refresh-request", "has-data"],
 
 
 

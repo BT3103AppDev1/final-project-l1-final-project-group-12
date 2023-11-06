@@ -157,7 +157,7 @@ export default {
           console.log("Adding Updated Item");
           await axios.put(apiAddUrl, updatedData);
           
-          this.$emit('refresh-request', this.hasData);
+          this.$emit('refresh-request');
 
         } catch (error) {
           console.error('Fail to updating trade: ', error )

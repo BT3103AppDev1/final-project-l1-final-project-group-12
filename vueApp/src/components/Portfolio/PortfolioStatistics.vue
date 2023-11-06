@@ -8,7 +8,8 @@
         <div class="row" v-for="(row, rowIndex) in column" :key="rowIndex">
           <div class="cell">{{ row.label }}</div>
 
-          <div class="cell" v-if="isNaN(statisticsData[row.header])">Loading..</div>
+          <div class="cell" v-if="!hasData">0</div>
+          <div class="cell" v-else-if="isNaN(statisticsData[row.header])">Loading..</div>
           <div class="cell" v-else>{{ parseFloat(statisticsData[row.header]).toFixed(2) }} {{ row.symbol }}</div>
         </div>
       </div>
@@ -18,7 +19,7 @@
   <div v-else>
       Optimising...
   </div>
-  
+
   </div>
   
 
@@ -59,6 +60,7 @@ export default {
   props: {
       objective: String,
       isStatisticsOptimizing: Boolean,
+      hasData: Boolean,
     },
 
     async created() {

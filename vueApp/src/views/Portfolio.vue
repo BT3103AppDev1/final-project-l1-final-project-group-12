@@ -27,6 +27,7 @@
               :status="getStatus()"
               @total-pl-updated = "emitTotalPL"
               @refresh-request = "change"
+              @has-data = "updateHasData"
               />
               
         </div>
@@ -41,8 +42,9 @@
     <div v-else class="right-icon">
         <PortfolioStatistics 
           :objective="objective"
-          :isStatisticsOptimizing="isStatisticsOptimizing" />
-        
+          :isStatisticsOptimizing="updatingStatistics" 
+          :hasData="hasData"/>
+          
     </div>
 
   </div>
@@ -79,7 +81,8 @@
         isAlphaOptimizing: false,
         isBetaOptimizing: false,
         isBalanceOptimizing: false,
-        isStatisticsOptimizing: false,
+        updatingStatistics: false,
+        hasData: false,
 
         useremail: '',
         existingPortfolio: null,
@@ -119,6 +122,10 @@
         this.$emit('total-pl-updated', totalPL);
       },
 
+      updateHasData(newHasData) {
+        this.hasData = newHasData;
+      },
+
       getObjective(index) {
         if (index == 1) {
             this.objective = "";
@@ -137,12 +144,14 @@
     // Called when portfolio changes
     async change(hasData) {
       const portfolioAssetView = this.$refs.PortfolioAssetView;
-      this.isAlphaOptimizing = true;
-      this.isBetaOptimizing = true;
-      this.isBalanceOptimizing = true;
-      this.isStatisticsOptimizing = true;
-
+      
       if (portfolioAssetView) {
+        if (hasData) {
+          this.updatingStatistics = true;
+          await this.updateStatistics();
+        }
+
+        // Then fetch data and get stock prices
         await Promise.all([
           portfolioAssetView.fetchData(),
           portfolioAssetView.getStockPrice(),
@@ -150,10 +159,12 @@
       }
 
       if (hasData) {
-        await Promise.all([
-          this.updateStatistics(),
-          this.updateOptimisePortfolio(),
-        ]);
+        this.isAlphaOptimizing = true;
+        this.isBetaOptimizing = true;
+        this.isBalanceOptimizing = true;
+        
+        await this.updateOptimisePortfolio();
+        await portfolioAssetView.fetchData();
       }
     },
 
@@ -193,9 +204,9 @@
         try {
           const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`; 
           await axios.put(apiUrl);
-          this.isStatisticsOptimizing = false;
-          console.log(this.isStatisticsOptimizing)
-          
+          this.updatingStatistics = false;
+          console.log("Portfolio Update complete!")
+
         } catch (error) {
           console.error("Error Updated Portfolio:", error);
         }
@@ -221,7 +232,7 @@
         console.error("Error Updated Optimised Portfolio:", error);
       }
 
-      console.log("Update complete!")
+      console.log("Portfolio Optimised!")
       
     },    
 
