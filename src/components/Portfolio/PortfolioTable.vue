@@ -281,7 +281,7 @@ export default {
 
 
 
-<style>
+<style scope>
 /* Box */
 .table-container {
     height: 33vw; 

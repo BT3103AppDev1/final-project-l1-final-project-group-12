@@ -175,7 +175,7 @@
   
 
 
-  <style>
+  <style scope>
   /* Toggle Switch */
   .toggleContainer {
      margin-left: 21%;

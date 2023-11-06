@@ -76,7 +76,7 @@ export default {
 </script>
 
 
-<style>
+<style scope>
 .topnav {
   overflow: hidden; 
   background-color: #272F51;

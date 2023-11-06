@@ -148,7 +148,7 @@
 
 
 
-<style >
+<style scope>
   #addTradeContainer h1 {
     margin-top: 0;
 }
@@ -206,6 +206,7 @@ input::placeholder {
 #tradecost {
     text-align: center;
     margin-top: 1%; /* Adjust the margin-top value to move it closer to the input box */
+    margin-bottom: 4%;
     font-weight: bold; /* Make the text bold if needed */
     font-size:2vw;
 }
@@ -237,12 +238,14 @@ input::placeholder {
     padding-top: 0.1%;
     padding-bottom: 0.1%;
     margin-top: 4%; 
-    font-size: 1.15vw;
+    font-size: 1vw;
 }
 
 #profitContainer h3 {
-    margin-bottom: 0vw; /* Adjust the margin-bottom value as needed */
+    margin-bottom: 0.4vw; /* Adjust the margin-bottom value as needed */
+    font-size: 1.5vw;
     color: rgb(222, 222, 222);
+    margin-top: 4%;
 }
 
 #totalProfit {

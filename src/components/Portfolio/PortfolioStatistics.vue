@@ -116,7 +116,7 @@ export default {
 </script>
 
 
-<style>
+<style scope>
 .statistics-table {
   height: 33vw;
   border-radius: 25px;

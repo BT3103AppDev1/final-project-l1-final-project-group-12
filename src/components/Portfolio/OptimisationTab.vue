@@ -51,13 +51,13 @@
 
 </script>
 
-<style>
+<style scope>
 .Optimisation-tab {
       flex: 1; 
       background-color: #cdcdd0;
       color: white;
       margin: 1vw 0.5vw;
-      padding: 0.8vw 0; 
+      padding: 2.5vw 0; 
       border: 1vw;
       border-radius: 1.2vw;
       cursor: pointer;

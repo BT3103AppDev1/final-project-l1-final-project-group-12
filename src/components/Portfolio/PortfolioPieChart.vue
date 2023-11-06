@@ -6,7 +6,7 @@
       <div id="chart-container" class="center">
         <apexchart ref="chart" 
           type="pie" 
-          width="700" 
+          width="600" 
           :options="chartOptions" 
           :series="series"></apexchart>
       </div>
