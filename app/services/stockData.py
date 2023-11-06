@@ -111,22 +111,7 @@ def get_options_data(ticker):
 
     Returns:
     @return: str
-    str: A JSON string containing information on the top 5 gainers.
-    The JSON structure includes 'stock_name' for each gainer.
-
-    Example JSON Output:
-    ```
-    [
-        {
-            "stock_name": "Company A",
-        },
-        {
-            "stock_name": "Company B",
-        },
-        {
-            "stock_name": "Company C",
-        }
-    ]
+        A JSON string containing 'stock_name' for each gainer.
     """
 def get_top_gainers():
     url = 'https://finance.yahoo.com/gainers'
@@ -157,22 +142,7 @@ def get_top_gainers():
 
     Returns:
     @return: str
-    str: A JSON string containing information on the top 5 losers.
-    The JSON structure includes 'stock_name' for each gainer.
-
-    Example JSON Output:
-    ```
-    [
-        {
-            "stock_name": "Company A",
-        },
-        {
-            "stock_name": "Company B",
-        },
-        {
-            "stock_name": "Company C",
-        }
-    ]
+        A JSON string containing 'stock_name' for each loser.
     """
 
 def get_top_losers():
@@ -195,6 +165,50 @@ def get_top_losers():
 
     return top_losers
 
+    """
+    get_most_actives Function:
+    Fetches information on the most active stocks from https://finance.yahoo.com/most-active
+
+    Parameters:
+    @param None
+
+    Returns:
+    @return: str
+        A JSON string containing market data for the most active stocks
+    """
+
+def get_most_actives():
+    url = 'https://finance.yahoo.com/most-active'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0'
+    }
+    ytext = requests.get(url, headers=headers).text
+    yroot = lxml.html.fromstring(ytext)
+
+    most_actives = []
+
+    # XPath expressions for the column headers
+    headers = yroot.xpath('//*[@id="scr-res-table"]/div[1]/table/thead/tr/th')
+
+    # Extract column names
+    column_names = [header.text_content().strip() for header in headers]
+
+    # Updated XPath expressions for the data rows
+    rows = yroot.xpath('//*[@id="scr-res-table"]/div[1]/table/tbody/tr')
+
+    for row in rows:
+        data = row.xpath('./td')
+        stock_info = {}
+
+        for i, column in enumerate(data):
+            column_name = column_names[i]
+            column_value = column.text_content().strip()
+            stock_info[column_name] = column_value
+
+        most_actives.append(stock_info)
+
+    return most_actives
+
 if __name__ == "__main__":
     function_name = sys.argv[1]
     args = sys.argv[2:]
@@ -211,3 +225,5 @@ if __name__ == "__main__":
         print(json.dumps(get_top_gainers()))
     elif function_name == 'get_top_losers' and len(args) == 1:
         print(json.dumps(get_top_losers()))
+    elif function_name == 'get_most_actives' and len(args) == 1:
+        print(json.dumps(get_most_actives()))

@@ -1,6 +1,6 @@
 <template>
   <div class="market-header">
-    <h1>Market</h1>
+    <h1>Market (Most Actives)</h1>
     <form id="marketSearch" class="search-form">
       <input
         type="text"

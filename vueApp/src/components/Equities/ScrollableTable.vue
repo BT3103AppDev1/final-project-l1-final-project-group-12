@@ -1,23 +1,25 @@
 <template>
   <div class="table-bg">
-  <div class="scrollable-table">
-    <table>
-      <thead>
-        <tr>
-          <th v-for="header in headers" :key="header">{{ header }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
-          <td>{{ rowIndex + 1 }}</td>
-          <!-- Display auto-index for each row -->
-          <td v-for="(cell, cellIndex) in row" :key="cellIndex">
-            {{ cell }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="scrollable-table">
+      <table>
+        <thead class="sticky-header">
+          <tr>
+            <th v-for="(header, index) in headers" :key="index">
+              {{ header }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
+            <td>{{ rowIndex + 1 }}</td>
+            <td v-for="(cell, cellIndex) in row" :key="cellIndex">
+              {{ cell }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -31,12 +33,12 @@ export default {
 
 <style scoped>
 .scrollable-table {
-  max-height: 40vw; 
-  overflow-y: auto; 
+  max-height: 50vw;
+  overflow-y: auto;
 }
 
 .table-bg {
-  width: 97%; 
+  width: 97%;
   background-color: #ffffff;
   padding: 1.5%;
   border-radius: 13px;
@@ -47,13 +49,21 @@ table {
   border-collapse: collapse;
   width: 100%;
 }
+
 th,
 td {
   border-bottom: 1px solid #d0d0d0;
   text-align: center;
-  padding: 1.8vw 1.8vw 1.8vw 1.8vw;
-  font-size: 1.7vw;
+  padding: 1.8vw 1vw 1.8vw 1.8vw;
+  font-size: 1.25vw;
   font-weight: bold;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: #ffffff;
+  z-index: 1;
 }
 
 .scrollable-table::-webkit-scrollbar {

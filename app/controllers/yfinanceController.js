@@ -109,11 +109,27 @@ const getTopLosersData = async (req, res) => {
   }
 };
 
+// Connector method to get top losers data
+const getMostActivesData = async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_most_actives",
+      ticker,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
 module.exports = {
   getCurrentPrice,
   getStockStatistics,
   getHistoricalData,
   getOptionsData,
   getTopGainersData,
-  getTopLosersData
+  getTopLosersData,
+  getMostActivesData
 };
