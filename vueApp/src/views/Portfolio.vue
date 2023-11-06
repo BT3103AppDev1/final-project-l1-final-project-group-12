@@ -34,7 +34,8 @@
             <div class="addTrade">
                 <AddTrade  
                   :totalPL = "totalPL"
-                  @added = "change"/>
+                  ref="AddTrade"
+                  @added = "added"/>
             </div>
         </div>
 
@@ -49,7 +50,10 @@
 
     </div>
 
+    <Loading 
+    ref="Loading"/>
   </div>
+  
 </template>
   
 
@@ -116,7 +120,11 @@
 
     methods: {
 
-      
+    added() {
+      this.change(true);
+      const addedStock = this.$refs.AddTrade.stockPrice;
+      this.$refs.PortfolioAssetView.stockPrices[addedStock[0]] = addedStock[1]
+    },
 
     // Called when portfolio changes
     async change(hasData) {
@@ -125,7 +133,7 @@
       if (portfolioAssetView) {
         await Promise.all([
           portfolioAssetView.fetchData(),
-          portfolioAssetView.getStockPrice(),
+          //portfolioAssetView.getStockPrice(),
         ]);
       }
 
@@ -144,6 +152,8 @@
        
 
       async checkAndCreatePortfolio() {
+        this.$refs.Loading.onLoading()
+
         const apiReadPortfolioUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}/""`;
         const apiCreatePortfolioUrl = `http://localhost:3000/api/update/createPortfolio/${this.useremail}`;
         console.log(this.existingPortfolio)
@@ -164,11 +174,13 @@
               console.log("Creating Portfolio..")
               await axios.post(apiCreatePortfolioUrl);
               this.updateOptimisePortfolio();
-                
+                  
             } catch (error) {
               alert('Error: ' + error.response.data);
             }
           } 
+
+          this.$refs.Loading.offLoading()
       },
 
 //Update functions

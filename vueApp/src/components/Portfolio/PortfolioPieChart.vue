@@ -6,7 +6,7 @@
       <div id="chart-container" class="center">
         <apexchart ref="chart" 
           type="pie" 
-          width="550" 
+          width="700" 
           :options="chartOptions" 
           :series="series"></apexchart>
       </div>
@@ -100,11 +100,11 @@ export default {
 
 
 
-<style>
+<style scope>
 .pie-chart-container {
   height: 33vw;
   margin-top: 0.1vw;
-  padding-left: 13vw;
+  padding-left: 23vw;
   padding-right: 13vw;
   border-radius: 25px;
   background-color: white;

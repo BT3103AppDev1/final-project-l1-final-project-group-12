@@ -47,6 +47,7 @@
         tradeQuantity: null,
         pricePerTrade: null,
         totalCost: 0,
+        stockPrice: [],
 
         // User info
         useremail: '',
@@ -96,10 +97,11 @@
 
             // Add Trade
             this.$refs.Loading.onLoading()
+            this.stockPrice = [];
             try {
                 const apiCheckValidTickerUrl = `http://localhost:3000/api/yfinance/curentPrice/${ticker}`;
-                const response = await axios.get(apiCheckValidTickerUrl);
-                console.log(response.data)
+                const price = await axios.get(apiCheckValidTickerUrl);
+                this.stockPrice = [ticker, price.data];
 
             } catch (error) {
                 alert("Please enter a valid ticker!");

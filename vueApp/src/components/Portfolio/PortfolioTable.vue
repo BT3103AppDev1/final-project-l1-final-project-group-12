@@ -206,7 +206,7 @@ export default {
           
         } catch (error) {
           console.error('Fail to delete trade: ', error )
-          alert('Fail to delete trade: ', error, 'Please try again!' )
+          alert('Fail to delete trade: ', error, 'Please try again later!' )
         }
       }
     },
@@ -228,7 +228,7 @@ export default {
         console.log('Delete: All requests completed');
       } catch (error) {
         console.error('Failed to delete trade: ', error);
-        alert('Fail to updating trade: ', error, 'Please try again!')
+        alert('Fail to delete trade: ', error, 'Please try again later!')
       }
     },
 
