@@ -2,7 +2,7 @@
   <div class="popup">
     <div class="inner-popup">
       <button
-        class="close-button"
+        class="closeButton"
         aria-label="Dismiss alert"
         type="button"
         @click="closepopup"
@@ -94,7 +94,7 @@ button.popup-close {
   background-color: #272f51;
   width: 75%;
 }
-button.close-button {
+button.closeButton {
   height: 30px;
   width: 30px;
   margin-left: 90%;

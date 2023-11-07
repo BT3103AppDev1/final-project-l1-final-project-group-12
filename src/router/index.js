@@ -56,7 +56,6 @@ router.beforeEach((to, from, next) => {
     console.log("restricted");
     next("/login");
   } else {
-    console.log("justgo");
     next();
     return;
   }

@@ -19,19 +19,16 @@
         :class="{ active: $route.path === '/portfolio' }"
         ><b>Portfolio</b></router-link
       >
-      <router-link to="/user" :class="{ active: $route.path === '/user' }">
-        <b v-if="isLoggedIn">{{ this.displayName }}</b>
-        <b v-else>User</b>
-      </router-link>
-      <button v-if="isLoggedIn" @click="signOut">signOut</button>
+      <div @click="toggleProfilePopup" :class="{ active: showProfilePopup }">
+        <b>{{ displayName || "Log In" }}</b>
+      </div>
     </div>
   </div>
 
   <!-- Profile Popup component -->
-  <div class="profile-popup-container" v-if="showProfilePopup">
-    <ProfilePage @close="toggleProfilePopup" />
+  <div class="profile-popup-container" v-if="isLoggedIn && showProfilePopup">
+    <ProfilePage @close="toggleProfilePopup" @signOut="signOut" />
   </div>
-
   <router-view />
 </template>
 
@@ -75,7 +72,11 @@ export default {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         this.isLoggedIn = true;
-        this.displayName = user.email; // Changed from auth.currentUser.email to user.email
+        this.displayName = user.email;
+      } else {
+        // User is signed out
+        this.isLoggedIn = false;
+        this.displayName = "";
       }
     });
   },

@@ -4,7 +4,7 @@
     <div class="profileHeader">
       <button @click="closeProfilePage" class="back-button">←</button>
       <h1 class="profileHeader_main">My Profile</h1>
-      <button class="logout-button">Log Out</button>
+      <button @click="emitSignOut" class="logout-button">Log Out</button>
     </div>
 
     <!-- User Info -->
@@ -58,8 +58,19 @@ export default {
     closeProfilePage() {
       this.$emit("close");
     },
-    logout() {
-      // Implement your logout logic here
+    // signOut() {
+    //   const auth = getAuth();
+    //   firebaseSignOut(auth).then(() => {
+    //     // User signed-out
+    //     this.isLoggedIn = false;
+    //     this.displayName = "";
+    //     this.$router.push("/login");
+    //   });
+    closeProfilePage() {
+      this.$emit("close");
+    },
+    emitSignOut() {
+      this.$emit("signOut");
     },
     changePassword() {
       // Implement password change logic
@@ -70,6 +81,8 @@ export default {
   },
 };
 </script>
+
+
 <style scoped>
 .profile_container {
   position: fixed; /* or absolute, depending on context */
