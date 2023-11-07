@@ -7,6 +7,9 @@
           <th>Name</th>
           <th>Ticker</th>
           <th>Price</th>
+          <th>Market Cap</th>
+          <th>Avg Vol</th>
+          <th>%Change</th>
           <th>Beta</th>
           <th></th>
           <th></th>
@@ -18,17 +21,47 @@
           <td>{{ index + 1 }}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.ticker }}</td>
-          <td>
-            <template v-if="isNaN(this.stockPrices[item.ticker]) ">Loading..</template>
-            <template v-else>{{ parseFloat(this.stockPrices[item.ticker]).toFixed(2) }}</template>
-          </td>     
 
+          <!-- Stock price -->
           <td>
-            <template v-if="isNaN(item.beta) ">Loading..</template>
+            <template v-if="isNaN(this.stockPrices[item.ticker])"
+              >Loading..</template>
+            <template v-else>{{
+              parseFloat(this.stockPrices[item.ticker]).toFixed(2)
+            }}</template>
+          </td>
+
+          <!-- Market Cap -->
+          <td>
+            <template v-if="this.marketCap[item.ticker] === ''">
+              Loading..</template>
+            <template v-else>{{this.marketCap[item.ticker]}}</template>
+          </td>
+
+          <!-- Avg Vol -->
+          <td>
+            <template v-if="this.avgVol[item.ticker] === ''">
+              Loading..</template>
+            <template v-else>{{this.avgVol[item.ticker]}}</template>
+          </td>
+
+          <!-- Percent Change -->
+          <td>
+            <template v-if="this.percentChange[item.ticker] === ''">
+              Loading..</template>
+            <template v-else>{{this.percentChange[item.ticker]}}</template>
+          </td>
+
+          <!-- Beta -->
+          <td>
+            <template v-if="isNaN(item.beta)">Loading..</template>
             <template v-else>{{ parseFloat(item.beta).toFixed(2) }}</template>
-          </td>  
-          <td>{{  }}</td>
+          </td>
+
+          <!-- For the delete icon -->
+          <td>{{}}</td>
           <td>
+
             <button class="btw" @click="deleteItem(item.ticker)">
               <img src="@/assets/deleteIcon.png" alt="Delete" />
             </button>
@@ -46,7 +79,7 @@
 
 <script>
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
@@ -55,86 +88,129 @@ export default {
       useremail: "",
       watchlistData: [],
       hasData: false,
-      stockPrices: {} // Initialize stockPrices
-
+      stockPrices: {}, // Initialize stockPrices
+      marketCap: {},
+      avgVol: {},
+      percentChange: {}
     };
   },
 
   async created() {
+    console.log("created lifecycle hook");
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        
         this.useremail = user.email;
-        this.fetchData()
-          .then(() => {
-            this.getStockPrice();
-            console.log(this.watchlistData)
-          });
+        this.fetchData().then(() => {
+          this.getStockPrice();
+          this.getMarketCap();
+          this.getAvgVolume();
+          this.getPercentChange();
+          console.log(this.watchlistData);
+        });
 
         // Call fetchData every 5 seconds
         setInterval(this.getStockPrice, 5000);
       } else {
-        console.error('User not authenticated');
+        console.error("User not authenticated");
       }
     });
   },
 
   methods: {
     async deleteItem(ticker) {
-      const confirmation = window.confirm("Are you sure you want to delete this ticker?");
-      
+      const confirmation = window.confirm(
+        "Are you sure you want to delete this ticker?"
+      );
+
       if (confirmation) {
+        const apiUrl = `http://localhost:3000/api/watch/delete/${this.useremail}/${ticker}`;
+        await axios.delete(apiUrl);
 
-      
-      const apiUrl = `http://localhost:3000/api/watch/delete/${this.useremail}/${ticker}`;
-      await axios.delete(apiUrl);
-
-      this.fetchData();
-    } else {
-
-    }
-  },
-  
-  async fetchData() {
-    console.log(this.useremail)
-    try {
-      
-      const apiUrl = `http://localhost:3000/api/watch/read/${this.useremail}`;
-      console.log(apiUrl);
-      const querySnapshot = await axios.get(apiUrl);
-      this.watchlistData = querySnapshot.data;
-
-      this.hasData = this.watchlistData.length > 0;
-      console.log(this.watchlistData)
-
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  },
-
-  async getStockPrice() {
-    try {
-      for (const item of this.watchlistData) {
-        const apiUrl = `http://localhost:3000/api/yfinance/curentPrice/${item.ticker}`;
-        const response = await axios.get(apiUrl);
-        const price = response.data;
-
-        this.stockPrices[item.ticker] = price;
+        this.fetchData();
+      } else {
       }
-    } catch (error) {
-      console.error("Error fetching stock price:", error);
-    }
+    },
+
+    async fetchData() {
+      console.log(this.useremail);
+      try {
+        const apiUrl = `http://localhost:3000/api/watch/read/${this.useremail}`;
+        console.log(apiUrl);
+        const querySnapshot = await axios.get(apiUrl);
+        this.watchlistData = querySnapshot.data;
+
+        this.hasData = this.watchlistData.length > 0;
+        console.log(this.watchlistData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+
+    async getStockPrice() {
+      try {
+        for (const item of this.watchlistData) {
+          const apiUrl = `http://localhost:3000/api/yfinance/curentPrice/${item.ticker}`;
+          const response = await axios.get(apiUrl);
+          const price = response.data;
+
+          this.stockPrices[item.ticker] = price;
+        }
+      } catch (error) {
+        console.error("Error fetching stock price:", error);
+      }
+    },
+
+    async getMarketCap() {
+      try {
+        for (const item of this.watchlistData) {
+          const apiUrl = `http://localhost:3000/api/yfinance/marketCapData/${item.ticker}`;
+          const response = await axios.get(apiUrl);
+
+          const marketCap = response.data; // Assuming the response is the market cap string
+          this.marketCap[item.ticker] = marketCap;
+          console.log(`Market Cap for ${item.ticker}: ${marketCap}`);
+        }
+      } catch (error) {
+        console.error("Error fetching market cap:", error);
+      }
+    },
+    async getAvgVolume() {
+      try {
+        for (const item of this.watchlistData) {
+          const apiUrl = `http://localhost:3000/api/yfinance/averageVolumeData/${item.ticker}`;
+          const response = await axios.get(apiUrl);
+
+          const avgVolume = response.data; // Assuming the response is the market cap string
+          this.avgVol[item.ticker] = avgVolume;
+        }
+      } catch (error) {
+        console.error("Error fetching average volume:", error);
+      }
+    },
+
+    async getPercentChange() {
+      try {
+        for (const item of this.watchlistData) {
+          const apiUrl = `http://localhost:3000/api/yfinance/percentageChange/${item.ticker}`;
+          const response = await axios.get(apiUrl);
+
+          const percChange = response.data; // Assuming the response is the market cap string
+          this.percentChange[item.ticker] = percChange;
+        }
+      } catch (error) {
+        console.error("Error fetching average volume:", error);
+      }
+    },
+
   },
-}};
-
+};
 </script>
-
 
 <style scoped>
 /* Box */
 .table-container {
-  height: 33vw;
+  height: 45vw;
   overflow-y: auto;
   border-radius: 25px;
   justify-content: center;
@@ -145,7 +221,7 @@ export default {
 
 /* Table */
 #scrollable-table {
-  width: 90%;
+  width: 94%;
   background-color: white;
   border-collapse: collapse;
   margin: 0 auto;
@@ -158,7 +234,7 @@ export default {
   border-bottom: 2px solid #d0d0d0;
   padding-bottom: 2.7%;
   padding-top: 2.7%;
-  font-size: 1.7vw;
+  font-size: 1.45vw;
   font-weight: bold;
 }
 
