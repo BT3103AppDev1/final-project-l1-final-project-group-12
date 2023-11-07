@@ -128,7 +128,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { auth } from "./../../firebasefunc.js";
+import { auth } from "../../usersController.js";
 
 // var ui = firebaseui.auth.AuthUI.getInstance()
 // if (!ui) {

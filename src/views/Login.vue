@@ -148,17 +148,5 @@ a.flex-item {
   height: 50px;
   align-self: center;
   background-color: #00ff7f;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.enterNext:hover {
-  transform: translateY(-2px);
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-}
-
-.enterNext:active {
-  transform: translateY(1px);
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 </style>

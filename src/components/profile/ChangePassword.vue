@@ -1,82 +1,114 @@
 <template>
-  <div class="profile_container">
+  <div class="password_container">
     <!-- Header -->
-    <div class="profileHeader">
-      <button @click="closeProfilePage" class="back-button">←</button>
-      <h1 class="profileHeader_main">My Profile</h1>
-      <button @click="emitSignOut" class="logout-button">Log Out</button>
+    <div class="passwordHeader">
+      <button @click="closeChangePassword" class="back-button">←</button>
+      <h1 class="passwordHeader_main">Change Password</h1>
     </div>
 
-    <!-- User Info -->
-    <div class="profileUser">
+    <!-- Password Form -->
+    <div class="profilePasswords">
       <img src="@/assets/logo/main.png" alt="" class="profileUser_picture" />
-      <div id="profileUser_details">
-        <h3 class="profileUser_details_name">Username</h3>
-        <h3 class="profileUser_details_email">Email@email.com</h3>
+      <div v-if="isOAuthUser">
+        <p class="oauth-message">
+          It looks like you've signed in using a social account. To change your
+          password, please visit your social account's settings page.
+        </p>
       </div>
-
-      <button class="edit-button">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="25"
-          height="25"
-          fill="currentColor"
-          class="bi bi-pencil-square"
-          viewBox="0 0 16 16"
+      <form @submit.prevent="changePassword" class="password-form">
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <input
+            id="newPassword"
+            type="password"
+            v-model="newPassword"
+            :disabled="isOAuthUser"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm New Password</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            v-model="confirmPassword"
+            :disabled="isOAuthUser"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          class="submit_ChangePassword"
+          :disabled="isOAuthUser"
         >
-          <path
-            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-          />
-          <path
-            fill-rule="evenodd"
-            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"
-          />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Action Items -->
-    <div class="actionItems">
-      <button class="actionButton" id="changePassword">Change Password</button>
-      <button class="actionButton" id="deleteAccount">Delete Account</button>
+          Update Password
+        </button>
+      </form>
     </div>
   </div>
 </template>
-  
+
 <script>
+import {
+  getAuth,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  updatePassword,
+} from "firebase/auth";
+
 export default {
   props: {
-    isVisible: {
-      type: Boolean,
-      default: false,
+    profilePicture: {
+      type: String,
+      default: "@/assets/logo/main.png",
     },
-    userName: String,
-    userEmail: String,
-    profilePicture: String,
+  },
+  data() {
+    return {
+      newPassword: "",
+      confirmPassword: "",
+      isOAuthUser: false,
+    };
+  },
+  created() {
+    this.checkAuthProvider();
   },
   methods: {
-    closeProfilePage() {
-      this.$emit("close");
+    closeChangePassword() {
+      this.$emit("changeComponent", "ProfilePage");
     },
-    // signOut() {
-    //   const auth = getAuth();
-    //   firebaseSignOut(auth).then(() => {
-    //     // User signed-out
-    //     this.isLoggedIn = false;
-    //     this.displayName = "";
-    //     this.$router.push("/login");
-    //   });
-    closeProfilePage() {
-      this.$emit("close");
+    checkAuthProvider() {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (user) {
+        // Check if the user signed in using an OAuth provider
+        const providerData = user.providerData;
+        this.isOAuthUser = providerData.some(
+          (provider) => provider.providerId !== "password"
+        );
+      }
     },
-    emitSignOut() {
-      this.$emit("signOut");
-    },
-    changePassword() {
-      // Implement password change logic
-    },
-    deleteAccount() {
-      // Implement account deletion logic
+    async changePassword() {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (user) {
+        try {
+          if (this.newPassword != this.confirmPassword) {
+            alert("Passwords do not match");
+          } else {
+            await updatePassword(user, this.newPassword);
+            alert("Password updated successfully!");
+          }
+          this.closeChangePassword();
+        } catch (error) {
+          // Handle errors here, such as re-authentication if needed or showing a message for weak password
+          alert(error.message);
+        }
+      } else {
+        // No user is signed in.
+        alert("No user is signed in to update the password.");
+      }
     },
   },
 };
@@ -84,38 +116,44 @@ export default {
 
 
 <style scoped>
-.profile_container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: fixed; /* or absolute, depending on context */
+.password_container {
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 45%; /* 2/3 of the page */
+  width: 45%;
   height: 40%;
-  max-width: 80%; /* You can set a max-width to ensure it doesn't get too wide on larger screens */
-  max-height: 80%;
+  max-width: 80%;
+  max-height: 100%;
   background-color: white;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: Adds a shadow for better visibility */
-  z-index: 1000; /* Ensure it's above other content */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
   font-family: "Inter", sans-serif;
+  overflow: auto;
 }
 
-.profileAllContent {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.profileHeader {
-  flex-grow: 1;
+.passwordHeader {
+  flex-grow: 0.5;
+  flex-shrink: 1.2;
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
 }
 
-.profileHeader_main {
+.passwordHeader_main {
   text-align: left;
+  font-size: 3vh;
+}
+
+.profilePasswords {
+  flex-shrink: 1.2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .back-button {
@@ -126,94 +164,101 @@ export default {
   font-size: 3rem;
   text-align: left;
   vertical-align: middle;
+  margin-right: 1%;
 }
-.logout-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.5rem;
-  font-weight: bold;
-  font-family: "Inter", sans-serif;
-  margin-left: auto;
-}
-.profileUser {
-  flex-grow: 0.5;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  margin-left: 8%;
-}
-
 .profileUser_picture {
-  width: 80px; /* Adjust size as needed */
-  height: 80px; /* Adjust size as needed */
+  width: 10%;
+  height: 10%;
   margin-left: auto;
   border-radius: 50%;
   border: 1px solid #333;
   margin: 3%;
+  background-color: #272f51;
 }
 
-.profileUser_details {
+.form-group {
   display: flex;
   align-items: center;
+  margin-bottom: 15px;
 }
 
-.profileUser_details_name {
-  margin: 0;
-  font-size: 1rem; /* Adjust size as needed */
-}
-
-.profileUser_details_email {
-  align-items: left;
-  margin: 0;
-  color: grey; /* Adjust color as needed */
-  font-size: 1rem;
-}
-
-.edit-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-left: auto;
-  margin-right: 20%;
-  margin-bottom: auto;
-  font-size: 1.5rem;
-}
-
-.actionItems {
-  flex-grow: 1;
-}
-
-.actionItems button {
-  border: none; /* Removes all default borders */
-  border-top: 1px solid #000000; /* Adds just a top border */
-  border-radius: 0; /* Removes rounded corners */
+.form-group label {
+  min-width: 50%;
   display: block;
-  width: 100%;
-  text-align: left;
-  background: none;
-  cursor: pointer;
+  margin-bottom: 5px;
 }
 
-.actionItems button:hover {
-  background-color: #f2f2f2;
+.form-group input {
+  box-sizing: border-box;
+  padding: 10px;
 }
 
-#deleteAccount {
+.form-group input,
+.submit_ChangePassword {
+  word-wrap: break-word;
+}
+
+.submit_ChangePassword {
+  font-size: 1.2vw;
+  border-radius: 10px;
+  width: 200px;
+  height: 50px;
+  align-self: center;
+  color: white;
+  background-color: #272f51;
+}
+
+.oauth-message {
+  font-size: 1.2vw;
   color: red;
 }
 
 /* Dynamic Media Queries for various devices */
 @media (max-width: 600px) {
-  .profileUser_details_name {
-    font-size: 0.75rem;
+  .passwordHeader {
+    height: 5vh;
+  }
+  .passwordHeader_main {
+    margin: none;
+    text-align: left;
+    font-size: 1.5vh;
+  }
+  .back-button {
+    font-size: 1.5vh;
+  }
+  .logout-button {
+    font-size: 1.75vh;
+  }
+  .profileUser_picture {
+    width: 1.5vh;
+    height: 1.5vh;
+  }
+  .submit_ChangePassword {
+    font-size: 1.75vh;
   }
 }
 
-@media (min-width: 1200px) {
-  .profileUser_details_name {
-    font-size: 1.25rem;
+@media (max-width: 1200px) {
+  .passwordHeader {
+    height: 5vh;
+  }
+  .passwordHeader_main {
+    margin: none;
+    text-align: left;
+    font-size: 1.5vh;
+  }
+  .back-button {
+    font-size: 1.5vh;
+  }
+  .logout-button {
+    font-size: 1.75vh;
+  }
+  .profileUser_picture {
+    width: 1.5vh;
+    height: 1.5vh;
+  }
+  .submit_ChangePassword {
+    font-size: 1.75vh;
   }
 }
 </style>

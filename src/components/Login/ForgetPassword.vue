@@ -34,7 +34,7 @@
 
 <script>
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "./../../firebasefunc.js";
+import { auth } from "../../usersController.js";
 import { ref } from "vue";
 const email = ref("");
 
@@ -118,20 +118,5 @@ button.closeButton {
 .break-point::before {
   content: "\a";
   display: block;
-}
-
-button {
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-}
-
-button:active {
-  transform: translateY(1px);
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 </style>

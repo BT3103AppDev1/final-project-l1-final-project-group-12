@@ -2,9 +2,8 @@
   <div class="profile_container">
     <!-- Header -->
     <div class="profileHeader">
-      <button @click="closeProfilePage" class="back-button">←</button>
-      <h1 class="profileHeader_main">My Profile</h1>
-      <button @click="emitSignOut" class="logout-button">Log Out</button>
+      <button @click="closeDeleteAccount" class="back-button">←</button>
+      <h1 class="profileHeader_main">Delete Account</h1>
     </div>
 
     <!-- User Info -->
@@ -12,76 +11,63 @@
       <img src="@/assets/logo/main.png" alt="" class="profileUser_picture" />
       <div id="profileUser_details">
         <h3 class="profileUser_details_email">
-          Email: {{ user?.email || "No email" }}
+          {{ user?.email || "No email" }}
         </h3>
       </div>
     </div>
-
-    <!-- Action Items -->
-    <div class="actionItems">
-      <button
-        class="actionButton"
-        id="changePassword"
-        @click="navigateToChangePassword"
-      >
-        Change Password
-      </button>
-
-      <button
-        class="actionButton"
-        id="deleteAccount"
-        @click="navigateToDeleteAccount"
-      >
-        Delete Account
-      </button>
-    </div>
-    <ChangePassword
-      v-if="currentComponent === 'ChangePassword'"
-      @close="handleComponentChange('ProfilePage')"
-    />
-    <DeleteAccount
-      v-if="currentComponent === 'DeleteAccount'"
-      @close="handleComponentChange('ProfilePage')"
-    />
+    <h4 class="warningHeader">
+      This action cannot be reversed!! <br />Are you sure?
+    </h4>
+    <button @click="deleteAccount" class="deleteAccount">Delete</button>
   </div>
 </template>
-  
+
 <script>
-import ChangePassword from "@/components/profile/ChangePassword.vue";
-import DeleteAccount from "@/components/profile/DeleteAccount.vue";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, deleteUser, onAuthStateChanged } from "firebase/auth";
+import { getFirestore, deleteDoc, doc } from "firebase/firestore";
 
 export default {
-  name: "ProfilePage",
-  components: {
-    ChangePassword,
-    DeleteAccount,
+  props: {
+    profilePicture: {
+      type: String,
+      default: "@/assets/logo/main.png",
+    },
   },
   data() {
     return {
-      showChangePassword: false,
       user: false,
     };
   },
-  props: {
-    isVisible: {
-      type: Boolean,
-      default: false,
-    },
-  },
   methods: {
-    closeProfilePage() {
-      this.$emit("closePopup");
+    closeDeleteAccount() {
+      this.$emit("changeComponent", "ProfilePage");
     },
-    emitSignOut() {
-      this.$emit("signOut");
+    async deleteAccount() {
+      const auth = getAuth();
+      const db = getFirestore();
+      const user = auth.currentUser;
+
+      if (user) {
+        try {
+          await deleteUser(user);
+
+          this.$emit("accountDeleted");
+
+          console.log("Account deleted successfully");
+        } catch (error) {
+          if (error.code === "auth/requires-recent-login") {
+            alert(
+              "Please log in again to verify your identity before deleting your account."
+            );
+          }
+          this.$emit("accountDeletionFailed", error);
+          console.error("Error deleting account:", error);
+        }
+      } else {
+        console.error("No user is signed in.");
+      }
     },
-    navigateToChangePassword() {
-      this.$emit("changeComponent", "ChangePassword");
-    },
-    navigateToDeleteAccount() {
-      this.$emit("changeComponent", "DeleteAccount");
-    },
+
     created() {
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
@@ -104,12 +90,12 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .profile_container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-content: center;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -126,11 +112,8 @@ export default {
   overflow: auto;
 }
 
-.profileAllContent {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
 .profileHeader {
+  flex-grow: 0.5;
   display: flex;
   align-items: center;
 }
@@ -150,30 +133,17 @@ export default {
   vertical-align: middle;
   margin-right: 1%;
 }
-.logout-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 3vh;
-  font-weight: bold;
-  font-family: "Inter", sans-serif;
-  margin-left: auto;
-}
 
 .profileUser {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-left: 8%;
+  width: 100%;
+  text-align: center;
 }
 
 .profileUser_picture {
   width: 80px;
   height: 80px;
-  margin-left: auto;
   border-radius: 50%;
   border: 1px solid #333;
-  margin: 3%;
   background-color: #272f51;
 }
 
@@ -183,48 +153,24 @@ export default {
 }
 
 .profileUser_details_email {
-  align-items: left;
-  margin: 0;
-  color: grey;
-  font-size: 1.5vh;
+  align-items: center;
+  color: #272f51;
+  font-size: 3vh;
 }
-
-.edit-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-left: auto;
-  margin-right: 20%;
-  margin-bottom: auto;
-  font-size: 1.2vw;
-  width: 10%;
-  height: 30%;
-  vertical-align: middle;
-}
-
-.actionItems {
-  flex-grow: 1;
-}
-
-.actionItems button {
-  border: none;
-  border-top: 1px solid #000000;
-  border-radius: 0;
-  display: block;
-  width: 100%;
-  height: 50%;
-  font-size: 1.2vw;
-  text-align: left;
-  background: none;
-  cursor: pointer;
-}
-
-.actionItems button:hover {
-  background-color: #f2f2f2;
-}
-
-#deleteAccount {
+.warningHeader {
+  font-size: 1vw;
   color: red;
+  text-align: center;
+}
+
+.deleteAccount {
+  font-size: 1.2vw;
+  border-radius: 10px;
+  width: 200px;
+  height: 50px;
+  align-self: center;
+  color: white;
+  background-color: red;
 }
 
 /* Dynamic Media Queries for various devices */
@@ -239,9 +185,6 @@ export default {
   }
   .back-button {
     font-size: 1.5vh;
-  }
-  .logout-button {
-    font-size: 1.75vh;
   }
   .profileUser_picture {
     width: 1.5vh;
@@ -266,9 +209,6 @@ export default {
   }
   .back-button {
     font-size: 1.5vh;
-  }
-  .logout-button {
-    font-size: 1.75vh;
   }
   .profileUser_picture {
     width: 1.5vh;

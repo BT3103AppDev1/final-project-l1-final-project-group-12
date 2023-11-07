@@ -1,13 +1,11 @@
 <template>
   <div class="topnav" :class="{ responsive: isResponsive }" id="myTopnav">
-    <!-- Logo -->
     <div class="logo-container">
       <router-link to="/" class="logo">
         <img src="@/assets/logo/whiteLogo.png" alt="Logo" />
       </router-link>
     </div>
 
-    <!-- Navigation links -->
     <div class="nav-links">
       <router-link
         to="/equities"
@@ -19,31 +17,35 @@
         :class="{ active: $route.path === '/portfolio' }"
         ><b>Portfolio</b></router-link
       >
-      <div @click="toggleProfilePopup" :class="{ active: showProfilePopup }">
+      <div @click="handleLoginClick" :class="{ active: showProfilePopup }">
         <b>{{ displayName || "Log In" }}</b>
       </div>
     </div>
   </div>
 
-  <!-- Profile Popup component -->
   <div class="profile-popup-container" v-if="isLoggedIn && showProfilePopup">
-    <ProfilePage @close="toggleProfilePopup" @signOut="signOut" />
+    <Profile @close="toggleProfilePopup" @requestSignOut="signOut" />
   </div>
   <router-view />
 </template>
 
 <script>
-import ProfilePage from "@/components/profile/ProfilePage.vue";
+import Profile from "@/views/Profile.vue";
 import {
   getAuth,
   onAuthStateChanged,
   signOut as firebaseSignOut,
 } from "firebase/auth";
+import { useRouter } from "vue-router";
 
 export default {
   name: "Navigation",
   components: {
-    ProfilePage,
+    Profile,
+  },
+  setup() {
+    const router = useRouter();
+    return { router };
   },
   data() {
     return {
@@ -54,6 +56,13 @@ export default {
     };
   },
   methods: {
+    handleLoginClick() {
+      if (!this.isLoggedIn) {
+        this.router.push("/login");
+      } else {
+        this.toggleProfilePopup();
+      }
+    },
     signOut() {
       const auth = getAuth();
       firebaseSignOut(auth).then(() => {
@@ -72,7 +81,7 @@ export default {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         this.isLoggedIn = true;
-        this.displayName = user.email;
+        this.displayName = user.email || user.displayName;
       } else {
         // User is signed out
         this.isLoggedIn = false;
