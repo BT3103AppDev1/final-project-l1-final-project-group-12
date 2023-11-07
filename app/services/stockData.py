@@ -298,6 +298,17 @@ def get_percentage_change(ticker):
     else:
         return f"Failed to retrieve data. Status code: {response.status_code}"
 
+def get_ticker(stockName):
+    yfinance = "https://query2.finance.yahoo.com/v1/finance/search"
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+    params = {"q": stockName, "quotes_count": 1, "country": "United States"}
+
+    res = requests.get(url=yfinance, params=params, headers={'User-Agent': user_agent})
+    data = res.json()
+
+    company_code = data['quotes'][0]['symbol']
+    return company_code
+   
 if __name__ == "__main__":
     function_name = sys.argv[1]
     args = sys.argv[2:]
@@ -322,5 +333,7 @@ if __name__ == "__main__":
         print(json.dumps(get_avg_volume(*args)))
     elif function_name == 'get_percentage_change' and len(args) == 1:
         print(json.dumps(get_percentage_change(*args)))
+    elif function_name == 'get_ticker' and len(args) == 1:
+        print(json.dumps(get_ticker(*args)))
 
         

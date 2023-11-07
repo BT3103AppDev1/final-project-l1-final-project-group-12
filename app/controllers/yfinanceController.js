@@ -170,6 +170,21 @@ const getPercentageChangeData = async (req, res) => {
   }
 };
 
+// Connector method to get ticker based on stock name
+const getTicker = async (req, res) => {
+  const { stockName } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_ticker",
+      stockName,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
 module.exports = {
   getCurrentPrice,
   getStockStatistics,
@@ -180,5 +195,6 @@ module.exports = {
   getMostActivesData,
   getMarketCapData,
   getAvgVolumeData,
-  getPercentageChangeData
+  getPercentageChangeData,
+  getTicker,
 };
