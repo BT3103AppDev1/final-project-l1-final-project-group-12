@@ -41,6 +41,12 @@ const email = ref("");
 export default {
   name: "ForgetPasswordPopup",
   emits: ["closepopupbox"],
+  data() {
+    return {
+      email: "", // Define the email property
+      errorMessage: "", // Define the errorMessage property
+    };
+  },
   methods: {
     closepopup() {
       this.$emit("closepopupbox", false);
