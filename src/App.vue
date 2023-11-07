@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { getAuth, onAuthStateChanged} from 'firebase/auth'
 export default {
 name: 'App',
 
@@ -16,7 +17,8 @@ data() {
   return {
     isResponsive: false,
   };
-}
+},
+
 
 };
 </script>

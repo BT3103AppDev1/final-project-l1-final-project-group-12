@@ -14,17 +14,16 @@
         :class="{ active: $route.path === '/equities' }"
         ><b>Equities</b></router-link
       >
-
       <router-link
         to="/portfolio"
         :class="{ active: $route.path === '/portfolio' }"
         ><b>Portfolio</b></router-link
       >
-
-      <!-- This div will toggle the profile popup -->
-      <div @click="toggleProfilePopup" :class="{ active: showProfilePopup }">
-        <b>User</b>
-      </div>
+      <router-link to="/user" :class="{ active: $route.path === '/user' }">
+        <b v-if="isLoggedIn">{{ this.displayName }}</b>
+        <b v-else>User</b>
+      </router-link>
+      <button v-if="isLoggedIn" @click="signOut">signOut</button>
     </div>
   </div>
 
@@ -38,38 +37,48 @@
 
 <script>
 import ProfilePage from "@/components/ProfilePage.vue";
-//import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut as firebaseSignOut,
+} from "firebase/auth";
+
 export default {
   name: "Navigation",
   components: {
-    ProfilePage, // Make sure to declare the imported component here
+    ProfilePage,
   },
   data() {
     return {
+      isResponsive: false,
+      isLoggedIn: false,
+      displayName: "",
       showProfilePopup: false,
-      //     user: false,
-      //     isResponsive: false,
     };
   },
   methods: {
+    signOut() {
+      const auth = getAuth();
+      firebaseSignOut(auth).then(() => {
+        // User signed-out
+        this.isLoggedIn = false;
+        this.displayName = "";
+        this.$router.push("/login");
+      });
+    },
     toggleProfilePopup() {
       this.showProfilePopup = !this.showProfilePopup;
     },
-    // other methods
   },
-  // computed: {
-  //   currentRoute() {
-  //     return this.$route.path;
-  //   },
-  // },
-  // mounted() {
-  //   const auth = getAuth()
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       this.user = user
-  //     }
-  //   })
-  // }
+  mounted() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.isLoggedIn = true;
+        this.displayName = user.email; // Changed from auth.currentUser.email to user.email
+      }
+    });
+  },
 };
 </script>
 
