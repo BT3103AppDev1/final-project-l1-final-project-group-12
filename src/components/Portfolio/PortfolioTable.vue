@@ -159,6 +159,18 @@ export default {
 
     async saveItem(index) {
       const item = this.portfolioData[index];
+
+      //Define valid input
+      if (isNaN(parseFloat(this.updatedBuyPrice)) || isNaN(parseFloat(this.updatedBuyQuantity)) ) {   
+                alert("Buy Price or Buy Quantity must be valid numbers.");          //TODO: Add PopUp Window
+                return;
+            } else if (this.updatedBuyPrice === "" || this.updatedBuyQuantity === "") {
+                alert("All fields must be filled out.");
+                return;
+            } else if (this.updatedBuyPrice <= 0 || this.updatedBuyQuantity <= 0)  {
+                alert("Buy Price or Buy Quantity must be more than 0");
+                return;
+            }
       
       // Update item data with the new values
       const updatedData = {
@@ -240,7 +252,7 @@ export default {
         console.log('Delete: All requests completed');
       } catch (error) {
         console.error('Failed to delete trade: ', error);
-        alert('Fail to delete trade: ', error, 'Please try again later!')
+        //alert('Fail to delete trade: ', error, 'Please try again later!')
       }
     },
 

@@ -97,7 +97,9 @@
             } else if (ticker.trim() === "" || buyPrice.trim() === "" || buyQuantity.trim() === "") {
                 alert("All fields must be filled out.");
                 return;
-            }      
+            } else if(buyPrice <= 0) {
+                alert("Buy Price must be more than 0");
+            }
 
             // Add Trade
             this.$refs.Loading.onLoading()
@@ -190,6 +192,7 @@ input {
     padding-left: 4%;
     border-radius: 5px; 
     border: none;
+    text-align: left;
     
 }
 
@@ -197,11 +200,12 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0%;
+    
 }
 
 input::placeholder {
     color: #C2C1C1;
-    text-align: left !important;
+    text-align: left;
 }
 
 

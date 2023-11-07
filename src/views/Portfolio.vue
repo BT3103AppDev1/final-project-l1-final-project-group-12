@@ -137,18 +137,15 @@
 
     // Called when portfolio changes
     async change(hasData) {
-      const portfolioAssetView = this.$refs.PortfolioAssetView;
       this.alphaOptimized = false;
       this.betaOptimized = false;
       this.balanceOptimized = false;
       
-      if (portfolioAssetView) {
-        await Promise.all([
-          portfolioAssetView.fetchData(),
-          //portfolioAssetView.getStockPrice(),
-        ]);
-      }
-
+      await Promise.all([
+        this.$refs.PortfolioAssetView.fetchData(),
+        //portfolioAssetView.getStockPrice(),
+      ]);
+      
       if (hasData) {
         this.updatingStatistics = true;
         
@@ -156,8 +153,8 @@
         
         if(this.objective != "") {
           await this.updateOptimisePortfolio(this.objective);
-          await portfolioAssetView.fetchData();
-          await PortfolioStatistics.fetchStatistics();
+          await this.$refs.PortfolioAssetView.fetchData();
+          await this.$refs.PortfolioStatistics.fetchStatistics();
         }
         
       }
@@ -242,6 +239,7 @@
 
       } catch (error) {
         console.error("Error Updated Optimised Portfolio:", error);
+        this.updateOptimisePortfolio(objective);
       }
 
       console.log("Portfolio Optimised!")
