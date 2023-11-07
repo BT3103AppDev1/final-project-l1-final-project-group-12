@@ -1,6 +1,12 @@
 <template>
   <div class="body">
-    <h1>{{ searchTerm }}</h1>
+    <div class="header">
+      <h1>{{ searchTerm }}</h1>
+      <button class="add-button" @click="addToWatchlist">
+      <img src="@/assets/starIcon.png" alt="" class="star-icon" />
+        <span class="add-text">Add to Watchlist</span>
+      </button>
+    </div>
     <div v-if="isLoading">Loading...</div>
     <div v-else>
       <LineChart :chartData="chartData" :chartOptions="chartOptions"></LineChart>
@@ -50,10 +56,39 @@ export default {
 
 <style scoped>
 .body {
-  margin: 4% 3.5% 0% 1.5%;
+  margin: 1.5% 3.5% 0% 1.5%;
   padding: 0 0 3% 1.5%;
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.header {
+  display: flex;
+  padding-bottom: 3vw;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-button {
+  background-color: #272f51;
+  color: #fff;
+  border: none;
+  padding: 1vw 3vw;
+  border-radius: 10px;
+  font-size: 1.4vw;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.star-icon {
+  width: 2.3vw; /* Adjust the width as needed */
+  height: 2.3vw; /* Adjust the height as needed */
+  margin-right: 1vw; /* Add some space between the star icon and text */
+}
+
+.add-text {
+  position: relative;
+  top: -4px;
+  font-weight: bold;
+}
 
 </style>
