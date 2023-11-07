@@ -27,7 +27,7 @@
             <template v-if="isNaN(this.stockPrices[item.ticker])"
               >Loading..</template>
             <template v-else>{{
-              parseFloat(this.stockPrices[item.ticker]).toFixed(2)
+              parseFloat(this.stockPrices[item.ticker]).toFixed(4)
             }}</template>
           </td>
 
@@ -234,7 +234,7 @@ export default {
   border-bottom: 2px solid #d0d0d0;
   padding-bottom: 2.7%;
   padding-top: 2.7%;
-  font-size: 1.45vw;
+  font-size: 1.4vw;
   font-weight: bold;
 }
 

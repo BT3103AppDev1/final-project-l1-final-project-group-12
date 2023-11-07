@@ -2,7 +2,7 @@
   <div class="body">
     <div class="header">
       <h1>{{ searchTerm }}</h1>
-      <button class="add-button" @click="addToWatchlist">
+      <button class="add-button" @click="confirmAndAdd()">
       <img src="@/assets/starIcon.png" alt="" class="star-icon" />
         <span class="add-text">Add to Watchlist</span>
       </button>
@@ -16,6 +16,8 @@
 
 <script>
 import LineChart from './LineChart.vue';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import axios from "axios";
 
 export default {
   props: {
@@ -29,6 +31,8 @@ export default {
       isLoading: true,
       data: null,
       chartData: {}, // Initialize the chart data object
+      ticker: this.searchTerm,
+      useremail: "",
     };
   },
   created() { // Use the created hook for fetching data
@@ -51,8 +55,51 @@ export default {
         this.isLoading = false; // Handle errors and set isLoading to false
       });
   },
+  async mounted() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.useremail = user.email;
+      } else {
+        this.useremail = ""; // Ensure it's cleared when the user signs out
+      }
+    });
+  },
+  methods: {
+    confirmAndAdd() {
+      const confirmation = window.confirm(
+        "Are you sure you want to add this ticker to your watchlist?"
+      );
+      if (confirmation) {
+        this.saveToWatchlist();
+      }
+    },
+
+    async saveToWatchlist() {
+      const watchData = {
+        ticker: this.ticker,
+        // Add other data fields as needed
+      };
+      console.log("Saving " + this.ticker + " to Watchlist");
+
+      const apiUrl = `http://localhost:3000/api/watch/add/${this.useremail}/${this.ticker}`;
+      console.log(apiUrl);
+
+      try {
+        // Make a POST request to updateTrade endpoint
+        await axios.post(apiUrl, watchData);
+        // Reset placeholder
+        this.ticker = ""; // Clear the input field
+        this.$emit("added");
+      } catch (error) {
+        alert("Error: " + error.response.data);
+      }
+    },
+  },
 };
 </script>
+
+
 
 <style scoped>
 .body {
