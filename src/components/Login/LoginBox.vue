@@ -209,6 +209,7 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .SignwithGoogle {
   display: inline-flex;
