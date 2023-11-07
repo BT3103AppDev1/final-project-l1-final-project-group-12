@@ -298,6 +298,19 @@ def get_percentage_change(ticker):
     else:
         return f"Failed to retrieve data. Status code: {response.status_code}"
 
+    """
+    get_ticker Function:
+    Fetches ticker based on stock name from https://query2.finance.yahoo.com/v1/finance/search
+    
+    Parameters:
+    @param ticker: stockName
+        The stock name
+
+    Returns:
+    @return: str
+        A str for ticker based on specified stockName
+    """
+
 def get_ticker(stockName):
     yfinance = "https://query2.finance.yahoo.com/v1/finance/search"
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'

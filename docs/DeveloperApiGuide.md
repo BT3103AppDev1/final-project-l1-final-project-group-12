@@ -128,6 +128,18 @@ curl http://<your-server-url>/api/yfinance/averageVolumeData/AAPL
 curl http://<your-server-url>/api/yfinance/percentageChange/AAPL
 ```
 
+### 10. Get ticker based on stock name 
+
+- Endpoint: `/ticker/:stockName`
+- Method: `GET`
+- URL Params: `NONE`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/yfinance/ticker/Apple
+```
+
 ## API Endpoints for Reading Firestore Data
 
 ### 1. Get User Information [`DEPRECATED`]
