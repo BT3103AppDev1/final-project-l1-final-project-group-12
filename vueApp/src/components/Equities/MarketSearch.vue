@@ -30,12 +30,16 @@ export default {
   methods: {
     runMarketSearch() {
       console.log("Button Clicked")
+
+      // Convert searchTerm to uppercase
+      const uppercaseSearchTerm = this.searchTerm.toUpperCase();
+
       // Redirect to a new page and pass the search term as a parameter
       this.$router.push({
         name: "SearchResults",
-        params: { searchTerm: this.searchTerm }, // need to transform searchTerm to stock code
+        params: { searchTerm: uppercaseSearchTerm }, // need to transform searchTerm to stock code
       });
-    },
+    }, 
   },
 };
 </script>
