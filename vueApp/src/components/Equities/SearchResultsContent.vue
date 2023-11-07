@@ -27,17 +27,13 @@
   </div>
     <div v-if="isLoading">Loading...</div>
     <div v-else>
-      <LineChart
-        :chartData="chartData"
-        :chartOptions="chartOptions"
-      ></LineChart>
+      <line-chart :data="chartData"></line-chart>
     </div>
 
   </div>
 </template>
 
 <script>
-import LineChart from "./LineChart.vue";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 
@@ -46,9 +42,7 @@ export default {
   props: {
     searchTerm: String,
   },
-  components: {
-    LineChart: LineChart, // Register the new component
-  },
+
   data() {
     return {
       isLoading: true,
@@ -101,6 +95,8 @@ export default {
       }
     },
 
+    
+
     updatePeriodInterval(period, interval) {
       this.selectedPeriod = period;
       this.selectedInterval = interval;
@@ -150,6 +146,8 @@ export default {
         this.isLoading = false;
       }
     },
+
+    
   },
 };
 </script>
