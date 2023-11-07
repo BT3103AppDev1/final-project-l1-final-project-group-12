@@ -74,9 +74,8 @@ export default {
           await this.fetchStatistics();
 
           const watchCallback = async () => {
-            if (!this.getOptimizedStatus && this.hasData){
+            if (!this.getOptimizedStatus && !this.optimizingStatus && this.hasData){
               await this.updateOptimisePortfolio(this.objective);
-              await this.fetchStatistics();
 
             }
             await this.fetchStatistics(); 

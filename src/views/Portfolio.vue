@@ -44,6 +44,7 @@
         <!-- Statistic Table  -->
         <div v-else class="right-icon">
             <PortfolioStatistics 
+              ref="PortfolioStatistics"
               :objective="objective"
               :optimizingStatus="getStatus()"
               :isStatisticsOptimizing="updatingStatistics" 
@@ -156,6 +157,7 @@
         if(this.objective != "") {
           await this.updateOptimisePortfolio(this.objective);
           await portfolioAssetView.fetchData();
+          await PortfolioStatistics.fetchStatistics();
         }
         
       }
