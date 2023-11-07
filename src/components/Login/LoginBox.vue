@@ -208,3 +208,29 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.SignwithGoogle {
+  display: inline-flex;
+  align-content: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.SignwithGoogle > h2 {
+  margin: 0;
+  font-size: 1.5vw;
+  vertical-align: middle;
+}
+
+.flex-item {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 800px) {
+  svg {
+    height: 30px;
+    width: 30px;
+  }
+}
+</style>
