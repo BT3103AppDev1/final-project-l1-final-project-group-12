@@ -36,9 +36,9 @@
     </div>
 
     <!-- Action Items -->
-    <div class="action-items">
-      <button class="action-button">Change Password →</button>
-      <button class="action-button">Delete Account →</button>
+    <div class="actionItems">
+      <button class="actionButton" id="changePassword">Change Password</button>
+      <button class="actionButton" id="deleteAccount">Delete Account</button>
     </div>
   </div>
 </template>
@@ -85,14 +85,17 @@ export default {
 
 <style scoped>
 .profile_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   position: fixed; /* or absolute, depending on context */
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 40%; /* 2/3 of the page */
+  width: 45%; /* 2/3 of the page */
   height: 40%;
   max-width: 80%; /* You can set a max-width to ensure it doesn't get too wide on larger screens */
-  max-height: 100%;
+  max-height: 80%;
   background-color: white;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: Adds a shadow for better visibility */
@@ -101,12 +104,11 @@ export default {
 }
 
 .profileAllContent {
-  padding: 20px;
-  border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .profileHeader {
+  flex-grow: 1;
   display: flex;
   align-items: center;
   margin-bottom: 20px;
@@ -117,11 +119,13 @@ export default {
 }
 
 .back-button {
+  width: 5vw;
   background: none;
   border: none;
-  margin-right: 3%;
   cursor: pointer;
   font-size: 3rem;
+  text-align: left;
+  vertical-align: middle;
 }
 .logout-button {
   background: none;
@@ -133,11 +137,12 @@ export default {
   margin-left: auto;
 }
 .profileUser {
+  flex-grow: 0.5;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-  margin: 8%;
+  margin-left: 8%;
 }
 
 .profileUser_picture {
@@ -176,17 +181,39 @@ export default {
   font-size: 1.5rem;
 }
 
-.action-items button {
+.actionItems {
+  flex-grow: 1;
+}
+
+.actionItems button {
+  border: none; /* Removes all default borders */
+  border-top: 1px solid #000000; /* Adds just a top border */
+  border-radius: 0; /* Removes rounded corners */
   display: block;
   width: 100%;
   text-align: left;
   background: none;
-  border: none;
-  padding: 10px 0;
   cursor: pointer;
 }
 
-.action-items button:hover {
+.actionItems button:hover {
   background-color: #f2f2f2;
+}
+
+#deleteAccount {
+  color: red;
+}
+
+/* Dynamic Media Queries for various devices */
+@media (max-width: 600px) {
+  .profileUser_details_name {
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .profileUser_details_name {
+    font-size: 1.25rem;
+  }
 }
 </style>

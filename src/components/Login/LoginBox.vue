@@ -208,38 +208,3 @@ export default {
   },
 };
 </script>
-
-
-<style scoped>
-.enterNext {
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.enterNext:hover {
-  transform: translateY(-2px);
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-}
-
-.enterNext:active {
-  transform: translateY(1px);
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.SignwithGoogle {
-  display: inline-flex;
-  align-content: center;
-  justify-content: center;
-  vertical-align: middle;
-}
-
-.SignwithGoogle > h2 {
-  margin: 0;
-  font-size: 1.5vw;
-  vertical-align: middle;
-}
-
-.flex-item {
-  cursor: pointer;
-}
-</style>

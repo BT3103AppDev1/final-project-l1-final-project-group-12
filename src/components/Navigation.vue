@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import ProfilePage from "@/components/ProfilePage.vue";
+import ProfilePage from "@/components/profile/ProfilePage.vue";
 import {
   getAuth,
   onAuthStateChanged,
