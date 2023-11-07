@@ -98,6 +98,7 @@
           const watchCallback = async () => {
             if (!this.getOptimizedStatus && this.hasData){
               await this.updateOptimisePortfolio(this.objective);
+              await this.fetchData()
             }
             await this.fetchData();
           };
