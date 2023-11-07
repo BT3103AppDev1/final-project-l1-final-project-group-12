@@ -246,4 +246,11 @@ button:active {
 .flex-item {
   cursor: pointer;
 }
+
+@media screen and (max-width: 800px) {
+svg {
+  height: 30px;
+  width:30px
+}
+}
 </style>
