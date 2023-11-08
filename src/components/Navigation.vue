@@ -1,13 +1,11 @@
 <template>
   <div class="topnav" :class="{ responsive: isResponsive }" id="myTopnav">
-    <!-- Logo -->
     <div class="logo-container">
-      <router-link to="/" class="logo"
-        ><img src="@/assets/logo/whiteLogo.png" alt="Logo"
-      /></router-link>
+      <router-link to="/" class="logo">
+        <img src="@/assets/logo/whiteLogo.png" alt="Logo" />
+      </router-link>
     </div>
 
-    <!-- Navigation links -->
     <div class="nav-links">
       <router-link
         to="/equities"
@@ -19,115 +17,140 @@
         :class="{ active: $route.path === '/portfolio' }"
         ><b>Portfolio</b></router-link
       >
-      <router-link to="/user" :class="{ active: $route.path === '/user' }">
-        <b v-if="isLoggedIn">{{ this.displayName }}</b>
-        <b v-else>User</b>
-      </router-link>
-      <button class="sign-out-button" v-if="isLoggedIn" @click="signOut">
-        Sign Out
-      </button>
+      <div @click="handleLoginClick" :class="{ active: showProfilePopup }">
+        <b>{{ displayName || "Log In" }}</b>
+      </div>
     </div>
+  </div>
+
+  <div class="profile-popup-container" v-if="isLoggedIn && showProfilePopup">
+    <Profile @close="toggleProfilePopup" @requestSignOut="signOut" />
   </div>
   <router-view />
 </template>
 
 <script>
-import { auth } from "../usersController.js";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import Profile from "@/views/Profile.vue";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut as firebaseSignOut,
+} from "firebase/auth";
+import { useRouter } from "vue-router";
+
 export default {
   name: "Navigation",
-  methods: {
-    signOut() {
-      signOut(auth).then(() => {
-        // user signed-out
-        this.isLoggedIn = false;
-        this.displayName = "";
-        this.$router.push("/login");
-      });
-    },
+  components: {
+    Profile,
+  },
+  setup() {
+    const router = useRouter();
+    return { router };
   },
   data() {
     return {
       isResponsive: false,
       isLoggedIn: false,
       displayName: "",
+      showProfilePopup: false,
     };
+  },
+  methods: {
+    handleLoginClick() {
+      if (!this.isLoggedIn) {
+        this.router.push("/login");
+      } else {
+        this.toggleProfilePopup();
+      }
+    },
+    signOut() {
+      const auth = getAuth();
+      firebaseSignOut(auth).then(() => {
+        // User signed-out
+        this.isLoggedIn = false;
+        this.displayName = "";
+        this.$router.push("/login");
+      });
+    },
+    toggleProfilePopup() {
+      this.showProfilePopup = !this.showProfilePopup;
+    },
   },
   mounted() {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        this.user = user;
         this.isLoggedIn = true;
-        this.displayName = auth.currentUser.email;
+        this.displayName = user.email || user.displayName;
+      } else {
+        // User is signed out
+        this.isLoggedIn = false;
+        this.displayName = "";
       }
     });
   },
 };
-// data() {
-//   return {
-//     user: false,
-//     isResponsive: false,
-//   }
-// },
-// computed: {
-//   currentRoute() {
-//     return this.$route.path;
-//   },
-// },
-
-// mounted() {
-//   const auth = getAuth()
-//   onAuthStateChanged(auth, (user) => {
-//     if (user) {
-//       this.user = user
-//     }
-//   })
-// }
 </script>
 
 
-<style scope>
+<style>
 .topnav {
   overflow: hidden;
   background-color: #272f51;
 }
-.nav-links a {
+
+/* Styles for all navigation items */
+.nav-links a,
+.nav-links div {
   color: #f2f2f2;
   float: right;
   text-align: center;
   padding: 2.15vw 3.2vw;
   text-decoration: none;
   font-size: 1.6vw;
+  cursor: pointer; /* Change cursor to indicate clickable */
 }
-.nav-links a:hover {
+
+/* Hover styles */
+.nav-links a:hover,
+.nav-links div:hover {
   background-color: #ddd;
   color: black;
-  text-decoration-color: black;
 }
-.nav-links a.active {
+
+/* Active state styles */
+.nav-links a.active,
+.nav-links div.active {
+  background-color: #3e4a68; /* Adjust to your active link background color */
   text-decoration: underline;
   text-decoration-thickness: 0.3vw;
 }
+.profile-popup-container {
+  position: fixed; /* Overlay the entire screen */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center; /* Center the child horizontally */
+  align-items: center; /* Center the child vertically */
+  background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
+  z-index: 10; /* Make sure it's above other content */
+}
+
+/* Responsive adjustments */
 @media screen and (max-width: 600px) {
-  .nav-links a:not(:first-child) {
+  .nav-links a:not(:first-child),
+  .nav-links div:not(:first-child) {
     display: none;
   }
-  .nav-links a.icon {
+  .nav-links a.icon,
+  .nav-links div.icon {
     float: right;
     display: block;
   }
-}
-@media screen and (max-width: 600px) {
-  .nav-links.responsive {
-    position: relative;
-  }
-  .nav-links.responsive .icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-  .nav-links.responsive a {
+  .nav-links.responsive a,
+  .nav-links.responsive div {
     float: none;
     display: block;
     text-align: left;

@@ -2,7 +2,7 @@
   <div class="popup">
     <div class="inner-popup">
       <button
-        class="close-button"
+        class="closeButton"
         aria-label="Dismiss alert"
         type="button"
         @click="closepopup"
@@ -136,18 +136,4 @@ export default {
   content: "\a";
   display: block;
 }
-/* button {
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-}
-
-button:active {
-  transform: translateY(1px);
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-} */
 </style>
