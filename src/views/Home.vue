@@ -6,7 +6,7 @@
 
     <div id="information1">
       <h2 id="info1">Diversify your portfolio and minimise risk. <br> Learn how to maximise your returns today!</h2>
-      <!-- <img src="../assets/logo/PLACEHOLDERSCREENSHOT.png"><br>       -->
+      <img src="../assets/logo/PLACEHOLDERSCREENSHOT.png"><br>      
       <button id="signUpButton">Sign up now!</button>
     </div>
 
@@ -17,13 +17,13 @@
         <div id="info2Container1">
             <div id="portfolioSection">
                 <h2 id="info2">Portfolio Overview</h2>
-                <!-- <img src="../assets/logo/pieChart.png" alt="Pie Chart"> -->
+                <img src="../assets/logo/pieChart.png" alt="Pie Chart">
             </div>
         </div>
     </div>
 
     <div id="information3">
-        <!-- <img src="../assets/logo/riskMeter.png" alt="riskMeter"> -->
+        <img src="../assets/logo/riskMeter.png" alt="riskMeter">
       <div id="info4Container">
         <h2 id="info4">Portfolio risks are calculated automatically</h2>
       </div>
