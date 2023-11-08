@@ -72,10 +72,12 @@ h3{
   align-self: center;
   margin-top: 1px;
 }
+
+
 .container {
     padding: 1.6vw;
-    height:70vh;
-    width:350px;
+    height: 70vh;
+    width: 25%;
     background-color: #272F51;
     margin-top:1.3%;
     display: flex;
@@ -83,6 +85,8 @@ h3{
     justify-content: space-evenly;
     align-items: center;
   }
+
+
 .titlecontainer{
   display: flex;
   justify-content: space-between;
@@ -100,7 +104,7 @@ form.register-form{
   display:flex;
   flex-direction: column;
   justify-content: space-around;
-  height: 400px;
+  height: 80vh;
   width: 310px;
 
 }
@@ -128,6 +132,26 @@ input{
 }
 a.flex-item{
   text-decoration: underline;
+}
+
+@media screen and (max-width: 800px) {
+  .container {
+    width:40%
+  }
+  form.register-form{
+      width: 80%;
+  }
+  input{
+    height:30px;
+  }
+  button{
+    width: 90%;
+    height: 40px;
+  }
+  button.SignwithGoogle{
+    width: 90%;
+    height: 40px;
+  }
 }
 
 </style>

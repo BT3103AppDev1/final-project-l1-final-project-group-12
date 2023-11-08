@@ -247,21 +247,11 @@ export default {
   cursor: pointer;
 }
 
-.custom-button {
-  background-color: #00FF7F; /* Choose your desired background color */
-  color: #000000; /* Text color */
-  padding: 7%; /* Adjust padding as needed */
-  border: none;
-  border-radius: 100vh;
-  font-size: 3vh; /* Adjust font size as needed */
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease; /* Add a smooth transition effect */
-  width: 95%;
-  margin-left:3%;
-  /* Hover effect */
-  &:hover {
-    background-color: #009349; /* Change the background color on hover */
-  }
+
+@media screen and (max-width: 800px) {
+svg {
+  height: 30px;
+  width:30px
+}
 }
 </style>
