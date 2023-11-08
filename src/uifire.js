@@ -1,16 +1,19 @@
-import firebase from 'firebase/compat/app'
+// Import initializeApp from firebase/app
+import { initializeApp } from "firebase/app";
 
-//Change
+// ------------------------------ Firebase Config ------------------------------ //
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCsdwvGXo3lwvM-TNOX_MuwFxAk97DfRQA",
-  authDomain: "smartfolio-16224.firebaseapp.com",
-  projectId: "smartfolio-16224",
-  storageBucket: "smartfolio-16224.appspot.com",
-  messagingSenderId: "281279681132",
-  appId: "1:281279681132:web:0996924688f2e29d417e49",
-  measurementId: "G-M1C9W3B0SG"
+  apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECTID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APPID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENTID,
 };
 
-firebase.initializeApp(firebaseConfig)
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
 
-export default firebase
+export default firebaseApp;

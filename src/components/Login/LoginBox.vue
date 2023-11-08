@@ -2,7 +2,7 @@
   <div class="container">
     <div class="titlecontainer">
       <div class="flex-item">
-        <a 
+        <a
           href="#"
           v-bind:style="{
             color: currentForm === 'login' ? '#38D3B4' : 'white',
@@ -104,7 +104,7 @@
         </svg>
         <h2>Login with Google</h2>
       </button>
-      <button class = "custom-button" >Login</button>
+      <button class="custom-button">Login</button>
     </form>
 
     <a ref="#" class="flex-item" @click="togglePopup"> Forget Password ? </a>
@@ -131,7 +131,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { useRouter } from "vue-router";
-import { auth } from "./../../firebasefunc.js";
+import { auth } from "../../usersController.js";
 const errMsg = ref("");
 
 // var ui = firebaseui.auth.AuthUI.getInstance()
@@ -247,11 +247,10 @@ export default {
   cursor: pointer;
 }
 
-
 @media screen and (max-width: 800px) {
-svg {
-  height: 30px;
-  width:30px
-}
+  svg {
+    height: 30px;
+    width: 30px;
+  }
 }
 </style>

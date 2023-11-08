@@ -3,136 +3,128 @@
     <NavBar />
 
     <div class="app-container">
+      <div class="title-button-container">
+        <span>{{ portfolioTitle }}</span>
 
-        <div class="title-button-container">
-            <span>{{ portfolioTitle }}</span>
+        <button @click="toggleStatistics" id="portfolioButton">
+          {{ buttonLabel }}
+        </button>
+      </div>
 
-            <button @click="toggleStatistics" id="portfolioButton">{{ buttonLabel }}</button>
-        </div>
+      <!-- Optimisation Tabs  -->
+      <div class="Optimisation-container">
+        <OptimisationTab @update-selected-tab-index="getObjective" />
+      </div>
 
-        <!-- Optimisation Tabs  -->
-        <div class="Optimisation-container">
-          <OptimisationTab 
-            @update-selected-tab-index="getObjective" 
+      <!-- Asset View & Add Trade  -->
+      <div v-if="!showStatistics" class="portfolioDisplay">
+        <div class="table">
+          <PortfolioAssetView
+            :objective="objective"
+            ref="PortfolioAssetView"
+            :status="getStatus()"
+            :getOptimizedStatus="getOptimizedStatus()"
+            :updateOptimisePortfolio="updateOptimisePortfolio"
+            @total-pl-updated="emitTotalPL"
+            @refresh-request="change"
+            @has-data="updateHasData"
           />
         </div>
-
-
-        <!-- Asset View & Add Trade  -->
-        <div v-if="!showStatistics" class="portfolioDisplay">
-            <div class="table">
-                <PortfolioAssetView 
-                  :objective="objective"   
-                  ref="PortfolioAssetView"
-                  :status="getStatus()"
-                  :getOptimizedStatus = "getOptimizedStatus()"
-                  :updateOptimisePortfolio = "updateOptimisePortfolio"
-                  @total-pl-updated = "emitTotalPL"
-                  @refresh-request = "change"
-                  @has-data = "updateHasData"
-                  />
-                  
-            </div>
-            <div class="addTrade">
-                <AddTrade  
-                  :totalPL = "totalPL"
-                  ref="AddTrade"
-                  @added = "added"/>
-            </div>
+        <div class="addTrade">
+          <AddTrade :totalPL="totalPL" ref="AddTrade" @added="added" />
         </div>
+      </div>
 
-        <!-- Statistic Table  -->
-        <div v-else class="right-icon">
-            <PortfolioStatistics 
-              ref="PortfolioStatistics"
-              :objective="objective"
-              :optimizingStatus="getStatus()"
-              :isStatisticsOptimizing="updatingStatistics" 
-              :getOptimizedStatus = "getOptimizedStatus()"
-              :updateOptimisePortfolio = "updateOptimisePortfolio"
-              :hasData="hasData"/>
-              
-        </div>
-
+      <!-- Statistic Table  -->
+      <div v-else class="right-icon">
+        <PortfolioStatistics
+          ref="PortfolioStatistics"
+          :objective="objective"
+          :optimizingStatus="getStatus()"
+          :isStatisticsOptimizing="updatingStatistics"
+          :getOptimizedStatus="getOptimizedStatus()"
+          :updateOptimisePortfolio="updateOptimisePortfolio"
+          :hasData="hasData"
+        />
+      </div>
     </div>
 
-    <Loading 
-    ref="Loading"/>
+    <Loading ref="Loading" />
   </div>
-  
 </template>
   
 
 <script>
-  import PortfolioAssetView from '@/components/Portfolio/PortfolioAssetView.vue'
-  import AddTrade from '@/components/Portfolio/AddTrade.vue'
-  import PortfolioStatistics from '@/components/Portfolio/PortfolioStatistics.vue'
-  import OptimisationTab from '@/components/Portfolio/OptimisationTab.vue'
-  import Loading from '@/components/Loading.vue'
-  import NavBar from '@/components/Navigation.vue'
+import PortfolioAssetView from "@/components/Portfolio/PortfolioAssetView.vue";
+import AddTrade from "@/components/Portfolio/AddTrade.vue";
+import PortfolioStatistics from "@/components/Portfolio/PortfolioStatistics.vue";
+import OptimisationTab from "@/components/Portfolio/OptimisationTab.vue";
+import Loading from "@/components/Loading.vue";
+import NavBar from "@/components/Navigation.vue";
 
-  import { getAuth, onAuthStateChanged } from 'firebase/auth'
-  import axios from 'axios';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import axios from "axios";
 
-  export default {
-    name: 'App',
-    components: {
-        PortfolioAssetView,
-        AddTrade,
-        PortfolioStatistics,
-        OptimisationTab,
-        NavBar,
-        Loading,
+export default {
+  name: "App",
+  components: {
+    PortfolioAssetView,
+    AddTrade,
+    PortfolioStatistics,
+    OptimisationTab,
+    NavBar,
+    Loading,
+  },
+
+  data() {
+    return {
+      isChecked: false,
+      showStatistics: false,
+      totalPL: 0,
+      objective: "",
+      isAlphaOptimizing: false,
+      isBetaOptimizing: false,
+      isBalanceOptimizing: false,
+      updatingStatistics: false,
+      alphaOptimized: false,
+      betaOptimized: false,
+      balanceOptimized: false,
+      hasData: false,
+
+      useremail: "",
+      existingPortfolio: null,
+    };
+  },
+
+  async mounted() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.useremail = user.email;
+        this.checkAndCreatePortfolio();
+      } else {
+        this.useremail = ""; // Ensure it's cleared when the user signs out
+      }
+    });
+  },
+
+  computed: {
+    buttonLabel() {
+      return this.showStatistics
+        ? "Back to Portfolio"
+        : "View Portfolio Statistics";
     },
 
-    data() {
-      return {
-        isChecked: false,
-        showStatistics: false,
-        totalPL: 0,
-        objective: "",
-        isAlphaOptimizing: false,
-        isBetaOptimizing: false,
-        isBalanceOptimizing: false,
-        updatingStatistics: false,
-        alphaOptimized: false,
-        betaOptimized: false,
-        balanceOptimized: false,
-        hasData: false,
-
-        useremail: '',
-        existingPortfolio: null,
-      };
+    portfolioTitle() {
+      return this.showStatistics ? "Portfolio Statistics" : "My Portfolio";
     },
+  },
 
-    async mounted() {
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                this.useremail = user.email;
-                this.checkAndCreatePortfolio();
-            } else {
-                this.useremail = ''; // Ensure it's cleared when the user signs out
-            }
-        });
-    },
-
-    computed: {
-      buttonLabel() {
-        return this.showStatistics ? 'Back to Portfolio' : 'View Portfolio Statistics';
-      },
-
-      portfolioTitle() {
-        return this.showStatistics ? 'Portfolio Statistics' : 'My Portfolio';
-      },
-    },
-
-    methods: {
-
+  methods: {
     added() {
       this.change(true);
       const addedStock = this.$refs.AddTrade.stockPrice;
-      this.$refs.PortfolioAssetView.stockPrices[addedStock[0]] = addedStock[1]
+      this.$refs.PortfolioAssetView.stockPrices[addedStock[0]] = addedStock[1];
     },
 
     // Called when portfolio changes
@@ -140,235 +132,216 @@
       this.alphaOptimized = false;
       this.betaOptimized = false;
       this.balanceOptimized = false;
-      
+
       await Promise.all([
         this.$refs.PortfolioAssetView.fetchData(),
         //portfolioAssetView.getStockPrice(),
       ]);
-      
+
       if (hasData) {
         this.updatingStatistics = true;
-        
+
         await this.updateStatistics();
-        
-        if(this.objective != "") {
+
+        if (this.objective != "") {
           await this.updateOptimisePortfolio(this.objective);
           await this.$refs.PortfolioAssetView.fetchData();
           await this.$refs.PortfolioStatistics.fetchStatistics();
         }
-        
       }
     },
 
-       
+    async checkAndCreatePortfolio() {
+      console.log(this.useremail);
+      this.$refs.Loading.onLoading();
 
-      async checkAndCreatePortfolio() {
-        this.$refs.Loading.onLoading()
-
-        const apiReadPortfolioUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}/""`;
-        const apiCreatePortfolioUrl = `http://localhost:3000/api/update/createPortfolio/${this.useremail}`;
-        console.log(this.existingPortfolio)
-        if (this.existingPortfolio) {
-          console.log("Using cached portfolio data:", this.existingPortfolio.data);
-        } else {
-          try {
-              this.existingPortfolio = await axios.get(apiReadPortfolioUrl);
-              console.log("Current Portfolio: ",this.existingPortfolio.data);
-            
-            } catch (error) {
-              console.log("No Portfolio found");
-            }
-          }
-
-          if (!this.existingPortfolio) { // Check if the portfolio doesn't exist
-            try {
-              console.log("Creating Portfolio..")
-              await axios.post(apiCreatePortfolioUrl);
-              this.updateOptimisePortfolio();
-                  
-            } catch (error) {
-              alert('Error: ' + error.response.data);
-            }
-          } 
-
-          this.$refs.Loading.offLoading()
-      },
-
-//Update functions
-    async updateStatistics() {
-        console.log("Updating Portfolio")
+      const apiReadPortfolioUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}/standard`;
+      const apiCreatePortfolioUrl = `http://localhost:3000/api/update/createPortfolio/${this.useremail}`;
+      if (this.existingPortfolio) {
+        console.log(
+          "Using cached portfolio data:",
+          this.existingPortfolio.data
+        );
+      } else {
         try {
-          const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`; 
-          await axios.put(apiUrl);
-          this.updatingStatistics = false;
-          console.log("Portfolio Update complete!")
-
+          this.existingPortfolio = await axios.get(apiReadPortfolioUrl);
+          console.log("Current Portfolio: ", this.existingPortfolio.data);
         } catch (error) {
-          console.error("Error Updated Portfolio:", error);
+          console.log("No Portfolio found");
         }
-    }, 
+      }
+
+      if (!this.existingPortfolio) {
+        // Check if the portfolio doesn't exist
+        try {
+          console.log("Creating Portfolio..");
+          await axios.post(apiCreatePortfolioUrl);
+          this.updateOptimisePortfolio();
+        } catch (error) {
+          alert("Error: " + error.response.data);
+        }
+      }
+
+      this.$refs.Loading.offLoading();
+    },
+
+    //Update functions
+    async updateStatistics() {
+      console.log("Updating Portfolio");
+      try {
+        const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`;
+        await axios.put(apiUrl);
+        this.updatingStatistics = false;
+        console.log("Portfolio Update complete!");
+      } catch (error) {
+        console.error("Error Updated Portfolio:", error);
+      }
+    },
 
     async updateOptimisePortfolio(objective) {
-      console.log("Updating Optimised Portfolio..")
+      console.log("Updating Optimised Portfolio..");
 
       try {
         if (objective == "alpha") {
           this.isAlphaOptimizing = true;
-                
+
           const apiAlphaUrl = `http://localhost:3000/api/optimise/${this.useremail}/alpha`;
           await axios.post(apiAlphaUrl);
           this.isAlphaOptimizing = false;
           this.alphaOptimized = true;
-        
         } else if (objective == "beta") {
           this.isBetaOptimizing = true;
-              
+
           const apiBetaUrl = `http://localhost:3000/api/optimise/${this.useremail}/beta`;
           await axios.post(apiBetaUrl);
           this.isBetaOptimizing = false;
           this.betaOptimized = true;
-
         } else if (objective == "balance") {
           this.isBalanceOptimizing = true;
-          
+
           const apiBalanceUrl = `http://localhost:3000/api/optimise/${this.useremail}/balance`;
           await axios.post(apiBalanceUrl);
           this.isBalanceOptimizing = false;
           this.balanceOptimized = true;
         }
-
       } catch (error) {
         console.error("Error Updated Optimised Portfolio:", error);
         this.updateOptimisePortfolio(objective);
       }
 
-      console.log("Portfolio Optimised!")
-      
-    },    
+      console.log("Portfolio Optimised!");
+    },
 
     getStatus() {
-      if(this.objective == 'alpha') {
-        return this.isAlphaOptimizing
-      } else if (this.objective == 'beta') {
-        return this.isBetaOptimizing
-      } else if (this.objective == 'balance') {
-        return this.isBalanceOptimizing
+      if (this.objective == "alpha") {
+        return this.isAlphaOptimizing;
+      } else if (this.objective == "beta") {
+        return this.isBetaOptimizing;
+      } else if (this.objective == "balance") {
+        return this.isBalanceOptimizing;
       } else {
         return false;
       }
     },
 
     getOptimizedStatus() {
-      if(this.objective == 'alpha') {
-        return this.alphaOptimized
-      
-      } else if (this.objective == 'beta') {
-        return this.betaOptimized
-
-      } else if (this.objective == 'balance') {
-        return this.balanceOptimized
-
+      if (this.objective == "alpha") {
+        return this.alphaOptimized;
+      } else if (this.objective == "beta") {
+        return this.betaOptimized;
+      } else if (this.objective == "balance") {
+        return this.balanceOptimized;
       } else {
         return true;
       }
-
     },
 
     toggleStatistics() {
-        this.showStatistics = !this.showStatistics;
-      },
-
-      emitTotalPL(totalPL) {
-        this.totalPL = totalPL;
-        this.$emit('total-pl-updated', totalPL);
-      },
-
-      updateHasData(newHasData) {
-        this.hasData = newHasData;
-      },
-
-      getObjective(index) {
-        if (index == 1) {
-            this.objective = "";
-
-          } else if (index == 2) {
-            this.objective = "alpha";
-          
-          } else if (index == 3) {
-            this.objective = "beta";
-
-          } else{
-            this.objective = "balance";
-          }
-      },
-
+      this.showStatistics = !this.showStatistics;
     },
 
-    emits: ["total-pl-updated", "refresh-request"],
+    emitTotalPL(totalPL) {
+      this.totalPL = totalPL;
+      this.$emit("total-pl-updated", totalPL);
+    },
 
-    
-    
-  };
-    
+    updateHasData(newHasData) {
+      this.hasData = newHasData;
+    },
 
-  </script>
+    getObjective(index) {
+      if (index == 1) {
+        this.objective = "";
+      } else if (index == 2) {
+        this.objective = "alpha";
+      } else if (index == 3) {
+        this.objective = "beta";
+      } else {
+        this.objective = "balance";
+      }
+    },
+  },
+
+  emits: ["total-pl-updated", "refresh-request"],
+};
+</script>
   
 
 
   <style scoped>
-  .app-container {
-    padding: 1.6vw;
-    margin-top: 1.3%;
-  }
-  
-  .title-button-container {
-      display: flex;
-      margin-left: 2%;
-      font-size: 3vw;
-      font-weight: bold;
-  }
-  
-  /* Statistic Button */
-  #portfolioButton {
-      width: 27%;
-      justify-content: flex-end;
-      margin-left: auto;
-      margin-bottom: 1.5vw; 
-      height: 3vw; 
-      background-color: #272F51; 
-      color: white; 
-      border: none;
-      border-radius: 15px; 
-      box-shadow: 0 7px 7px rgba(0, 0, 0, 0.3);
-      font-size: 1.6vw; 
-      font-weight: 700;
-      cursor: pointer;
-  }
-  
-  #portfolioButton:hover {
-    background-color: #475281; /* Change the button color on hover */
-  }
-  
-  /* Optimisation Tab */
-  .Optimisation-container {
-      display: flex;
-      width: 72%;
-      justify-content: space-between; /* Spread buttons evenly */
-      margin-top: 0vw;
-    }
+.app-container {
+  padding: 1.6vw;
+  margin-top: 1.3%;
+}
 
-    /* Portfolio Display */
-    .portfolioDisplay {
-        display: flex;
-        align-items: flex-start;
-      }
-      
-      .table {
-        width: 72%;
-      }
-      
-      .addTrade {
-        width: 26%;
-        margin-left: auto;
-      }
-  </style>
+.title-button-container {
+  display: flex;
+  margin-left: 2%;
+  font-size: 3vw;
+  font-weight: bold;
+}
+
+/* Statistic Button */
+#portfolioButton {
+  width: 27%;
+  justify-content: flex-end;
+  margin-left: auto;
+  margin-bottom: 1.5vw;
+  height: 3vw;
+  background-color: #272f51;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 7px 7px rgba(0, 0, 0, 0.3);
+  font-size: 1.6vw;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#portfolioButton:hover {
+  background-color: #475281; /* Change the button color on hover */
+}
+
+/* Optimisation Tab */
+.Optimisation-container {
+  display: flex;
+  width: 72%;
+  justify-content: space-between; /* Spread buttons evenly */
+  margin-top: 0vw;
+}
+
+/* Portfolio Display */
+.portfolioDisplay {
+  display: flex;
+  align-items: flex-start;
+}
+
+.table {
+  width: 72%;
+}
+
+.addTrade {
+  width: 26%;
+  margin-left: auto;
+}
+</style>

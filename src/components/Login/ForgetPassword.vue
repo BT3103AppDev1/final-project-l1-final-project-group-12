@@ -34,7 +34,7 @@
 
 <script>
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "./../../firebasefunc.js";
+import { auth } from "../../usersController.js";
 import { ref } from "vue";
 const email = ref("");
 
@@ -150,5 +150,4 @@ button:active {
   transform: translateY(1px);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 } */
-
 </style>
