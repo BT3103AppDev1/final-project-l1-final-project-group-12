@@ -43,6 +43,7 @@ export default {
         });
       } catch (error) {
         console.error("Error converting search term to ticker:", error);
+        alert("Company name or ticker not found!")
         // Handle the error here
       }
     },
