@@ -39,7 +39,7 @@ html {
 }
 
 .body {
-  margin: 2% 3.5% 0% 2%;
+  margin: 1% 3.5% 0% 2%;
   padding: 0 0 3% 1.5%;
   font-family: Arial, Helvetica, sans-serif;
 }

@@ -1,8 +1,13 @@
 <template>
   <div class="body">
     <div class="header">
-      <h1>{{ searchTerm }}</h1>
-      <button class="add-button" @click="confirmAndAdd()">
+      <div class="header-left">
+        <button class="back-button" @click="goBackToEquities()">
+          <img src="@/assets/backIcon.png" alt="" class="back-icon" />
+        </button>
+        <h1>{{ searchTerm }}</h1>
+      </div>
+      <button class="add-button" @click="confirmAndAdd">
         <img src="@/assets/starIcon.png" alt="" class="star-icon" />
         <span class="add-text">Add to Watchlist</span>
       </button>
@@ -95,7 +100,9 @@ export default {
       }
     },
 
-    
+    goBackToEquities() {
+      this.$router.push('/equities'); // Navigate to the "/equities" route
+    },    
 
     updatePeriodInterval(period, interval) {
       this.selectedPeriod = period;
@@ -213,4 +220,28 @@ export default {
   top: -0.5vw;
   font-weight: bold;
 }
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px; /* Adjust the margin as needed */
+}
+
+.back-icon {
+  width: 3vw; /* Adjust the width of the back icon */
+  height: 3vw; /* Adjust the height of the back icon */
+  margin-right: 1.5vw;
+}
+
+.header h1 {
+  margin: 0; /* Remove margin to avoid extra spacing */
+  font-size: 3vw; /* Adjust the font size as needed */
+}
+
+
 </style>

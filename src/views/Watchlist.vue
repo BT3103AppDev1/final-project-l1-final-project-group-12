@@ -1,4 +1,5 @@
 <template>
+  <Navigation />
   <div class="watchlist-container">
     <div class="watchlist-left">
       <WatchlistHeader />
@@ -11,12 +12,14 @@
 </template>
 
 <script>
+import Navigation from "../components/Navigation.vue";
 import WatchlistHeader from "../components/Watchlist/WatchlistHeader.vue";
 import AddToWatchlist from "../components/Watchlist/AddToWatchlist.vue";
 import WatchlistTable from "../components/Watchlist/WatchlistTable.vue";
 
 export default {
   components: {
+    Navigation,
     WatchlistHeader,
     AddToWatchlist,
     WatchlistTable,
@@ -40,7 +43,7 @@ export default {
 
 .watchlist-container {
   display: flex;
-  margin: 2% 2.5% 0% 3%;
+  margin: 1% 2.5% 0% 3%;
 
   font-family: Arial, Helvetica, sans-serif;
 }
