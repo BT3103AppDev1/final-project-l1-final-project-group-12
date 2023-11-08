@@ -37,7 +37,7 @@
         required
         v-model="password"
       />
-      <button class="SignwithGoogle" @click="signInWithGoogle">
+      <button type="button" class="SignwithGoogle" @click="signInWithGoogle">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           x="0px"
@@ -65,7 +65,7 @@
         </svg>
         <h2>Login with Google</h2>
       </button>
-      <button class="custom-button">Sign Up</button>
+      <button class="enterNext">Sign Up</button>
     </form>
 
     <form v-else class="register-form" @submit.prevent="loginuser">
@@ -76,7 +76,7 @@
         required
         v-model="password"
       />
-      <button class="SignwithGoogle" @click="signInWithGoogle">
+      <button type="button" class="SignwithGoogle" @click="signInWithGoogle">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           x="0px"
@@ -104,7 +104,7 @@
         </svg>
         <h2>Login with Google</h2>
       </button>
-      <button class="custom-button">Login</button>
+      <button class="enterNext">Login</button>
     </form>
 
     <a ref="#" class="flex-item" @click="togglePopup"> Forget Password ? </a>
@@ -120,9 +120,7 @@
 <script>
 import ForgetPasswordPopup from "./ForgetPassword.vue";
 import { ref } from "vue";
-import firebase from "@/uifire.js";
 import "firebase/compat/auth";
-import * as firebaseui from "firebaseui";
 import "firebaseui/dist/firebaseui.css";
 import {
   createUserWithEmailAndPassword,

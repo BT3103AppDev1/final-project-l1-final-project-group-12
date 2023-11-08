@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { auth } from "./../usersController.js";
+import { auth } from "../usersController.js";
 import Home from "@/views/Home.vue";
 import Portfolio from "@/views/Portfolio.vue";
 import Equities from "@/views/Equities.vue";
-import User from "@/views/User.vue";
 import Login from "@/views/Login.vue";
+import Profile from "@/views/Profile.vue";
 
 const routes = [
   {
@@ -25,18 +25,24 @@ const routes = [
     component: Portfolio,
     meta: { requiresAuth: true },
   },
+  {
+    path: "/portfolio",
+    name: "Portfolio",
+    component: Portfolio,
+    meta: { requiresAuth: true },
+  },
 
   {
     path: "/equities",
     name: "Equities",
     component: Equities,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: false },
   },
 
   {
-    path: "/user",
-    name: "User",
-    component: User,
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
     meta: { requiresAuth: true },
   },
 ];
@@ -49,14 +55,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (getAuth().currentUser) {
-      console.log("accessibles");
       next();
       return;
     }
     console.log("restricted");
     next("/login");
+    console.log("restricted");
+    next("/login");
   } else {
-    console.log("justgo");
     next();
     return;
   }
