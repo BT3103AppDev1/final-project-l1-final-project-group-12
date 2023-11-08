@@ -25,6 +25,12 @@ const routes = [
     component: Portfolio,
     meta: { requiresAuth: true },
   },
+  {
+    path: "/portfolio",
+    name: "Portfolio",
+    component: Portfolio,
+    meta: { requiresAuth: true },
+  },
 
   {
     path: "/equities",
@@ -45,6 +51,10 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
@@ -52,6 +62,8 @@ router.beforeEach((to, from, next) => {
       next();
       return;
     }
+    console.log("restricted");
+    next("/login");
     console.log("restricted");
     next("/login");
   } else {

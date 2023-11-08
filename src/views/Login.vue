@@ -114,7 +114,7 @@ input:nth-child(3) {
   align-self: center;
 }
 
-button.SignwithGoogle {
+.SignwithGoogle {
   font-size: 1.2vw;
   border-radius: 35px;
   width: 290px;

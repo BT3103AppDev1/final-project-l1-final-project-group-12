@@ -41,6 +41,12 @@ const email = ref("");
 export default {
   name: "ForgetPasswordPopup",
   emits: ["closepopupbox"],
+  data() {
+    return {
+      email: "", // Define the email property
+      errorMessage: "", // Define the errorMessage property
+    };
+  },
   methods: {
     closepopup() {
       this.$emit("closepopupbox", false);
@@ -85,7 +91,7 @@ export default {
   height: 40vh;
   width: 80vh;
 }
-button.popup-close {
+.popup-close {
   height: 6vh;
   width: 70%;
   color: white;
@@ -94,13 +100,24 @@ button.popup-close {
   background-color: #272f51;
   width: 75%;
 }
-button.closeButton {
+
+.popup-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
   height: 30px;
   width: 30px;
   margin-left: 90%;
   color: black;
   font-size: 1vw;
   background-color: white;
+}
+
+.close-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 .InsertEmail {
   margin-top: 0px;

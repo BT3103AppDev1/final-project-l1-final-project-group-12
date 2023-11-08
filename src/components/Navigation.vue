@@ -92,6 +92,7 @@ export default {
 };
 </script>
 
+
 <style>
 .topnav {
   overflow: hidden;
@@ -154,5 +155,21 @@ export default {
     display: block;
     text-align: left;
   }
+}
+
+.sign-out-button {
+  margin-top: 2%;
+  background-color: #4fa4ff; /* Choose your desired background color */
+  color: #020669; /* Text color */
+  padding: 10px 20px; /* Adjust padding as needed */
+  border: none;
+  border-radius: 5px;
+  font-size: 16px; /* Adjust font size as needed */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Add a smooth transition effect */
+}
+.sign-out-button:hover {
+  background-color: #0759b1;
+  color: #ffffff;
 }
 </style>

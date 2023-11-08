@@ -128,7 +128,9 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import { useRouter } from "vue-router";
 import { auth } from "../../usersController.js";
+const errMsg = ref("");
 
 // var ui = firebaseui.auth.AuthUI.getInstance()
 // if (!ui) {
@@ -211,6 +213,21 @@ export default {
 
 
 <style scoped>
+.SignwithGoogle {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.SignwithGoogle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.SignwithGoogle:active {
+  transform: translateY(1px);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 .SignwithGoogle {
   display: inline-flex;
   align-content: center;
