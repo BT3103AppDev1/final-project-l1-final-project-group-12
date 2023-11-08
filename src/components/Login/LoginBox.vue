@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="loginContainer">
     <div class="titlecontainer">
       <div class="flex-item">
         <a

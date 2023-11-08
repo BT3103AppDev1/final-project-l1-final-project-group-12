@@ -206,6 +206,8 @@ export default {
   align-self: center;
   color: white;
   background-color: #272f51;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .oauth-message {

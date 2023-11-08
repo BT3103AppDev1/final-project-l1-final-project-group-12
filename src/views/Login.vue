@@ -4,7 +4,7 @@
     <div class="LoginText">
       <p>Diversify Risk, Maximize Returns</p>
       <h2>Smartfolio</h2>
-      <h3>Simplicity meets Strategy</h3>
+      <h3 class="loginH3">Simplicity meets Strategy</h3>
     </div>
 
     <LoginBox />
@@ -62,13 +62,13 @@ h2 {
   align-self: center;
   margin-bottom: 0px;
 }
-h3 {
+.loginH3 {
   font-size: 2vw;
   align-self: center;
   margin-top: 1px;
 }
 
-.container {
+.loginContainer {
   padding: 1.6vw;
   height: 70vh;
   width: 25%;

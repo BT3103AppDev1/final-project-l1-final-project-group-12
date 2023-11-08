@@ -6,6 +6,8 @@ import Portfolio from "@/views/Portfolio.vue";
 import Equities from "@/views/Equities.vue";
 import Login from "@/views/Login.vue";
 import Profile from "@/views/Profile.vue";
+import SearchResults from "@/views/SearchResults.vue";
+import Watchlist from "@/views/Watchlist.vue";
 
 const routes = [
   {
@@ -43,6 +45,18 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: Profile,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/search-results/:searchTerm",
+    name: "SearchResults",
+    component: SearchResults,
+    props: true,
+  },
+  {
+    path: "/watchlist",
+    name: "Watchlist",
+    component: Watchlist,
     meta: { requiresAuth: true },
   },
 ];

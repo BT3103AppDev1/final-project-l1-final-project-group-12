@@ -72,6 +72,113 @@ const getOptionsData = async (req, res) => {
       "get_options_data",
       ticker,
     ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+// Connector method to get top gainers data
+const getTopGainersData = async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_top_gainers",
+      ticker,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+// Connector method to get top losers data
+const getTopLosersData = async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_top_losers",
+      ticker,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+// Connector method to get top losers data
+const getMostActivesData = async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_most_actives",
+      ticker,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+
+// Connector method to get market cap data
+const getMarketCapData = async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_market_cap",
+      ticker,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+// Connector method to get stock volume data
+const getAvgVolumeData = async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_avg_volume",
+      ticker,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+// Connector method to get percentage change data
+const getPercentageChangeData = async (req, res) => {
+  const { ticker } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_percentage_change",
+      ticker,
+    ]);
+  
+    res.json(JSON.parse(output));
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+// Connector method to get ticker based on stock name
+const getTicker = async (req, res) => {
+  const { stockName } = req.params;
+  try {
+    const output = await executePythonScript("../services/stockData.py", [
+      "get_ticker",
+      stockName,
+    ]);
+  
     res.json(JSON.parse(output));
   } catch (error) {
     res.status(500).send(error);
@@ -83,4 +190,11 @@ module.exports = {
   getStockStatistics,
   getHistoricalData,
   getOptionsData,
+  getTopGainersData,
+  getTopLosersData,
+  getMostActivesData,
+  getMarketCapData,
+  getAvgVolumeData,
+  getPercentageChangeData,
+  getTicker,
 };

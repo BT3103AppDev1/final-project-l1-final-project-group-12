@@ -68,6 +68,78 @@ curl http://<your-server-url>/api/yfinance/optionsData/AAPL
 curl http://<your-server-url>/api/yfinance/curentPrice/AAPL
 ```
 
+### 5. Get Top 5 Gainers 
+
+- Endpoint: `/topGainersData`
+- Method: `GET`
+- URL Params: `NONE`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/yfinance/topGainersData
+```
+
+### 6. Get Top 5 Losers 
+
+- Endpoint: `/topLosersData`
+- Method: `GET`
+- URL Params: `NONE`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/yfinance/topLosersData
+```
+
+### 7. Get Market Cap for Stock 
+
+- Endpoint: `/marketCapData/:ticker`
+- Method: `GET`
+- URL Params: `NONE`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/yfinance/marketCapData/AAPL
+```
+
+### 8. Get Average Volume for Stock 
+
+- Endpoint: `/averageVolumeData/:ticker`
+- Method: `GET`
+- URL Params: `NONE`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/yfinance/averageVolumeData/AAPL
+```
+
+### 9. Get Percentage Change for Stock 
+
+- Endpoint: `/percentageChange/:ticker`
+- Method: `GET`
+- URL Params: `NONE`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/yfinance/percentageChange/AAPL
+```
+
+### 10. Get ticker based on stock name 
+
+- Endpoint: `/ticker/:stockName`
+- Method: `GET`
+- URL Params: `NONE`
+
+#### Usage:
+
+```
+curl http://<your-server-url>/api/yfinance/ticker/Apple
+```
+
 ## API Endpoints for Reading Firestore Data
 
 ### 1. Get User Information [`DEPRECATED`]
