@@ -212,7 +212,10 @@ curl http://<your-server-url>/api/update/updatePortfolio/john.doe@example.com
 #### Usage:
 
 ```
-curl http://<your-server-url>/api/delete/trade/john.doe@example.com/AAPL
+curl http://<your-server-url>/api/delete/trade/john.doe@example.com/AAPL/standard
+curl http://<your-server-url>/api/delete/trade/john.doe@example.com/AAPL/alpha
+curl http://<your-server-url>/api/delete/trade/john.doe@example.com/AAPL/beta
+curl http://<your-server-url>/api/delete/trade/john.doe@example.com/AAPL/balance
 ```
 
 ## API Endpoints for optimising the portfolio
@@ -265,7 +268,7 @@ curl http://<your-server-url>/api/watch/read/john.doe@example.com
 curl http://<your-server-url>/api/watch/add/john.doe@example.com/AAPL
 ```
 
-### 2. Delete a stock from the watchlist
+### 3. Delete a stock from the watchlist
 
 - Endpoint: `/watch/delete/:userEmail/:ticker`
 - Method: `DELETE`

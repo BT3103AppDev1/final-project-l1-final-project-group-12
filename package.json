@@ -11,7 +11,8 @@
     "server": "cd app/api && node server.js",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "npm run server && npm run dev"
   },
   "author": "",
   "license": "ISC",
