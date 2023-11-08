@@ -109,8 +109,8 @@ export default {
           console.log(this.watchlistData);
         });
 
-        // Call fetchData every 5 seconds
-        setInterval(this.getStockPrice, 5000);
+        // Call fetchData every 3 seconds
+        setInterval(this.fetchData, 3000);
       } else {
         console.error("User not authenticated");
       }

@@ -3,7 +3,7 @@
   <div class="watchlist-container">
     <div class="watchlist-left">
       <WatchlistHeader />
-      <WatchlistTable :key="refreshComp"/>
+      <WatchlistTable ref = "watchlist"/>
     </div>
     <div class="watchlist-right">
       <AddToWatchlist @added="change" />
@@ -25,15 +25,9 @@ export default {
     WatchlistTable,
   },
 
-  data() {
-    return {
-      refreshComp: 0
-    }
-  },
-
   methods: {
     change() {
-      this.refreshComp += 1;
+      this.$ref.fetchData()
     }
   }
 };
