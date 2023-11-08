@@ -65,7 +65,7 @@
         </svg>
         <h2>Login with Google</h2>
       </button>
-      <button>Sign Up</button>
+      <button class="custom-button">Sign Up</button>
     </form>
 
     <form v-else class="register-form" @submit.prevent="loginuser">
@@ -104,7 +104,7 @@
         </svg>
         <h2>Login with Google</h2>
       </button>
-      <button>Login</button>
+      <button class="custom-button">Login</button>
     </form>
 
     <a ref="#" class="flex-item" @click="togglePopup"> Forget Password ? </a>
@@ -131,7 +131,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { useRouter } from "vue-router";
-import { auth } from "./../../firebasefunc.js";
+import { auth } from "../../usersController.js";
 const errMsg = ref("");
 
 // var ui = firebaseui.auth.AuthUI.getInstance()
@@ -215,17 +215,17 @@ export default {
 
 
 <style scoped>
-button {
+.SignwithGoogle {
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-button:hover {
+.SignwithGoogle:hover {
   transform: translateY(-2px);
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
-button:active {
+.SignwithGoogle:active {
   transform: translateY(1px);
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -248,9 +248,9 @@ button:active {
 }
 
 @media screen and (max-width: 800px) {
-svg {
-  height: 30px;
-  width:30px
-}
+  svg {
+    height: 30px;
+    width: 30px;
+  }
 }
 </style>
