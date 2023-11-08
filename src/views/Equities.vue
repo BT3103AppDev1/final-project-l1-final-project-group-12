@@ -32,23 +32,17 @@ export default {
   },
 };
 </script>
-
-<style>
-html {
-  background-color: #f6f6f6;
-}
-
+<style scoped>
 .body {
   margin: 1% 3.5% 0% 2%;
   padding: 0 0 3% 1.5%;
   font-family: Arial, Helvetica, sans-serif;
 }
-</style>
-
-<style scoped>
 .side-by-side-container {
-  display: flex;
   gap: 8%;
-  width: 60%;
+  width: 65%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

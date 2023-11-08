@@ -2,10 +2,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../usersController.js";
 import Home from "@/views/Home.vue";
-// import Portfolio from "@/views/Portfolio.vue";
+import Portfolio from "@/views/Portfolio.vue";
 import Equities from "@/views/Equities.vue";
 import Login from "@/views/Login.vue";
-// import Profile from "@/views/Profile.vue";
+import Profile from "@/views/Profile.vue";
 import SearchResults from "@/views/SearchResults.vue";
 import Watchlist from "@/views/Watchlist.vue";
 
@@ -21,13 +21,18 @@ const routes = [
     component: Login,
   },
 
-  // {
-  //   path: "/portfolio",
-  //   name: "Portfolio",
-  //   component: Portfolio,
-  //   meta: { requiresAuth: true },
-  // },
-
+  {
+    path: "/portfolio",
+    name: "Portfolio",
+    component: Portfolio,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/portfolio",
+    name: "Portfolio",
+    component: Portfolio,
+    meta: { requiresAuth: true },
+  },
 
   {
     path: "/equities",
@@ -36,13 +41,12 @@ const routes = [
     meta: { requiresAuth: false },
   },
 
-  // {
-  //   path: "/profile",
-  //   name: "Profile",
-  //   component: Profile,
-  //   meta: { requiresAuth: true },
-  // },
-
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
+    meta: { requiresAuth: true },
+  },
   {
     path: "/search-results/:searchTerm",
     name: "SearchResults",
@@ -53,9 +57,9 @@ const routes = [
     path: "/watchlist",
     name: "Watchlist",
     component: Watchlist,
+    meta: { requiresAuth: true },
   },
 ];
-
 
 const router = createRouter({
   history: createWebHistory(),

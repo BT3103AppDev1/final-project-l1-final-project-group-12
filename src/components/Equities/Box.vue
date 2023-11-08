@@ -1,9 +1,9 @@
 <template>
-  <div class="container">
+  <div class="EquityBoxcontainer">
     <div class="box">
       <div class="box-header">
         <div class="header-text">
-          <h3>
+          <h3 class="boxh3">
             <img class="icon" :src="imageSrc" alt="" />
             {{ header }}
           </h3>
@@ -36,10 +36,10 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  width: 180%; /* Set the width of the parent container */
-  display: flex;
-  justify-content: space-between;
+.EquityBoxcontainer {
+  height: auto;
+  width: 180%;
+  border-radius: 13px;
 }
 
 .box {
@@ -48,14 +48,22 @@ export default {
   background-color: #ffffff;
   font-weight: bold;
   font-size: 1.5vw;
-  width: 40vw; 
-  padding: 0px 0px 10px 15px; 
+  width: 40vw;
+  padding: 15px 0px 10px 15px;
 }
-
 
 .box table td {
   padding: 15px;
   font-size: 1.6vw;
+}
+.box-header {
+  vertical-align: middle;
+}
+
+.boxh3 {
+  font-size: 2vw;
+  align-self: center;
+  margin-top: 1px;
 }
 
 .header-text .icon {
@@ -65,10 +73,8 @@ export default {
 }
 
 .custom-hr {
-  border: none; /* Remove the default border */
-  border-top: 2px solid #d0d0d0; /* Set the custom color (e.g., red) */
+  border: none;
+  border-top: 2px solid #d0d0d0;
   margin-right: 4%;
 }
-
-
 </style>

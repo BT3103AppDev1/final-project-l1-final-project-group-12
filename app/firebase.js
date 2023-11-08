@@ -6,13 +6,13 @@ require("dotenv").config({ path: __dirname + "/../.env" });
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_APIKEY,
-  authDomain: process.env.FIREBASE_AUTHDOMAIN,
-  projectId: process.env.FIREBASE_PROJECTID,
-  storageBucket: process.env.FIREBASE_STORAGEBUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APPID,
-  measurementId: process.env.FIREBASE_MEASUREMENTID,
+  apiKey: process.env.VITE_FIREBASE_APIKEY,
+  authDomain: process.env.VITE_FIREBASE_AUTHDOMAIN,
+  projectId: process.env.VITE_FIREBASE_PROJECTID,
+  storageBucket: process.env.VITE_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VITE_FIREBASE_APPID,
+  measurementId: process.env.VITE_FIREBASE_MEASUREMENTID,
 };
 
 // Initialize Firebase

@@ -2,7 +2,7 @@
   <div class="popup">
     <div class="inner-popup">
       <button
-        class="close-button"
+        class="closeButton"
         aria-label="Dismiss alert"
         type="button"
         @click="closepopup"
@@ -33,15 +33,20 @@
 </template>
 
 <script>
-// import '@/style/Login/Login.css'
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "./../../usersController.js";
+import { auth } from "../../usersController.js";
 import { ref } from "vue";
 const email = ref("");
 
 export default {
   name: "ForgetPasswordPopup",
   emits: ["closepopupbox"],
+  data() {
+    return {
+      email: "", // Define the email property
+      errorMessage: "", // Define the errorMessage property
+    };
+  },
   methods: {
     closepopup() {
       this.$emit("closepopupbox", false);
@@ -61,7 +66,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .popup {
   position: fixed;
   top: 0;
@@ -86,7 +91,7 @@ export default {
   height: 40vh;
   width: 80vh;
 }
-button.popup-close {
+.popup-close {
   height: 6vh;
   width: 70%;
   color: white;
@@ -95,13 +100,24 @@ button.popup-close {
   background-color: #272f51;
   width: 75%;
 }
-button.close-button {
+
+.popup-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
   height: 30px;
   width: 30px;
   margin-left: 90%;
   color: black;
   font-size: 1vw;
   background-color: white;
+}
+
+.close-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 .InsertEmail {
   margin-top: 0px;
@@ -119,70 +135,5 @@ button.close-button {
 .break-point::before {
   content: "\a";
   display: block;
-}
-
-.container {
-  padding: 1.6vw;
-  height: 70vh;
-  width: 350px;
-  /* background-color: #272F51; */
-  margin-top: 1.3%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-}
-.titlecontainer {
-  display: flex;
-  justify-content: space-between;
-}
-.flex-item {
-  padding: 30px;
-  margin: 5px;
-  font-size: 1.6vw;
-  font-weight: bold;
-  text-align: center;
-  color: white;
-}
-
-form.register-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  height: 400px;
-  width: 310px;
-}
-input {
-  height: 40px;
-  border-radius: 5px;
-  font-size: 1.2vw;
-  text-align: center;
-}
-input:nth-child(3) {
-  font-size: 1.2vw;
-  border-radius: 30px;
-  width: 90%;
-  height: 50px;
-  align-self: center;
-}
-
-button {
-  font-size: 1.2vw;
-  border-radius: 10px;
-  width: 200px;
-  height: 50px;
-  align-self: center;
-  background-color: #00ff7f;
-}
-button.SignwithGoogle {
-  font-size: 1.2vw;
-  border-radius: 35px;
-  width: 290px;
-  height: 70px;
-  align-self: center;
-  background-color: white;
-}
-a.flex-item {
-  text-decoration: underline;
 }
 </style>

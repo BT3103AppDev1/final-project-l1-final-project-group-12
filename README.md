@@ -1,29 +1,41 @@
-# vueApp
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/WcPKYd5y)
 
-This template should help get you started developing with Vue 3 in Vite.
+## 📌 Prerequisites
 
-## Recommended IDE Setup
+1. Node.js (v18.16.0)
+2. Python (v3.11)
+3. Pip (v22.3.1)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## 🚀 Installing Dependencies and Configuration
 
-## Customize configuration
+Clone Smartfolio's source code to your local machine
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```
+git clone https://github.com/BT3103AppDev1/final-project-l1-final-project-group-12.git
 ```
 
-### Compile and Hot-Reload for Development
+For Windows users, run the following commands in Powershell from Root:
 
-```sh
+```
+npm install; if ($?) { pip install -r requirements.txt }
+```
+
+In command prompt:
+
+```
+npm install && pip install -r requirements.txt
+```
+
+## 🖥️ Starting development
+
+Starting the server-side for development and APIs query
+
+```
+npm run server
+```
+
+Starting the client-side for development
+
+```
 npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
 ```

@@ -54,7 +54,11 @@ class Portfolio:
     def _sharpeRatio(self):
         excessReturn = self.portfolioReturn - self.rfRate  # Excess Return of Portfolio
         portfolioStdDev = self.stddev
-        return float(excessReturn/portfolioStdDev)
+
+        if portfolioStdDev == 0:
+            return 0
+        else:
+            return float(excessReturn/portfolioStdDev)
 
     # Public Getter Methods
 
@@ -211,6 +215,7 @@ class Portfolio:
 
         # Define optimization variables
         weights = cp.Variable(n, nonneg=True)
+        t = cp.Variable(nonneg=True)
 
         # Calculate portfolio expected return and variance
         port_return = cp.sum(weights * returns)
@@ -219,18 +224,14 @@ class Portfolio:
         # here we assume returns as a proxy for risk
         port_variance = cp.sum(weights**2 * [r**2 for r in returns])
 
-        # Define Sharpe Ratio
-        sharpe_ratio = (port_return - portfolio.rfRate) / \
-            cp.sqrt(port_variance)
+        gamma = 1000     # Set gamma to some large value to penalize risk
+        objective = port_return - gamma * t
 
         # Constraints
         constraints = [cp.sum(weights) == 1, cp.sum(
-            weights * values) == total_value]
+            weights * values) == total_value, port_variance <= t]
 
-        # Optimization problem
-        sharpe_ratio_squared = (
-            port_return - portfolio.rfRate)**2 / port_variance
-        problem = cp.Problem(cp.Maximize(sharpe_ratio_squared), constraints)
+        problem = cp.Problem(cp.Maximize(objective), constraints)
 
         # Solve the problem
         problem.solve()
@@ -245,8 +246,8 @@ class Portfolio:
         for i, trade in enumerate(trades):
             adjusted_qty = (
                 optimized_weights[i] * total_value) / trade.buyPrice
-            adjusted_trade = Trade(trade.tradeKey, trade.getTicker(
-            ), trade.name, trade.buyPrice, adjusted_qty, trade.getBeta())
+            adjusted_trade = Trade(
+                trade.tradeKey, trade.getTicker(),  trade.buyPrice, adjusted_qty)
             adjusted_trades.append(adjusted_trade)
 
         # Return a new Portfolio instance with the adjusted trades
@@ -291,8 +292,8 @@ class Portfolio:
         for i, trade in enumerate(trades):
             adjusted_qty = (
                 optimized_weights[i] * total_value) / trade.buyPrice
-            adjusted_trade = Trade(trade.tradeKey, trade.getTicker(
-            ), trade.name, trade.buyPrice, adjusted_qty, trade.getBeta())
+            adjusted_trade = Trade(
+                trade.tradeKey, trade.getTicker(), trade.buyPrice, adjusted_qty)
             adjusted_trades.append(adjusted_trade)
 
         newPortfolio = Portfolio(portfolio.user_id, adjusted_trades)
