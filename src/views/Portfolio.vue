@@ -155,8 +155,8 @@ export default {
       console.log(this.useremail);
       this.$refs.Loading.onLoading();
 
-      const apiReadPortfolioUrl = `http://localhost:3000/api/read/portfolioInfo/${this.useremail}/standard`;
-      const apiCreatePortfolioUrl = `http://localhost:3000/api/update/createPortfolio/${this.useremail}`;
+      const apiReadPortfolioUrl = `/api/read/portfolioInfo/${this.useremail}/standard`;
+      const apiCreatePortfolioUrl = `/api/update/createPortfolio/${this.useremail}`;
       if (this.existingPortfolio) {
         console.log(
           "Using cached portfolio data:",
@@ -189,7 +189,7 @@ export default {
     async updateStatistics() {
       console.log("Updating Portfolio");
       try {
-        const apiUrl = `http://localhost:3000/api/update/updatePortfolio/${this.useremail}`;
+        const apiUrl = `/api/update/updatePortfolio/${this.useremail}`;
         await axios.put(apiUrl);
         this.updatingStatistics = false;
         console.log("Portfolio Update complete!");
@@ -205,21 +205,21 @@ export default {
         if (objective == "alpha") {
           this.isAlphaOptimizing = true;
 
-          const apiAlphaUrl = `http://localhost:3000/api/optimise/${this.useremail}/alpha`;
+          const apiAlphaUrl = `/api/optimise/${this.useremail}/alpha`;
           await axios.post(apiAlphaUrl);
           this.isAlphaOptimizing = false;
           this.alphaOptimized = true;
         } else if (objective == "beta") {
           this.isBetaOptimizing = true;
 
-          const apiBetaUrl = `http://localhost:3000/api/optimise/${this.useremail}/beta`;
+          const apiBetaUrl = `/api/optimise/${this.useremail}/beta`;
           await axios.post(apiBetaUrl);
           this.isBetaOptimizing = false;
           this.betaOptimized = true;
         } else if (objective == "balance") {
           this.isBalanceOptimizing = true;
 
-          const apiBalanceUrl = `http://localhost:3000/api/optimise/${this.useremail}/balance`;
+          const apiBalanceUrl = `/api/optimise/${this.useremail}/balance`;
           await axios.post(apiBalanceUrl);
           this.isBalanceOptimizing = false;
           this.balanceOptimized = true;

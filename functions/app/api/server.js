@@ -24,7 +24,4 @@ app.use("/api/delete", deleteDataRoutes);
 app.use("/api/optimise", optimiseDataRoutes);
 app.use("/api/watch", watchlistDataRoutes);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});
+module.exports = app;

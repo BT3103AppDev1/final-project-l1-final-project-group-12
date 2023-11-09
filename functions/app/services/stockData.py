@@ -16,10 +16,13 @@ Returns:
 @return: float
     A float of the latest stock value.
 """
+
+
 def get_current_price(ticker):
     ticker = yf.Ticker(ticker)
     todays_data = ticker.history(period='1d')
     return todays_data['Close'].iloc[0]
+
 
 """
 get_stock_statistics Function:
@@ -34,13 +37,14 @@ Returns:
     A JSON string containing stock statistics.
 """
 
+
 def get_stock_statistics(ticker):
     stock = yf.Ticker(ticker)
     info = stock.earnings
-    
+
     # Convert info dictionary to JSON
     info_json = json.dumps(info, indent=2)
-    
+
     return info_json
 
 
@@ -63,13 +67,14 @@ Returns:
     A JSON string containing historical market data.
 """
 
+
 def get_historical_data(ticker, period='1Y', interval='1d'):
     stock = yf.Ticker(ticker)
     historical_data = stock.history(period=period, interval=interval)
-    
+
     # Convert historical_data DataFrame to JSON
     historical_data_json = historical_data.to_json(indent=2, date_format='iso')
-    
+
     return historical_data_json
 
 
@@ -87,32 +92,36 @@ Returns:
     Each key maps to a JSON string containing options data for call options and put options, respectively.
 """
 
+
 def get_options_data(ticker):
     stock = yf.Ticker(ticker)
-    
+
     # Fetch options data
     options_data = stock.option_chain()
-    
+
     # Convert options data DataFrames to JSON
     calls_json = options_data.calls.to_json(indent=2, date_format='iso')
     puts_json = options_data.puts.to_json(indent=2, date_format='iso')
-    
+
     # Package calls and puts JSON strings into a dictionary
     options_data_json = {'calls': calls_json, 'puts': puts_json}
-    
+
     return options_data_json
 
-    """
-    get_top_gainers Function:
-    Fetches information on the top 5 stock gainers from https://finance.yahoo.com/gainers
 
-    Parameters:
-    @param None
+"""
+get_top_gainers Function:
+Fetches information on the top 5 stock gainers from https://finance.yahoo.com/gainers
 
-    Returns:
-    @return: str
-        A JSON string containing 'stock_name' for each gainer.
-    """
+Parameters:
+@param None
+
+Returns:
+@return: str
+    A JSON string containing 'stock_name' for each gainer.
+"""
+
+
 def get_top_gainers():
     url = 'https://finance.yahoo.com/gainers'
     headers = {
@@ -133,17 +142,20 @@ def get_top_gainers():
 
     return top_gainers
 
-    """
-    get_top_losers Function:
-    Fetches information on the top 5 stock losers from https://finance.yahoo.com/gainers
 
-    Parameters:
-    @param None
+"""
+get_top_losers Function:
+Fetches information on the top 5 stock losers from https://finance.yahoo.com/gainers
 
-    Returns:
-    @return: str
-        A JSON string containing 'stock_name' for each loser.
-    """
+Parameters:
+@param None
+
+Returns:
+@return: str
+    A JSON string containing 'stock_name' for each loser.
+"""
+
+
 def get_top_losers():
     url = 'https://finance.yahoo.com/losers'
     headers = {
@@ -164,17 +176,20 @@ def get_top_losers():
 
     return top_losers
 
-    """
-    get_most_actives Function:
-    Fetches information on the most active stocks from https://finance.yahoo.com/most-active
 
-    Parameters:
-    @param None
+"""
+get_most_actives Function:
+Fetches information on the most active stocks from https://finance.yahoo.com/most-active
 
-    Returns:
-    @return: str
-        A JSON string containing market data for the most active stocks
-    """
+Parameters:
+@param None
+
+Returns:
+@return: str
+    A JSON string containing market data for the most active stocks
+"""
+
+
 def get_most_actives():
     url = 'https://finance.yahoo.com/most-active'
     headers = {
@@ -207,18 +222,21 @@ def get_most_actives():
 
     return most_actives
 
-    """
-    get_market_cap Function:
-    Fetches information on market cap for a ticker from https://finance.yahoo.com/quote/:ticker
-    
-    Parameters:
-    @param ticker: str
-        The stock ticker symbol.
 
-    Returns:
-    @return: str
-        A str for market cap for specified ticker.
-    """
+"""
+get_market_cap Function:
+Fetches information on market cap for a ticker from https://finance.yahoo.com/quote/:ticker
+
+Parameters:
+@param ticker: str
+    The stock ticker symbol.
+
+Returns:
+@return: str
+    A str for market cap for specified ticker.
+"""
+
+
 def get_market_cap(ticker):
     url = f'https://finance.yahoo.com/quote/{ticker}'
     response = requests.get(url)
@@ -227,28 +245,33 @@ def get_market_cap(ticker):
         doc = lxml.html.fromstring(response.content)
 
         # Modify the XPath expression to match the location of the market cap data on the page
-        market_cap_element = doc.xpath('//*[@id="quote-summary"]/div[2]/table/tbody/tr[1]/td[2]')
+        market_cap_element = doc.xpath(
+            '//*[@id="quote-summary"]/div[2]/table/tbody/tr[1]/td[2]')
 
         if market_cap_element:
-            market_cap_value = market_cap_element[0].text  # Extract the text content of the element
+            # Extract the text content of the element
+            market_cap_value = market_cap_element[0].text
             return market_cap_value
         else:
             return "Data not found."
     else:
         return f"Failed to retrieve data. Status code: {response.status_code}"
 
-    """
-    get_avg_volume Function:
-    Fetches information on average volume for a ticker from https://finance.yahoo.com/quote/:ticker
-    
-    Parameters:
-    @param ticker: str
-        The stock ticker symbol.
 
-    Returns:
-    @return: str
-        A str for average volume for specified ticker.
-    """
+"""
+get_avg_volume Function:
+Fetches information on average volume for a ticker from https://finance.yahoo.com/quote/:ticker
+
+Parameters:
+@param ticker: str
+    The stock ticker symbol.
+
+Returns:
+@return: str
+    A str for average volume for specified ticker.
+"""
+
+
 def get_avg_volume(ticker):
     url = f'https://finance.yahoo.com/quote/{ticker}'
     response = requests.get(url)
@@ -257,9 +280,11 @@ def get_avg_volume(ticker):
         doc = lxml.html.fromstring(response.content)
 
         # Modify the XPath expression to match the location of the volume data on the page
-        volume_element = doc.xpath('//*[@id="quote-summary"]/div[1]/table/tbody/tr[8]/td[2]')
+        volume_element = doc.xpath(
+            '//*[@id="quote-summary"]/div[1]/table/tbody/tr[8]/td[2]')
         if volume_element:
-            volume_value = volume_element[0].text  # Extract the text content of the element
+            # Extract the text content of the element
+            volume_value = volume_element[0].text
             return volume_value
         else:
             return "Volume data not found on the page."
@@ -278,6 +303,8 @@ def get_avg_volume(ticker):
     @return: str
         A str for percentage change for specified ticker.
     """
+
+
 def get_percentage_change(ticker):
     url = f'https://finance.yahoo.com/quote/{ticker}'
     response = requests.get(url)
@@ -286,10 +313,12 @@ def get_percentage_change(ticker):
         doc = lxml.html.fromstring(response.content)
 
         # Modify the XPath expression to match the location of the percentage change data on the page
-        percentage_change_element = doc.xpath('//*[@id="quote-header-info"]/div[3]/div[1]/div/fin-streamer[3]/span')
+        percentage_change_element = doc.xpath(
+            '//*[@id="quote-header-info"]/div[3]/div[1]/div/fin-streamer[3]/span')
 
         if percentage_change_element:
-            percentage_change_value = percentage_change_element[0].text  # Extract the text content of the element
+            # Extract the text content of the element
+            percentage_change_value = percentage_change_element[0].text
             # Remove brackets if they exist
             percentage_change_value = percentage_change_value.strip('()')
             return percentage_change_value
@@ -311,21 +340,24 @@ def get_percentage_change(ticker):
         A str for ticker based on specified stockName
     """
 
+
 def get_ticker(stockName):
     yfinance = "https://query2.finance.yahoo.com/v1/finance/search"
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
     params = {"q": stockName, "quotes_count": 1, "country": "United States"}
 
-    res = requests.get(url=yfinance, params=params, headers={'User-Agent': user_agent})
+    res = requests.get(url=yfinance, params=params,
+                       headers={'User-Agent': user_agent})
     data = res.json()
 
     company_code = data['quotes'][0]['symbol']
     return company_code
-   
+
+
 if __name__ == "__main__":
     function_name = sys.argv[1]
     args = sys.argv[2:]
-    
+
     if function_name == 'get_stock_statistics' and len(args) == 1:
         print(get_stock_statistics(*args))
     elif function_name == 'get_historical_data' and len(args) >= 1:
@@ -348,5 +380,3 @@ if __name__ == "__main__":
         print(json.dumps(get_percentage_change(*args)))
     elif function_name == 'get_ticker' and len(args) == 1:
         print(json.dumps(get_ticker(*args)))
-
-        

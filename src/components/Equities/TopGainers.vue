@@ -35,7 +35,7 @@ export default {
   mounted() {
     // Make an HTTP GET request to the API endpoint
     axios
-      .get("http://localhost:3000/api/yfinance/topGainersData")
+      .get("/api/yfinance/topGainersData")
       .then((response) => {
         // Update the rows of the "Top Gainers" container with the API data
         this.containers[0].rows = response.data;

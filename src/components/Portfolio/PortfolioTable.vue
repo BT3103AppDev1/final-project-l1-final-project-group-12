@@ -1,6 +1,6 @@
 <template>
   <div class="table-container">
-        <table id="scrollable-table" class="auto-index">
+    <table id="scrollable-table" class="auto-index">
       <thead>
         <tr>
           <th>#</th>
@@ -8,16 +8,19 @@
           <th>BuyPrice</th>
           <th>Price</th>
           <th>Quantity</th>
-          <th>Expected <br> Return</th>
+          <th>
+            Expected <br />
+            Return
+          </th>
           <th></th>
         </tr>
       </thead>
- 
+
       <tbody>
         <tr v-for="(item, index) in portfolioData" :key="item.ticker">
           <td>{{ index + 1 }}</td>
           <td class="wrapped-cell">{{ item.name }}</td>
-                                                    <!-- TODO: Add ticker -->
+          <!-- TODO: Add ticker -->
           <!-- Buy Price -->
           <td>
             <!-- Display Buy Price input field if in editing state -->
@@ -32,9 +35,13 @@
 
           <!-- Stock Price -->
           <td>
-            <template v-if="isNaN(this.stockPrices[item.ticker]) ">Loading..</template>
-            <template v-else>{{ formatNumberWithCommas(this.stockPrices[item.ticker]) }}</template>
-          </td>        
+            <template v-if="isNaN(this.stockPrices[item.ticker])"
+              >Loading..</template
+            >
+            <template v-else>{{
+              formatNumberWithCommas(this.stockPrices[item.ticker])
+            }}</template>
+          </td>
 
           <!-- Buy Quantity -->
           <td>
@@ -48,22 +55,28 @@
             </template>
           </td>
 
-
           <!-- P/L -->
           <td>
-            <template v-if="isNaN(this.stockPrices[item.ticker])" >Loading..</template>
+            <template v-if="isNaN(this.stockPrices[item.ticker])"
+              >Loading..</template
+            >
             <template v-else>
-              <span :style="{ color: calculateProfitLoss(item) < 0 ? '#DA5151' : '#62D639' }">
-                {{ calculateProfitLoss(item) >= 0 ? '+$' : '-$' }}{{ formatNumberWithCommas(Math.abs(calculateProfitLoss(item))) }}
+              <span
+                :style="{
+                  color: calculateProfitLoss(item) < 0 ? '#DA5151' : '#62D639',
+                }"
+              >
+                {{ calculateProfitLoss(item) >= 0 ? "+$" : "-$"
+                }}{{
+                  formatNumberWithCommas(Math.abs(calculateProfitLoss(item)))
+                }}
               </span>
             </template>
           </td>
 
-
-
           <!-- Button -->
           <td>
-            <template v-if="objective==''">
+            <template v-if="objective == ''">
               <!-- Display Edit button only if not in editing state -->
               <button v-if="!item.editing" @click="editItem(index)" class="btw">
                 <img src="@/assets/editIcon.png" alt="Edit" />
@@ -73,43 +86,46 @@
                 <button @click="saveItem(index)" class="btw" id="saveButton">
                   <img src="@/assets/tickIcon.png" alt="Save" />
                 </button>
-                <button @click="cancelEdit(index)" class="btw" id="cancelButton">
+                <button
+                  @click="cancelEdit(index)"
+                  class="btw"
+                  id="cancelButton"
+                >
                   <img src="@/assets/crossIcon.png" alt="Cancel" />
                 </button>
               </template>
             </template>
             <!-- Display Delete button if not in editing state -->
-            <button v-if="!item.editing" @click="deleteItem(item.ticker)" class="btw">
+            <button
+              v-if="!item.editing"
+              @click="deleteItem(item.ticker)"
+              class="btw"
+            >
               <img src="@/assets/deleteIcon.png" alt="Delete" />
             </button>
           </td>
-
         </tr>
       </tbody>
-        </table>
-    
+    </table>
+
     <!-- Display message if portfolioData is empty -->
     <p v-if="hasData == false" class="no-trades-message">
-      You have not added any trades to your portfolio. To gain portfolio insights, please add your open trades.
+      You have not added any trades to your portfolio. To gain portfolio
+      insights, please add your open trades.
     </p>
-
-
   </div>
-    <Loading 
-    ref="Loading"/>
-  
-    
+  <Loading ref="Loading" />
 </template>
 
 <script>
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import axios from 'axios';
-import Loading from '@/components/Loading.vue'
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import axios from "axios";
+import Loading from "@/components/Loading.vue";
 
 export default {
   components: {
-        Loading,
-    },
+    Loading,
+  },
 
   data() {
     return {
@@ -119,18 +135,16 @@ export default {
     };
   },
 
-
   async mounted() {
-      const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-          if (user) {
-              this.useremail = user.email;
-
-          } else {
-              this.useremail = ''; // Ensure it's cleared when the user signs out
-          }
-      });
-      console.log('Objective value:', this.objective);
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.useremail = user.email;
+      } else {
+        this.useremail = ""; // Ensure it's cleared when the user signs out
+      }
+    });
+    console.log("Objective value:", this.objective);
   },
 
   props: {
@@ -143,15 +157,15 @@ export default {
 
   methods: {
     formatNumberWithCommas(number) {
-    return number.toLocaleString(undefined, {
-      useGrouping: true,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  },
+      return number.toLocaleString(undefined, {
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    },
     editItem(index) {
       const item = this.portfolioData[index];
-      
+
       item.editing = true;
       this.updatedBuyQuantity = item.buyQty;
       this.updatedBuyPrice = item.buyPrice;
@@ -161,48 +175,52 @@ export default {
       const item = this.portfolioData[index];
 
       //Define valid input
-      if (isNaN(parseFloat(this.updatedBuyPrice)) || isNaN(parseFloat(this.updatedBuyQuantity)) ) {   
-                alert("Buy Price or Buy Quantity must be valid numbers.");          //TODO: Add PopUp Window
-                return;
-            } else if (this.updatedBuyPrice === "" || this.updatedBuyQuantity === "") {
-                alert("All fields must be filled out.");
-                return;
-            } else if (this.updatedBuyPrice <= 0 || this.updatedBuyQuantity <= 0)  {
-                alert("Buy Price or Buy Quantity must be more than 0");
-                return;
-            }
-      
+      if (
+        isNaN(parseFloat(this.updatedBuyPrice)) ||
+        isNaN(parseFloat(this.updatedBuyQuantity))
+      ) {
+        alert("Buy Price or Buy Quantity must be valid numbers."); //TODO: Add PopUp Window
+        return;
+      } else if (
+        this.updatedBuyPrice === "" ||
+        this.updatedBuyQuantity === ""
+      ) {
+        alert("All fields must be filled out.");
+        return;
+      } else if (this.updatedBuyPrice <= 0 || this.updatedBuyQuantity <= 0) {
+        alert("Buy Price or Buy Quantity must be more than 0");
+        return;
+      }
+
       // Update item data with the new values
       const updatedData = {
         ticker: item.ticker,
         buyPrice: this.updatedBuyPrice,
         buyQty: this.updatedBuyQuantity,
       };
-      
+
       const userConfirmed = window.confirm("Are you sure you want to proceed?");
-      
+
       if (userConfirmed) {
-        this.$refs.Loading.onLoading()
-        const apiAddUrl = `http://localhost:3000/api/update/updateTrade/${this.useremail}`;
-        
+        this.$refs.Loading.onLoading();
+        const apiAddUrl = `/api/update/updateTrade/${this.useremail}`;
+
         try {
           await this.deleteFromDB(item.ticker);
 
           console.log("Adding Updated Item");
           await axios.put(apiAddUrl, updatedData);
 
-          this.$refs.Loading.offLoading()
-          this.$emit('refresh-request');
-
+          this.$refs.Loading.offLoading();
+          this.$emit("refresh-request");
         } catch (error) {
-          console.error('Fail to updating trade: ', error )
-          alert('Fail to updating trade: ', error, 'Please try again!')
+          console.error("Fail to updating trade: ", error);
+          alert("Fail to updating trade: ", error, "Please try again!");
         }
         item.editing = false;
       } else {
-        this.cancelEdit(index)
+        this.cancelEdit(index);
       }
-      
     },
 
     cancelEdit(index) {
@@ -211,65 +229,61 @@ export default {
       // Revert the updated values back to the original values
       this.updatedBuyPrice = item.buyPrice;
       this.updatedBuyQuantity = item.buyQty;
-      
+
       item.editing = false;
     },
 
     async deleteItem(ticker) {
-
       const userConfirmed = window.confirm("Are you sure you want to proceed?");
       if (userConfirmed) {
         try {
-          this.$refs.Loading.onLoading("Deleting Trade..")
+          this.$refs.Loading.onLoading("Deleting Trade..");
 
           await this.deleteFromDB(ticker);
 
-          this.$refs.Loading.offLoading()
+          this.$refs.Loading.offLoading();
           console.log("refresh");
-          this.$emit('refresh-request');
-          
+          this.$emit("refresh-request");
         } catch (error) {
-          console.error('Fail to delete trade: ', error )
-          alert('Fail to delete trade: ', error, 'Please try again later!' )
+          console.error("Fail to delete trade: ", error);
+          alert("Fail to delete trade: ", error, "Please try again later!");
         }
       }
     },
 
     async deleteFromDB(ticker) {
-      const apiUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}/""`;
-      const apiAlphaUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}/alpha`;
-      const apiBetaUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}/beta`;
-      const apiBalanceUrl = `http://localhost:3000/api/delete/trade/${this.useremail}/${ticker}/balance`;
+      const apiUrl = `/api/delete/trade/${this.useremail}/${ticker}/""`;
+      const apiAlphaUrl = `/api/delete/trade/${this.useremail}/${ticker}/alpha`;
+      const apiBetaUrl = `/api/delete/trade/${this.useremail}/${ticker}/beta`;
+      const apiBalanceUrl = `/api/delete/trade/${this.useremail}/${ticker}/balance`;
 
       try {
         await Promise.all([
           axios.delete(apiUrl),
           axios.delete(apiAlphaUrl),
           axios.delete(apiBetaUrl),
-          axios.delete(apiBalanceUrl)
+          axios.delete(apiBalanceUrl),
         ]);
-        
-        console.log('Delete: All requests completed');
+
+        console.log("Delete: All requests completed");
       } catch (error) {
-        console.error('Failed to delete trade: ', error);
+        console.error("Failed to delete trade: ", error);
         //alert('Fail to delete trade: ', error, 'Please try again later!')
       }
     },
 
-    
-
-    
-
     emitTotalPL() {
-      this.$emit('total-pl-updated', this.totalPL);
+      this.$emit("total-pl-updated", this.totalPL);
     },
-
   },
 
   computed: {
     calculateProfitLoss() {
       return (item) => {
-        return (item.buyQty * this.stockPrices[item.ticker]) - (item.buyQty * item.buyPrice); 
+        return (
+          item.buyQty * this.stockPrices[item.ticker] -
+          item.buyQty * item.buyPrice
+        );
       };
     },
 
@@ -278,15 +292,13 @@ export default {
         return total + this.calculateProfitLoss(item);
       }, 0);
     },
-
   },
 
   watch: {
-    totalPL: 'emitTotalPL',
+    totalPL: "emitTotalPL",
   },
 
   emits: ["total-pl-updated", "refresh-request"],
-
 };
 </script>
 
@@ -296,60 +308,58 @@ export default {
 <style scope>
 /* Box */
 .table-container {
-    height: 33vw; 
-    overflow-y: auto; 
-    border-radius: 25px;
-    justify-content: center;
-    background-color: white;
-    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.3);
-    margin-bottom: 0;
+  height: 33vw;
+  overflow-y: auto;
+  border-radius: 25px;
+  justify-content: center;
+  background-color: white;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 0;
+}
 
-  }
-  
-  
-  /* Table */
-  #scrollable-table {
-    width: 90%;
-    background-color: white; 
-    border-collapse: collapse;
-    margin: 0 auto;
-  }
-    
-  #scrollable-table th,
-  #scrollable-table td {
-    padding: 1vw;
-    text-align: center;
-    border-bottom: 2px solid #D0D0D0;
-    padding-bottom: 2.7%;
-    padding-top: 2.7%;
-    font-size: 1.7vw;
-    font-weight: bold;
-  }
-    
-  #scrollable-table th {
-    padding-top: 2vw;
-    background-color: white;
-  }
-  
-  #scrollable-table thead th {
-    position: sticky;
-    top: 0;
-  }
-  
-  /* Add styles for input elements within table cells */
+/* Table */
+#scrollable-table {
+  width: 90%;
+  background-color: white;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+#scrollable-table th,
+#scrollable-table td {
+  padding: 1vw;
+  text-align: center;
+  border-bottom: 2px solid #d0d0d0;
+  padding-bottom: 2.7%;
+  padding-top: 2.7%;
+  font-size: 1.7vw;
+  font-weight: bold;
+}
+
+#scrollable-table th {
+  padding-top: 2vw;
+  background-color: white;
+}
+
+#scrollable-table thead th {
+  position: sticky;
+  top: 0;
+}
+
+/* Add styles for input elements within table cells */
 #scrollable-table input[type="number"] {
-  width: 25%; 
+  width: 25%;
   padding: 0.6vw;
-  border: 1px solid #ccc; 
-  border-radius: 10px; 
-  font-size: 1.2vw; 
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1.2vw;
   font-weight: bold;
   text-align: center;
 }
 
 #scrollable-table input[type="number"]:focus {
   outline: none; /* Remove the default focus outline */
-  border-color: #007BFF; /* Change border color when focused */
+  border-color: #007bff; /* Change border color when focused */
 }
 
 .wrapped-cell {
@@ -360,10 +370,9 @@ export default {
   white-space: wrap;
 }
 
-
 /* No Trades message */
 .no-trades-message {
-  color: #BFBFBF; /* Change the color to your desired color */
+  color: #bfbfbf; /* Change the color to your desired color */
   border-bottom: none !important;
   padding-top: 11vw !important;
   text-align: center;
@@ -373,38 +382,33 @@ export default {
   padding-right: 10%;
 }
 
+/* Delete/Edit Button */
+.btw {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline;
+  margin-right: 0.5vw;
+}
 
+.btw img:hover {
+  transform: scale(1.3); /* Increase the value to make it scale more */
+  transition: transform 0.2s ease-in-out; /* Add a smooth transition effect */
+}
 
-  
-  /* Delete/Edit Button */
-  .btw {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: inline;   
-    margin-right: 0.5vw;
-  }
-  
-  .btw img:hover {
-    transform: scale(1.3); /* Increase the value to make it scale more */
-    transition: transform 0.2s ease-in-out; /* Add a smooth transition effect */
-  }
-  
-  
-  .btw img {
-    width: 1.8vw; 
-    height: auto; 
-  }
+.btw img {
+  width: 1.8vw;
+  height: auto;
+}
 
-  #saveButton img {
-    width: 2vw; 
-    height: auto 
-  }
+#saveButton img {
+  width: 2vw;
+  height: auto;
+}
 
-  #cancelButton img {
-    width: 1.5vw; 
-    height: auto 
-  }
-  
+#cancelButton img {
+  width: 1.5vw;
+  height: auto;
+}
 </style>

@@ -33,7 +33,7 @@ export default {
   mounted() {
     // Make an API request to fetch data
     axios
-      .get("http://localhost:3000/api/yfinance/mostActivesData")
+      .get("/api/yfinance/mostActivesData")
       .then((response) => {
         // Assuming the API response is an array of data
         this.tableRows = response.data;
