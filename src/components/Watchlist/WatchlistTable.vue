@@ -25,7 +25,8 @@
           <!-- Stock price -->
           <td>
             <template v-if="isNaN(this.stockPrices[item.ticker])"
-              >Loading..</template>
+              >Loading..</template
+            >
             <template v-else>{{
               parseFloat(this.stockPrices[item.ticker]).toFixed(4)
             }}</template>
@@ -34,22 +35,25 @@
           <!-- Market Cap -->
           <td>
             <template v-if="this.marketCap[item.ticker] === ''">
-              Loading..</template>
-            <template v-else>{{this.marketCap[item.ticker]}}</template>
+              Loading..</template
+            >
+            <template v-else>{{ this.marketCap[item.ticker] }}</template>
           </td>
 
           <!-- Avg Vol -->
           <td>
             <template v-if="this.avgVol[item.ticker] === ''">
-              Loading..</template>
-            <template v-else>{{this.avgVol[item.ticker]}}</template>
+              Loading..</template
+            >
+            <template v-else>{{ this.avgVol[item.ticker] }}</template>
           </td>
 
           <!-- Percent Change -->
           <td>
             <template v-if="this.percentChange[item.ticker] === ''">
-              Loading..</template>
-            <template v-else>{{this.percentChange[item.ticker]}}</template>
+              Loading..</template
+            >
+            <template v-else>{{ this.percentChange[item.ticker] }}</template>
           </td>
 
           <!-- Beta -->
@@ -61,7 +65,6 @@
           <!-- For the delete icon -->
           <td>{{}}</td>
           <td>
-
             <button class="btw" @click="deleteItem(item.ticker)">
               <img src="@/assets/deleteIcon.png" alt="Delete" />
             </button>
@@ -91,7 +94,7 @@ export default {
       stockPrices: {}, // Initialize stockPrices
       marketCap: {},
       avgVol: {},
-      percentChange: {}
+      percentChange: {},
     };
   },
 
@@ -126,7 +129,7 @@ export default {
       );
 
       if (confirmation) {
-        const apiUrl = `http://localhost:3000/api/watch/delete/${this.useremail}/${ticker}`;
+        const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/watch/delete/${this.useremail}/${ticker}`;
         await axios.delete(apiUrl);
         alert("Successfully deleted " + ticker + " from Watchlist!")
 
@@ -153,7 +156,7 @@ export default {
     async getStockPrice() {
       try {
         for (const item of this.watchlistData) {
-          const apiUrl = `http://localhost:3000/api/yfinance/curentPrice/${item.ticker}`;
+          const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/yfinance/curentPrice/${item.ticker}`;
           const response = await axios.get(apiUrl);
           const price = response.data;
 
@@ -167,7 +170,7 @@ export default {
     async getMarketCap() {
       try {
         for (const item of this.watchlistData) {
-          const apiUrl = `http://localhost:3000/api/yfinance/marketCapData/${item.ticker}`;
+          const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/yfinance/marketCapData/${item.ticker}`;
           const response = await axios.get(apiUrl);
 
           const marketCap = response.data; // Assuming the response is the market cap string
@@ -181,7 +184,7 @@ export default {
     async getAvgVolume() {
       try {
         for (const item of this.watchlistData) {
-          const apiUrl = `http://localhost:3000/api/yfinance/averageVolumeData/${item.ticker}`;
+          const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/yfinance/averageVolumeData/${item.ticker}`;
           const response = await axios.get(apiUrl);
 
           const avgVolume = response.data; // Assuming the response is the market cap string
@@ -195,7 +198,7 @@ export default {
     async getPercentChange() {
       try {
         for (const item of this.watchlistData) {
-          const apiUrl = `http://localhost:3000/api/yfinance/percentageChange/${item.ticker}`;
+          const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/yfinance/percentageChange/${item.ticker}`;
           const response = await axios.get(apiUrl);
 
           const percChange = response.data; // Assuming the response is the market cap string
@@ -205,7 +208,6 @@ export default {
         console.error("Error fetching average volume:", error);
       }
     },
-
   },
 };
 </script>

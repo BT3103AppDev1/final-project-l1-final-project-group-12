@@ -75,7 +75,7 @@ export default {
   created() {
     // Use the created hook for fetching data
     // Fetch data from the API based on searchTerm
-    const apiUrl = `http://localhost:3000/api/yfinance/historicalData/${this.searchTerm}?period=${this.selectedPeriod}&interval=${this.selectedInterval}`;
+    const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/yfinance/historicalData/${this.searchTerm}?period=${this.selectedPeriod}&interval=${this.selectedInterval}`;
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
@@ -139,7 +139,7 @@ export default {
       // console.log("Saving " + this.ticker + " to Watchlist");
       alert("Successfully added " + this.ticker + " to Watchlist!");
 
-      const apiUrl = `http://localhost:3000/api/watch/add/${this.useremail}/${this.ticker}`;
+      const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/watch/add/${this.useremail}/${this.ticker}`;
       console.log(apiUrl);
 
       try {
@@ -156,7 +156,7 @@ export default {
       this.isLoading = true; // Set isLoading to true while fetching data
 
       // Construct the API URL with the selected period and interval
-      const apiUrl = `http://localhost:3000/api/yfinance/historicalData/${this.searchTerm}?period=${this.selectedPeriod}&interval=${this.selectedInterval}`;
+      const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/yfinance/historicalData/${this.searchTerm}?period=${this.selectedPeriod}&interval=${this.selectedInterval}`;
 
       try {
         // Fetch data from the updated API URL
