@@ -105,11 +105,15 @@ export default {
   },
   methods: {
     confirmAndAdd() {
-      const confirmation = window.confirm(
-        "Confirm adding " + this.ticker + " to your watchlist?"
-      );
-      if (confirmation) {
-        this.saveToWatchlist();
+      if (this.useremail == "") {
+        this.$router.push({ name: "Login" });
+      } else {
+        const confirmation = window.confirm(
+          "Confirm adding " + this.ticker + " to your watchlist?"
+        );
+        if (confirmation) {
+          this.saveToWatchlist();
+        }
       }
     },
 
@@ -120,7 +124,6 @@ export default {
     goToWatchlist() {
       this.$router.push("/watchlist"); // Navigate to the "/watchlist" route
     },
-
 
     updatePeriodInterval(period, interval) {
       this.selectedPeriod = period;
