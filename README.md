@@ -39,3 +39,25 @@ Starting the client-side for development
 ```
 npm run dev
 ```
+
+## Production
+
+Both the backend and frontend server has to be deployed for the app to work as expected. Presently, the client is being served by https://smartfolio-7gt75z5x3q-as.a.run.app.
+
+### 1. Server Deployment
+
+Due to complexities of deployment of a mixed language architecture, the backend is containerized and deployed on Google Cloud Run. An extensive user guide on Docker and GCR deployment can be found here
+https://docs.docker.com/get-started/02_our_app/
+
+To deploy on GCR via Docker images
+
+```
+gcloud run deploy your-service-name --image gcr.io/your-project-id/your-image-name:your-tag --platform managed
+```
+
+### 2. Client Deployment
+
+```
+npm run build
+firebase deploy
+```
