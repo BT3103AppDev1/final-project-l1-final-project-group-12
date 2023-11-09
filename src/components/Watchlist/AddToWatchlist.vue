@@ -56,7 +56,7 @@ export default {
       };
       console.log("Saving " + this.ticker + " to Watchlist");
 
-      const apiUrl = `http://localhost:3000/api/watch/add/${this.useremail}/${this.ticker}`;
+      const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/watch/add/${this.useremail}/${this.ticker}`;
       console.log(apiUrl);
 
       try {

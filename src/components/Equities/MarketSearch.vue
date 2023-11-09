@@ -33,9 +33,9 @@ export default {
       console.log("Button Clicked");
 
       try {
-        const apiUrl = `http://localhost:3000/api/yfinance/ticker/${this.searchTerm}`;
+        const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/yfinance/ticker/${this.searchTerm}`;
         const ticker = await axios.get(apiUrl);
-        console.log(ticker)
+        console.log(ticker);
         // Redirect to a new page and pass the search term as a parameter
         this.$router.push({
           name: "SearchResults",
@@ -43,7 +43,7 @@ export default {
         });
       } catch (error) {
         console.error("Error converting search term to ticker:", error);
-        alert("Company name or ticker not found!")
+        alert("Company name or ticker not found!");
         // Handle the error here
       }
     },
