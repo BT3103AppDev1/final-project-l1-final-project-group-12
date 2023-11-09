@@ -122,12 +122,13 @@ export default {
   methods: {
     async deleteItem(ticker) {
       const confirmation = window.confirm(
-        "Are you sure you want to delete this ticker?"
+        "Are you sure you want to delete " + ticker + " from your Watchlist?"
       );
 
       if (confirmation) {
         const apiUrl = `http://localhost:3000/api/watch/delete/${this.useremail}/${ticker}`;
         await axios.delete(apiUrl);
+        alert("Successfully deleted " + ticker + " from Watchlist!")
 
         this.fetchData();
       } else {
