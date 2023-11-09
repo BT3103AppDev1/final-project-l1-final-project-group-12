@@ -213,6 +213,19 @@ export default {
 
 
 <style scoped>
+.loginContainer {
+  padding: 1.6vw;
+  height: 70vh;
+  width: 25%;
+  background-color: #272f51;
+  margin-top: 1.3%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+
 .SignwithGoogle {
   cursor: pointer;
   transition: all 0.3s ease;

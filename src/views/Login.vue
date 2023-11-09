@@ -49,7 +49,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  margin-top: 300px;
+  margin-top: 20vh;
 }
 p {
   font-size: 3vw;
@@ -140,25 +140,6 @@ a.flex-item {
   text-decoration: underline;
 }
 
-@media screen and (max-width: 800px) {
-  .container {
-    width: 40%;
-  }
-  form.register-form {
-    width: 80%;
-  }
-  input {
-    height: 30px;
-  }
-  button {
-    width: 90%;
-    height: 40px;
-  }
-  button.SignwithGoogle {
-    width: 90%;
-    height: 40px;
-  }
-}
 .flex-item {
   cursor: pointer;
 }
@@ -189,4 +170,26 @@ a.flex-item {
     height: 40px;
   }
 }
+
+@supports (font: -apple-system-body) and (-webkit-appearance: none) {
+.loginContainer {
+  height: 70vh;
+  margin-top: 3%;
+  background-color: #272f51;
+  }
+  .titlecontainer{
+  margin-top: 5%;
+  }
+  form.register-form {
+    height: 60vh;
+    width: 17.5vw;
+  }
+  .SignwithGoogle {
+  font-size: 1.2vw;
+  border-radius: 35px;
+  width: 17.5vw;
+  height: 70px;
+}
+}
+
 </style>
