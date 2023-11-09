@@ -31,6 +31,5 @@ coverage
 .vscode
 __pycache__
  
-firebase.json
 .firebaserc
 .firebase
