@@ -93,7 +93,7 @@ export default {
   methods: {
     confirmAndAdd() {
       const confirmation = window.confirm(
-        "Are you sure you want to add this ticker to your watchlist?"
+        "Confirm adding " + this.ticker + " to your watchlist?"
       );
       if (confirmation) {
         this.saveToWatchlist();
@@ -115,7 +115,8 @@ export default {
         ticker: this.ticker,
         // Add other data fields as needed
       };
-      console.log("Saving " + this.ticker + " to Watchlist");
+      // console.log("Saving " + this.ticker + " to Watchlist");
+      alert("Successfully added " + this.ticker + " to Watchlist!");
 
       const apiUrl = `http://localhost:3000/api/watch/add/${this.useremail}/${this.ticker}`;
       console.log(apiUrl);

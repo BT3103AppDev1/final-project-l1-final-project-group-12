@@ -26,8 +26,12 @@ export default {
   },
 
   methods: {
-    change() {
-      this.$ref.fetchData()
+    async change() {
+      await this.$refs.watchlist.fetchData()
+      await this.$refs.watchlist.getStockPrice()
+      await this.$refs.watchlist.getMarketCap()
+      await this.$refs.watchlist.getAvgVolume()
+      await this.$refs.watchlist.getPercentChange()
     }
   }
 };
