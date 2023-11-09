@@ -2,46 +2,59 @@
   <div class="body">
     <div class="header">
       <div class="header-left">
-        <button class="back-button" @click="goBackToEquities()">
+        <button class="back-button" @click="goBack()">
           <img src="@/assets/backIcon.png" alt="" class="back-icon" />
         </button>
         <h1>{{ searchTerm }}</h1>
       </div>
-      <button class="add-button" @click="confirmAndAdd">
-        <img src="@/assets/starIcon.png" alt="" class="star-icon" />
-        <span class="add-text">Add to Watchlist</span>
-      </button>
+      <div class="stacked-buttons">
+        <button class="add-button" @click="confirmAndAdd">
+          <img src="@/assets/starIcon.png" alt="" class="star-icon" />
+          <span class="add-text">Add to Watchlist</span>
+        </button>
+        <br />
+        <br />
+        <button class="watchlist-button" @click="goToWatchlist()">
+          <span class="watchlist-text">View Watchlist</span>
+        </button>
+      </div>
     </div>
     <div class="period-interval-selector">
-    <button
-      @click="updatePeriodInterval('1Y', '1D')"
-      :class="{ 'selected': selectedPeriod === '1Y' }"
-    >1Y</button>
-    <button
-      @click="updatePeriodInterval('5Y', '1D')"
-      :class="{ 'selected': selectedPeriod === '5Y' }"
-    >5Y</button>
-    <button
-      @click="updatePeriodInterval('10Y', '1D')"
-      :class="{ 'selected': selectedPeriod === '10Y' }"
-    >10Y</button>
-    <button
-      @click="updatePeriodInterval('max', '1D')"
-      :class="{ 'selected': selectedPeriod === 'max' }"
-    >Max</button>
-  </div>
+      <button
+        @click="updatePeriodInterval('1Y', '1D')"
+        :class="{ selected: selectedPeriod === '1Y' }"
+      >
+        1Y
+      </button>
+      <button
+        @click="updatePeriodInterval('5Y', '1D')"
+        :class="{ selected: selectedPeriod === '5Y' }"
+      >
+        5Y
+      </button>
+      <button
+        @click="updatePeriodInterval('10Y', '1D')"
+        :class="{ selected: selectedPeriod === '10Y' }"
+      >
+        10Y
+      </button>
+      <button
+        @click="updatePeriodInterval('max', '1D')"
+        :class="{ selected: selectedPeriod === 'max' }"
+      >
+        Max
+      </button>
+    </div>
     <div v-if="isLoading">Loading...</div>
     <div v-else>
       <line-chart :data="chartData"></line-chart>
     </div>
-
   </div>
 </template>
 
 <script>
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
-
 
 export default {
   props: {
@@ -100,9 +113,14 @@ export default {
       }
     },
 
-    goBackToEquities() {
-      this.$router.push('/equities'); // Navigate to the "/equities" route
-    },    
+    goBack() {
+      this.$router.go(-1); // Navigate to previous page
+    },
+
+    goToWatchlist() {
+      this.$router.push("/watchlist"); // Navigate to the "/watchlist" route
+    },
+
 
     updatePeriodInterval(period, interval) {
       this.selectedPeriod = period;
@@ -154,8 +172,6 @@ export default {
         this.isLoading = false;
       }
     },
-
-    
   },
 };
 </script>
@@ -178,6 +194,7 @@ export default {
   display: flex;
   padding-bottom: 3%;
   padding-left: 1%;
+  margin-top: -3%;
 }
 
 .period-interval-selector button {
@@ -193,7 +210,7 @@ export default {
 }
 
 .selected {
-  background-color: #272f51; 
+  background-color: #272f51;
   color: #ffffff; /* Change the text color of the selected button */
   border: none; /* Remove the border on the selected button */
   font-weight: 800;
@@ -203,7 +220,18 @@ export default {
   background-color: #272f51;
   color: #fff;
   border: none;
-  padding: 1vw 3vw;
+  padding: 0.5vw 3vw;
+  border-radius: 10px;
+  font-size: 1.4vw;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.watchlist-button {
+  background-color: #272f51;
+  color: #fff;
+  border: none;
+  padding: 0.85vw 5.3vw;
   border-radius: 10px;
   font-size: 1.4vw;
   font-weight: bold;
@@ -221,9 +249,14 @@ export default {
   top: -0.5vw;
   font-weight: bold;
 }
+
+.watchlist-text {
+  font-weight: bold;
+}
 .header-left {
   display: flex;
   align-items: center;
+  margin-top: -3%;
 }
 
 .back-button {
@@ -243,6 +276,4 @@ export default {
   margin: 0; /* Remove margin to avoid extra spacing */
   font-size: 3vw; /* Adjust the font size as needed */
 }
-
-
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="back-button">
-      <button @click="goBackToEquities()">
+      <button @click="goBack()">
         <img src="@/assets/backIcon.png" alt="" class="back-icon" />
       </button>
     </div>
@@ -12,8 +12,8 @@
 <script>
 export default {
   methods: {
-    goBackToEquities() {
-      this.$router.push('/equities'); // Navigate to the "/equities" route
+    goBack() {
+      this.$router.go(-1); // Navigate to previous page
     },
   },
 };
