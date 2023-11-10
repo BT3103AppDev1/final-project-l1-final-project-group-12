@@ -21,10 +21,7 @@
             <div class="cell" v-if="!hasData">0</div>
             <div
               class="cell"
-              v-else-if="
-                isNaN(statisticsData[row.header] && !isStatisticsOptimizing)
-              "
-            >
+              v-else-if="isNaN(statisticsData[row.header]) || isStatisticsOptimizing">
               Loading..
             </div>
             <div class="cell" v-else>

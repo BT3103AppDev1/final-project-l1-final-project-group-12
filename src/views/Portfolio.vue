@@ -25,6 +25,10 @@
             :status="getStatus()"
             :getOptimizedStatus="getOptimizedStatus()"
             :updateOptimisePortfolio="updateOptimisePortfolio"
+            :portfolioData="getPortfolioData()"
+            :stockPrices="getStockPrices()"
+            :updatePortfolioData="updatePortfolioData"
+            :updateStockPrices="updateStockPrice"
             @total-pl-updated="emitTotalPL"
             @refresh-request="change"
             @has-data="updateHasData"
@@ -82,14 +86,20 @@ export default {
       showStatistics: false,
       totalPL: 0,
       objective: "",
+
       isAlphaOptimizing: false,
       isBetaOptimizing: false,
       isBalanceOptimizing: false,
       updatingStatistics: false,
+
       alphaOptimized: false,
       betaOptimized: false,
       balanceOptimized: false,
+
       hasData: false,
+
+      portfolioData: {"":[], "alpha":[], "beta":[], "balance":[]},
+      stockPrices: {},
 
       useremail: "",
       existingPortfolio: null,
@@ -102,6 +112,7 @@ export default {
       if (user) {
         this.useremail = user.email;
         this.checkAndCreatePortfolio();
+
       } else {
         this.useremail = ""; // Ensure it's cleared when the user signs out
       }
@@ -124,7 +135,7 @@ export default {
     added() {
       this.change(true);
       const addedStock = this.$refs.AddTrade.stockPrice;
-      this.$refs.PortfolioAssetView.stockPrices[addedStock[0]] = addedStock[1];
+      this.stockPrices[addedStock[0]] = addedStock[1];
     },
 
     // Called when portfolio changes
@@ -132,7 +143,7 @@ export default {
       this.alphaOptimized = false;
       this.betaOptimized = false;
       this.balanceOptimized = false;
-
+      
       await Promise.all([
         this.$refs.PortfolioAssetView.fetchData(),
         //portfolioAssetView.getStockPrice(),
@@ -140,7 +151,6 @@ export default {
 
       if (hasData) {
         this.updatingStatistics = true;
-
         await this.updateStatistics();
 
         if (this.objective != "") {
@@ -152,7 +162,6 @@ export default {
     },
 
     async checkAndCreatePortfolio() {
-      console.log(this.useremail);
       this.$refs.Loading.onLoading();
 
       const apiReadPortfolioUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/read/portfolioInfo/${this.useremail}/standard`;
@@ -166,6 +175,7 @@ export default {
         try {
           this.existingPortfolio = await axios.get(apiReadPortfolioUrl);
           console.log("Current Portfolio: ", this.existingPortfolio.data);
+          
         } catch (error) {
           console.log("No Portfolio found");
         }
@@ -254,6 +264,23 @@ export default {
       } else {
         return true;
       }
+    },
+
+    getPortfolioData() {
+      return this.portfolioData[this.objective];
+    },
+
+    getStockPrices() {
+      return this.stockPrices;
+    },
+
+    updatePortfolioData(newPortfolioData) {
+      this.portfolioData[this.objective] = newPortfolioData;
+
+    },
+
+    updateStockPrice(stock,newStockPrice) {
+      this.stockPrices[stock] = newStockPrice;
     },
 
     toggleStatistics() {

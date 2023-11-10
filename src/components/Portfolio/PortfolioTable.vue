@@ -132,6 +132,7 @@ export default {
       updatedBuyQuantity: 0,
       updatedBuyPrice: 0,
       totalProfitLoss: 0,
+      isEditing: false,
     };
   },
 
@@ -237,7 +238,7 @@ export default {
       const userConfirmed = window.confirm("Are you sure you want to proceed?");
       if (userConfirmed) {
         try {
-          this.$refs.Loading.onLoading("Deleting Trade..");
+          this.$refs.Loading.onLoading();
 
           await this.deleteFromDB(ticker);
 
