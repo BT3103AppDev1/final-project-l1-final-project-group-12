@@ -78,4 +78,13 @@
       background-color: #bde4fa;
       color: #4e5ea4;
     }
+
+    .Optimisation-tab:hover {
+      box-shadow: none !important;
+      transform: translateY(0) !important;
+      background-color: #aeaeb3;
+    }
+    .Optimisation-tab.selected-Optimisation-tab:hover {
+      background-color: #bde4fa;
+    }
 </style>
