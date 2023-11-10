@@ -50,7 +50,7 @@
           :updateOptimisePortfolio="updateOptimisePortfolio"
           :hasData="hasData"
           :statisticsData="getStatistics()"
-          :updateStatistics="updateStatistics"
+          :updateStatistics="updateStatisticsData"
         />
       </div>
     </div>
@@ -201,7 +201,7 @@ export default {
 
     //Update functions
     async updateStatistics() {
-      console.log("Updating Portfolio");
+      console.log("Updating Statistics Portfolio");
       try {
         const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/update/updatePortfolio/${this.useremail}`;
         await axios.put(apiUrl);
@@ -252,7 +252,7 @@ export default {
 
     updatePortfolioData(objective, newPortfolioData) {
       this.portfolioData[objective] = newPortfolioData;
-      console.log(objective, newPortfolioData)
+      console.log("Updated Trade Portfolio - ", objective, newPortfolioData)
 
     },
 
@@ -260,11 +260,11 @@ export default {
       this.stockPrices[stock] = newStockPrice;
     },
 
-    updateStatistics(objective, newStatistics) {
+    updateStatisticsData(objective, newStatistics) {
       this.statistics[objective] = newStatistics;
-      console.log(objective, newStatistics)
+      console.log('Portfolio Statistics Overview: ',this.statistics)
     },
-
+    
 
 
     // Get functions

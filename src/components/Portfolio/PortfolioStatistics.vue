@@ -112,6 +112,8 @@ export default {
 
         const querySnapshot = await axios.get(apiUrl);
         this.updateStatistics(obj, querySnapshot.data);
+        console.log("Updated Statistics - ",obj, querySnapshot.data)
+
 
       } catch (error) {
         console.error("Error fetching data:", error);

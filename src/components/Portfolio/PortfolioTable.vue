@@ -145,7 +145,6 @@ export default {
         this.useremail = ""; // Ensure it's cleared when the user signs out
       }
     });
-    console.log("Objective value:", this.objective);
   },
 
   props: {
