@@ -9,7 +9,13 @@
           :key="columnIndex"
         >
           <div class="row" v-for="(row, rowIndex) in column" :key="rowIndex">
-            <div class="cell">{{ row.label }}</div>
+            <div class="cell">
+              
+                <span>{{ row.label }}</span>
+                <button class="infoBtw" :title="row.info">
+                  <img src="@/assets/infoIcon.png" alt="Button Image" />
+                </button>
+            </div>
 
             <div class="cell" v-if="!hasData">0</div>
             <div
@@ -44,19 +50,19 @@ export default {
       useremail: "",
       columns: [
         [
-          { label: "Expected Alpha", header: "alpha", symbol: "" },
-          { label: "Overall Beta", header: "beta", symbol: "" },
-          { label: "Market Return", header: "marketReturn", symbol: "%" },
-          { label: "Portfolio Return", header: "portfolioReturn", symbol: "%" },
+          { label: "Expected Alpha", header: "alpha", symbol: "", info: "Measures return on investment above whats's expected based on risk" },
+          { label: "Overall Beta", header: "beta", symbol: "", info: "Volatility relative to benchmark"},
+          { label: "Market Return", header: "marketReturn", symbol: "%" , info: "Gain or loss realized by your portfolio, attributed to overall market performance"},
+          { label: "Portfolio Return", header: "portfolioReturn", symbol: "%" , info: "Gain or loss realized by your portfolio"},
         ],
 
         [
-          { label: "Portfolio Value", header: "portfolioValue", symbol: "" },
-          { label: "Risk-Free Rate", header: "rfRate", symbol: "%" },
-          { label: "Sharpe Ratio", header: "sharpeRatio", symbol: "" },
-          { label: "Std Deviation", header: "stdDev", symbol: "" },
+          { label: "Portfolio Value", header: "portfolioValue", symbol: "" , info: "Current worth of your investment portfolio"},
+          { label: "Risk-Free Rate", header: "rfRate", symbol: "%" , info: "Return on an investment with zero risk of financial loss"},
+          { label: "Sharpe Ratio", header: "sharpeRatio", symbol: "" , info: "Risk-adjusted performance of an investment portfolio, evaluating its return in relation to its level of risk"},
+          { label: "Std Deviation", header: "stdDev", symbol: "" , info: "Measures deviation from the mean of returns to assess the volatility and risk associated with a portfolio's returns"},
         ],
-        [{ label: "Variance", header: "variance", symbol: "" }],
+        [{ label: "Variance", header: "variance", symbol: "" , info: "Degree of the variability of returns in a portfolio, providing insight into the overall risk and stability of the investment"}],
       ],
       statisticsData: {},
       test: {},
@@ -114,6 +120,10 @@ export default {
         console.error("Error fetching data:", error);
       }
     },
+
+    setTooltip(info) {
+    this.$set(this, 'tooltip', info);
+  }
   },
 };
 </script>
@@ -171,4 +181,47 @@ export default {
   font-size: 2vw;
   color: rgb(101, 100, 100);
 }
+
+/* info button */
+.cell .infoBtw {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline;
+  margin: 0;
+  transition: none;
+}
+
+.cell .infoBtw img {
+  max-width: 50px;
+  max-height: 50px;
+  position: static; /* or position: relative; */
+  padding:0;
+}
+
+
+ .cell .infoBtw:hover::before {
+  content: attr(title);
+  position: absolute;
+  bottom: -2.5em; 
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #e6e6e6; 
+  color: #454444; 
+  font-size: 1.5vh;
+  padding: 0.5em;
+  border-radius: 0.2em;
+  white-space: normal;
+  z-index: 1;
+  width: 500%;
+  text-align: left;
+} 
+
+.cell .infoBtw:hover {
+  box-shadow: none !important;
+  transform: translateY(0) !important;
+}
+
+
 </style>
