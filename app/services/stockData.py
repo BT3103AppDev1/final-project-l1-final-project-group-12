@@ -3,10 +3,58 @@ import json
 import sys
 import lxml.html
 import requests
+from bs4 import BeautifulSoup
+
+"""
+get_currency_from_yahoo_finance Function:
+Fetches stock Currency for a specified ticker by scraping from from Yahoo Finance.
+
+Parameters:
+@param ticker: str
+    The stock ticker symbol.
+
+Returns:
+@return: str
+    A string of the latest stock's currency.
+"""
+def get_currency_from_yahoo_finance(ticker):
+    url = f"https://finance.yahoo.com/quote/{ticker}"
+    response = requests.get(url)
+    if response.status_code != 200:
+        return "Error: Unable to fetch data"
+    soup = BeautifulSoup(response.text, 'html.parser')
+    for span in soup.find_all('span'):
+        if "Currency in" in span.text:
+            currency = span.text.split("Currency in ")[1]
+            return currency
+    return "Currency information not found"
+
+"""
+get_exchange_rate Function:
+Fetches the exchange rate for a specified Currency against SGD by scraping Google Finance.
+
+Parameters:
+@param currency_code: str
+    The currency code.
+
+Returns:
+@return: float
+    A float of the latest exchange rate between the currency and SGD.
+"""
+def get_exchange_rate(currency_code):
+    url = f'https://www.google.com/finance/quote/{currency_code}-SGD'
+    response = requests.get(url)
+    if response.status_code != 200:
+        return "Error: Unable to fetch data"
+    soup = BeautifulSoup(response.text, 'html.parser')
+    exchange_rate_element = soup.find('div', class_='YMlKec fxKbKc')
+    exchange_rate = exchange_rate_element.text if exchange_rate_element else 'Not found'
+    exchange_rate = exchange_rate.strip().replace(' ', '')
+    return float(exchange_rate)
 
 """
 get_current_price Function:
-Fetches stock statistics for a specified ticker from Yahoo Finance.
+Fetches stock statistics in SGD for a specified ticker from Yahoo Finance.
 
 Parameters:
 @param ticker: str
@@ -17,10 +65,13 @@ Returns:
     A float of the latest stock value.
 """
 def get_current_price(ticker):
-    ticker = yf.Ticker(ticker)
+    ticker = yf.Ticker(ticker_name)
     todays_data = ticker.history(period='1d')
-    return todays_data['Close'].iloc[0]
-
+    # currency = get_currency_from_yahoo_finance(ticker_name)
+    price = todays_data['Close'].iloc[0]
+    # if currency != 'SGD':
+    #     price = price * get_exchange_rate(currency)
+    return price
 """
 get_stock_statistics Function:
 Fetches stock statistics for a specified ticker from Yahoo Finance.
