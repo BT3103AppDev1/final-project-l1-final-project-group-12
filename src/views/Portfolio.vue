@@ -49,6 +49,8 @@
           :getOptimizedStatus="getOptimizedStatus()"
           :updateOptimisePortfolio="updateOptimisePortfolio"
           :hasData="hasData"
+          :statisticsData="getStatistics()"
+          :updateStatistics="updateStatistics"
         />
       </div>
     </div>
@@ -100,6 +102,7 @@ export default {
 
       portfolioData: {"":[], "alpha":[], "beta":[], "balance":[]},
       stockPrices: {},
+      statistics: {"":[], "alpha":[], "beta":[], "balance":[]},
 
       useremail: "",
       existingPortfolio: null,
@@ -138,14 +141,15 @@ export default {
       this.stockPrices[addedStock[0]] = addedStock[1];
     },
 
-    // Called when portfolio changes
+    // Called when stock added, deleted or edited
     async change(hasData) {
       this.alphaOptimized = false;
       this.betaOptimized = false;
       this.balanceOptimized = false;
-      
+      const obj = this.objective;
+
       await Promise.all([
-        this.$refs.PortfolioAssetView.fetchData(),
+        this.$refs.PortfolioAssetView.fetchData(obj),
         //portfolioAssetView.getStockPrice(),
       ]);
 
@@ -153,10 +157,10 @@ export default {
         this.updatingStatistics = true;
         await this.updateStatistics();
 
-        if (this.objective != "") {
-          await this.updateOptimisePortfolio(this.objective);
-          await this.$refs.PortfolioAssetView.fetchData();
-          await this.$refs.PortfolioStatistics.fetchStatistics();
+        if (obj != "") {
+          await this.updateOptimisePortfolio(obj);
+          await this.$refs.PortfolioAssetView.fetchData(obj);
+          await this.$refs.PortfolioStatistics.fetchStatistics(obj);
         }
       }
     },
@@ -186,7 +190,7 @@ export default {
         try {
           console.log("Creating Portfolio..");
           await axios.post(apiCreatePortfolioUrl);
-          this.updateOptimisePortfolio();
+          this.updateOptimisePortfolio("");
         } catch (error) {
           alert("Error: " + error.response.data);
         }
@@ -242,6 +246,28 @@ export default {
       console.log("Portfolio Optimised!");
     },
 
+    updateHasData(newHasData) {
+      this.hasData = newHasData;
+    },
+
+    updatePortfolioData(objective, newPortfolioData) {
+      this.portfolioData[objective] = newPortfolioData;
+      console.log(objective, newPortfolioData)
+
+    },
+
+    updateStockPrice(stock,newStockPrice) {
+      this.stockPrices[stock] = newStockPrice;
+    },
+
+    updateStatistics(objective, newStatistics) {
+      this.statistics[objective] = newStatistics;
+      console.log(objective, newStatistics)
+    },
+
+
+
+    // Get functions
     getStatus() {
       if (this.objective == "alpha") {
         return this.isAlphaOptimizing;
@@ -274,13 +300,8 @@ export default {
       return this.stockPrices;
     },
 
-    updatePortfolioData(newPortfolioData) {
-      this.portfolioData[this.objective] = newPortfolioData;
-
-    },
-
-    updateStockPrice(stock,newStockPrice) {
-      this.stockPrices[stock] = newStockPrice;
+    getStatistics() {
+      return this.statistics[this.objective];
     },
 
     toggleStatistics() {
@@ -292,9 +313,6 @@ export default {
       this.$emit("total-pl-updated", totalPL);
     },
 
-    updateHasData(newHasData) {
-      this.hasData = newHasData;
-    },
 
     getObjective(index) {
       if (index == 1) {

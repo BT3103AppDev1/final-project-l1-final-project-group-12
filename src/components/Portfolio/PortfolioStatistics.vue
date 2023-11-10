@@ -62,8 +62,6 @@ export default {
         ],
         [{ label: "Variance", header: "variance", symbol: "" , info: "Degree of the variability of returns in a portfolio, providing insight into the overall risk and stability of the investment"}],
       ],
-      statisticsData: {},
-      test: {},
     };
   },
 
@@ -74,6 +72,8 @@ export default {
     updateOptimisePortfolio: Function,
     getOptimizedStatus: Boolean,
     isStatisticsOptimizing: Boolean,
+    statisticsData: Object,
+    updateStatistics: Function,
   },
 
   async created() {
@@ -81,17 +81,15 @@ export default {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         this.useremail = user.email;
-        await this.fetchStatistics();
+        const objective = this.objective;
+        await this.fetchStatistics(objective);
 
         const watchCallback = async () => {
-          if (
-            !this.getOptimizedStatus &&
-            !this.optimizingStatus &&
-            this.hasData
-          ) {
-            await this.updateOptimisePortfolio(this.objective);
+          const newObjective = this.objective;
+          if (!this.getOptimizedStatus && !this.optimizingStatus && this.hasData) {
+            await this.updateOptimisePortfolio(newObjective);
           }
-          await this.fetchStatistics();
+          await this.fetchStatistics(newObjective);
         };
 
         this.$watch("objective", watchCallback);
@@ -102,18 +100,19 @@ export default {
   },
 
   methods: {
-    async fetchStatistics() {
-      console.log("Fetching Statistics: ", this.objective);
+    async fetchStatistics(obj) {
+      console.log("Fetching Statistics: ", obj);
       let apiUrl;
       try {
-        if (this.objective) {
-          apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/read/portfolioInfo/${this.useremail}/${this.objective}`;
+        if (obj) {
+          apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/read/portfolioInfo/${this.useremail}/${obj}`;
         } else {
           apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/read/portfolioInfo/${this.useremail}/""`;
         }
 
         const querySnapshot = await axios.get(apiUrl);
-        this.statisticsData = querySnapshot.data;
+        this.updateStatistics(obj, querySnapshot.data);
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }

@@ -86,17 +86,19 @@ export default {
         this.useremail = user.email;  
         if (!this.hasData || Object.keys(this.stockPrices).length == 0) {
             this.$refs.Loading.onLoading();
-            await this.fetchData();
+            await this.fetchData(this.objective);
             await this.getStockPrice();
             this.$refs.Loading.offLoading();
           
         }
 
+        // If select optimisation tab, update optimise portfolio and fetch data
         const watchCallback = async () => {
+          const objective = this.objective;
           if (!this.getOptimizedStatus && !this.status && this.hasData) {
-            await this.updateOptimisePortfolio(this.objective);
-        }
-        await this.fetchData();
+            await this.updateOptimisePortfolio(objective);
+          }
+        await this.fetchData(objective);
         };
 
         // Get stock price every 5 seconds
@@ -122,20 +124,20 @@ export default {
 
     async refresh() {
       this.$emit("refresh-request", this.hasData);
-      await this.fetchData();
+      await this.fetchData(this.objective);
     },
 
-    async fetchData() {
+    async fetchData(objective) {
       let apiUrl;
       try {
-        if (this.objective) {
-          apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/read/allTrades/${this.useremail}/${this.objective}`;
+        if (objective) {
+          apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/read/allTrades/${this.useremail}/${objective}`;
         } else {
           apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/read/allTrades/${this.useremail}/""`;
         }
         console.log("Fetching Portfolio Data: ", apiUrl);
         const querySnapshot = await axios.get(apiUrl);
-        this.updatePortfolioData(querySnapshot.data);
+        this.updatePortfolioData(objective, querySnapshot.data);
 
         this.hasData = querySnapshot.data.length > 0;
 
