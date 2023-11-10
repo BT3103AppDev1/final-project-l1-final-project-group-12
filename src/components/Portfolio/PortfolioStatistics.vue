@@ -12,8 +12,9 @@
             <div class="cell">
               
                 <span>{{ row.label }}</span>
-                <button class="infoBtw" :title="row.info">
+                <button class="infoBtw">
                   <img src="@/assets/infoIcon.png" alt="Button Image" />
+                  <span class="tooltiptext"> {{ row.info }}</span>
                 </button>
             </div>
 
@@ -121,9 +122,6 @@ export default {
       }
     },
 
-    setTooltip(info) {
-    this.$set(this, 'tooltip', info);
-  }
   },
 };
 </script>
@@ -194,29 +192,29 @@ export default {
 }
 
 .cell .infoBtw img {
-  max-width: 50px;
-  max-height: 50px;
+  max-width: 6vh;
+  max-height: auto;
   position: static; /* or position: relative; */
   padding:0;
 }
 
-
- .cell .infoBtw:hover::before {
-  content: attr(title);
-  position: absolute;
-  bottom: -2.5em; 
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #e6e6e6; 
-  color: #454444; 
-  font-size: 1.5vh;
-  padding: 0.5em;
-  border-radius: 0.2em;
-  white-space: normal;
-  z-index: 1;
+.cell .tooltiptext {
+  visibility: hidden;
   width: 500%;
+  background-color: #e6e6e6;
+  color: #454444;
   text-align: left;
-} 
+  border-radius: 1vh;
+  padding: 10% 15%;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.infoBtw:hover .tooltiptext {
+  visibility: visible;
+}
 
 .cell .infoBtw:hover {
   box-shadow: none !important;
