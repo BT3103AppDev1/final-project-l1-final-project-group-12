@@ -109,11 +109,13 @@ export default {
           this.getMarketCap();
           this.getAvgVolume();
           this.getPercentChange();
-          console.log(this.watchlistData);
         });
 
-        // Call fetchData every 3 seconds
-        setInterval(this.fetchData, 3000);
+        // Call fetchData every 5 seconds
+        setInterval(this.getStockPrice, 5000);
+        setInterval(this.getMarketCap, 5000);
+        setInterval(this.getAvgVolume, 5000);
+        setInterval(this.getPercentChange, 5000);
       } else {
         console.error("User not authenticated");
       }
@@ -123,12 +125,13 @@ export default {
   methods: {
     async deleteItem(ticker) {
       const confirmation = window.confirm(
-        "Are you sure you want to delete this ticker?"
+        "Are you sure you want to delete " + ticker + " from your Watchlist?"
       );
 
       if (confirmation) {
         const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/watch/delete/${this.useremail}/${ticker}`;
         await axios.delete(apiUrl);
+        alert("Successfully deleted " + ticker + " from Watchlist!")
 
         this.fetchData();
       } else {
@@ -136,15 +139,15 @@ export default {
     },
 
     async fetchData() {
-      console.log(this.useremail);
+      // console.log(this.useremail);
       try {
-        const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/watch/read/${this.useremail}`;
-        console.log(apiUrl);
+        const apiUrl = `http://localhost:3000/api/watch/read/${this.useremail}`;
+        // console.log(apiUrl);
         const querySnapshot = await axios.get(apiUrl);
         this.watchlistData = querySnapshot.data;
 
         this.hasData = this.watchlistData.length > 0;
-        console.log(this.watchlistData);
+        // console.log(this.watchlistData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -172,7 +175,7 @@ export default {
 
           const marketCap = response.data; // Assuming the response is the market cap string
           this.marketCap[item.ticker] = marketCap;
-          console.log(`Market Cap for ${item.ticker}: ${marketCap}`);
+          // console.log(`Market Cap for ${item.ticker}: ${marketCap}`);
         }
       } catch (error) {
         console.error("Error fetching market cap:", error);

@@ -40,33 +40,41 @@ export default {
     });
   },
   methods: {
-    confirmAndAdd() {
+    async confirmAndAdd() {
       const confirmation = window.confirm(
-        "Are you sure you want to add this ticker to your watchlist?"
+        "Confirm adding " + this.ticker.toUpperCase() + " to your watchlist?"
       );
       if (confirmation) {
         this.saveToWatchlist();
       }
     },
 
-    async saveToWatchlist() {
-      const watchData = {
-        ticker: this.ticker,
-        // Add other data fields as needed
-      };
-      console.log("Saving " + this.ticker + " to Watchlist");
-
-      const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/watch/add/${this.useremail}/${this.ticker}`;
-      console.log(apiUrl);
-
+    async validateInput() {
       try {
-        // Make a POST request to updateTrade endpoint
-        await axios.post(apiUrl, watchData);
-        // Reset placeholder
-        this.ticker = ""; // Clear the input field
-        this.$emit("added");
+        const apiUrlGetTicker = `http://localhost:3000/api/yfinance/ticker/${this.ticker}`;
+        const currTicker = await axios.get(apiUrlGetTicker);
+        return currTicker.data;
       } catch (error) {
-        alert("Error: " + error.response.data);
+        alert("Error: Invalid company name or ticker!");
+      }
+    },
+
+    async saveToWatchlist() {
+      try {
+        const currTicker = await this.validateInput();
+
+        const watchData = {
+          ticker: currTicker,
+        };
+
+        const apiUrl = `http://localhost:3000/api/watch/add/${this.useremail}/${currTicker}`;
+        await axios.post(apiUrl, watchData);
+        alert("Successfully added " + currTicker + " to Watchlist!");
+        this.ticker = ""; // Clear the input field
+        this.$emit("added")
+      } catch (error) {
+        console.error(error);
+        alert("Please try again!")
       }
     },
   },

@@ -63,7 +63,7 @@ export default {
 .boxh3 {
   font-size: 2vw;
   align-self: center;
-  margin-top: 1px;
+  margin-top: 0.8vw;
 }
 
 .header-text .icon {

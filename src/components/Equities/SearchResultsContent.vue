@@ -2,15 +2,22 @@
   <div class="body">
     <div class="header">
       <div class="header-left">
-        <button class="back-button" @click="goBackToEquities()">
+        <button class="back-button" @click="goBack()">
           <img src="@/assets/backIcon.png" alt="" class="back-icon" />
         </button>
         <h1>{{ searchTerm }}</h1>
       </div>
-      <button class="add-button" @click="confirmAndAdd">
-        <img src="@/assets/starIcon.png" alt="" class="star-icon" />
-        <span class="add-text">Add to Watchlist</span>
-      </button>
+      <div class="stacked-buttons">
+        <button class="add-button" @click="confirmAndAdd">
+          <img src="@/assets/starIcon.png" alt="" class="star-icon" />
+          <span class="add-text">Add to Watchlist</span>
+        </button>
+        <br />
+        <br />
+        <button class="watchlist-button" @click="goToWatchlist()">
+          <span class="watchlist-text">View Watchlist</span>
+        </button>
+      </div>
     </div>
     <div class="period-interval-selector">
       <button
@@ -98,16 +105,24 @@ export default {
   },
   methods: {
     confirmAndAdd() {
-      const confirmation = window.confirm(
-        "Are you sure you want to add this ticker to your watchlist?"
-      );
-      if (confirmation) {
-        this.saveToWatchlist();
+      if (this.useremail == "") {
+        this.$router.push({ name: "Login" });
+      } else {
+        const confirmation = window.confirm(
+          "Confirm adding " + this.ticker + " to your watchlist?"
+        );
+        if (confirmation) {
+          this.saveToWatchlist();
+        }
       }
     },
 
-    goBackToEquities() {
-      this.$router.push("/equities"); // Navigate to the "/equities" route
+    goBack() {
+      this.$router.go(-1); // Navigate to previous page
+    },
+
+    goToWatchlist() {
+      this.$router.push("/watchlist"); // Navigate to the "/watchlist" route
     },
 
     updatePeriodInterval(period, interval) {
@@ -121,7 +136,8 @@ export default {
         ticker: this.ticker,
         // Add other data fields as needed
       };
-      console.log("Saving " + this.ticker + " to Watchlist");
+      // console.log("Saving " + this.ticker + " to Watchlist");
+      alert("Successfully added " + this.ticker + " to Watchlist!");
 
       const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/watch/add/${this.useremail}/${this.ticker}`;
       console.log(apiUrl);
@@ -181,6 +197,7 @@ export default {
   display: flex;
   padding-bottom: 3%;
   padding-left: 1%;
+  margin-top: -3%;
 }
 
 .period-interval-selector button {
@@ -206,7 +223,18 @@ export default {
   background-color: #272f51;
   color: #fff;
   border: none;
-  padding: 1vw 3vw;
+  padding: 0.5vw 3vw;
+  border-radius: 10px;
+  font-size: 1.4vw;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.watchlist-button {
+  background-color: #272f51;
+  color: #fff;
+  border: none;
+  padding: 0.85vw 5.3vw;
   border-radius: 10px;
   font-size: 1.4vw;
   font-weight: bold;
@@ -224,9 +252,14 @@ export default {
   top: -0.5vw;
   font-weight: bold;
 }
+
+.watchlist-text {
+  font-weight: bold;
+}
 .header-left {
   display: flex;
   align-items: center;
+  margin-top: -3%;
 }
 
 .back-button {
