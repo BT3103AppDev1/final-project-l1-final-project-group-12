@@ -38,7 +38,6 @@ export default {
 <style scoped>
 .EquityBoxcontainer {
   height: auto;
-  width: 180%;
   border-radius: 13px;
 }
 
