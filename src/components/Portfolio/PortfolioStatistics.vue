@@ -1,6 +1,6 @@
 <template>
   <div class="statistics-table">
-    <div v-if="getOptimizedStatus">
+    <div v-if="getOptimizedStatus || !hasData">
       <!-- Content -->
       <div class="statistics-content">
         <div
