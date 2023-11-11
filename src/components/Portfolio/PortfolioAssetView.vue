@@ -14,7 +14,7 @@
     </div>
   </div>
 
-  <div v-if="getOptimizedStatus">
+  <div v-if="getOptimizedStatus || !hasData">
     <!-- Table / PieChart  -->
     <PortfolioTable
       v-if="!isChecked"
