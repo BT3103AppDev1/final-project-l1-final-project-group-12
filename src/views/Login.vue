@@ -1,6 +1,7 @@
 <template>
   <Navigation />
   <div class="mainbody">
+
     <div class="LoginText">
       <p>Diversify Risk, Maximize Returns</p>
       <h2>Smartfolio</h2>
@@ -44,6 +45,7 @@ export default {
   justify-content: space-around;
   align-self: center;
 }
+
 .LoginText {
   align-self: center;
   display: flex;
@@ -151,25 +153,7 @@ a.flex-item {
   align-self: center;
   background-color: #00ff7f;
 }
-@media screen and (max-width: 800px) {
-  .container {
-    width: 40%;
-  }
-  form.register-form {
-    width: 80%;
-  }
-  input {
-    height: 30px;
-  }
-  button {
-    width: 90%;
-    height: 40px;
-  }
-  button.SignwithGoogle {
-    width: 90%;
-    height: 40px;
-  }
-}
+
 
 @supports (font: -apple-system-body) and (-webkit-appearance: none) {
 .loginContainer {
@@ -187,9 +171,40 @@ a.flex-item {
   .SignwithGoogle {
   font-size: 1.2vw;
   border-radius: 35px;
-  width: 17.5vw;
+  width: 17.5vwls
+  ;
   height: 70px;
 }
 }
 
+@media screen and (max-width: 800px) {
+  .LoginText{
+    visibility:hidden;
+    width:0px;
+    margin:0px
+  }
+  .container {
+    width: 40%;
+  }
+  form.register-form {
+    width: 80%;
+  }
+  input {
+    margin-left:10%;
+    height: 30px;
+    width: 50vw;
+  }
+  button {
+    width: 50vw;
+    height: 40px;
+  }
+  button.SignwithGoogle {
+    width: 50vw;
+    height: 40px;
+  }
+}
+
+
+
+  
 </style>
