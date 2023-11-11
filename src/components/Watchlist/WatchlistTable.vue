@@ -131,7 +131,7 @@ export default {
       if (confirmation) {
         const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/watch/delete/${this.useremail}/${ticker}`;
         await axios.delete(apiUrl);
-        alert("Successfully deleted " + ticker + " from Watchlist!")
+        alert("Successfully deleted " + ticker + " from Watchlist!");
 
         this.fetchData();
       } else {
@@ -141,7 +141,7 @@ export default {
     async fetchData() {
       // console.log(this.useremail);
       try {
-        const apiUrl = `http://localhost:3000/api/watch/read/${this.useremail}`;
+        const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/watch/read/${this.useremail}`;
         // console.log(apiUrl);
         const querySnapshot = await axios.get(apiUrl);
         this.watchlistData = querySnapshot.data;

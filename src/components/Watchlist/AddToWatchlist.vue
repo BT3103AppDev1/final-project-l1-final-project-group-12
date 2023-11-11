@@ -51,7 +51,7 @@ export default {
 
     async validateInput() {
       try {
-        const apiUrlGetTicker = `http://localhost:3000/api/yfinance/ticker/${this.ticker}`;
+        const apiUrlGetTicker = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/yfinance/ticker/${this.ticker}`;
         const currTicker = await axios.get(apiUrlGetTicker);
         return currTicker.data;
       } catch (error) {
@@ -67,14 +67,14 @@ export default {
           ticker: currTicker,
         };
 
-        const apiUrl = `http://localhost:3000/api/watch/add/${this.useremail}/${currTicker}`;
+        const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/watch/add/${this.useremail}/${currTicker}`;
         await axios.post(apiUrl, watchData);
         alert("Successfully added " + currTicker + " to Watchlist!");
         this.ticker = ""; // Clear the input field
-        this.$emit("added")
+        this.$emit("added");
       } catch (error) {
         console.error(error);
-        alert("Please try again!")
+        alert("Please try again!");
       }
     },
   },
