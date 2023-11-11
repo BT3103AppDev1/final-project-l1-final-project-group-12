@@ -5,7 +5,7 @@
       @changeComponent="handleChangeComponent"
       @closePopup="handleClose"
       @signOut="emitSignOut"
-      @accountDeleted="handleAccountDeleted"
+      @accountDeleted="emitSignOut"
     />
   </div>
 </template>
@@ -38,8 +38,8 @@ export default {
       this.$emit("requestSignOut");
     },
     handleAccountDeleted() {
-      this.emitSignOut(); // Sign out the user
-      this.$emit("close"); // Close the Profile popup
+      console.log("");
+      this.emitSignOut();
     },
   },
 };

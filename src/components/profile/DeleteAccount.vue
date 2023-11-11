@@ -16,7 +16,8 @@
       </div>
     </div>
     <h4 class="warningHeader">
-      This action cannot be reversed!! <br />Are you sure?
+      We would store your trades data for up to 3 days, but this action cannot
+      be reversed!! <br />Are you sure?
     </h4>
     <button @click="deleteAccount" class="deleteAccount">Delete</button>
   </div>
@@ -49,9 +50,8 @@ export default {
 
       if (user) {
         try {
-          await deleteUser(user);
-
           this.$emit("accountDeleted");
+          await deleteUser(user);
 
           console.log("Account deleted successfully");
         } catch (error) {
