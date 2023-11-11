@@ -24,7 +24,7 @@ export default {
     return {
       containers: [
         {
-          imageSrc: "./src/assets/loseIcon.png",
+          imageSrc: "../../../src/assets/loseIcon.png",
           header: "Top Losers Today",
           rows: Array(5).fill(["Loading..."]),
         },
