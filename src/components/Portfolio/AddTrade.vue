@@ -255,11 +255,10 @@ input::placeholder {
   padding-top: 0.1%;
   padding-bottom: 0.1%;
   margin-top: 4%;
-  font-size: 1.1vw;
 }
 
 #profitContainer h3 {
-  margin-bottom: 0.2vw; /* Adjust the margin-bottom value as needed */
+  margin-bottom: 0vw;
   font-size: 1.5vw;
   color: rgb(222, 222, 222);
   margin-top: 4%;
@@ -267,6 +266,7 @@ input::placeholder {
 
 #totalProfit {
   color: #02dbfd;
+  font-size: 5vh;
 }
 </style>
 

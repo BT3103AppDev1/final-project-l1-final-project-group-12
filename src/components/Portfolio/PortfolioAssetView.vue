@@ -14,7 +14,7 @@
     </div>
   </div>
 
-  <div v-if="!status">
+  <div v-if="getOptimizedStatus">
     <!-- Table / PieChart  -->
     <PortfolioTable
       v-if="!isChecked"
@@ -36,12 +36,15 @@
   </div>
 
   <div class="assetView-container" v-else>Optimising...</div>
+
+  <Loading ref="Loading" />
 </template>
   
   
   <script>
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
+import Loading from "@/components/Loading.vue";
 
 import PortfolioTable from "@/components/Portfolio/PortfolioTable.vue";
 import PieChart from "@/components/Portfolio/PortfolioPieChart.vue";
@@ -51,6 +54,7 @@ export default {
   components: {
     PortfolioTable,
     PieChart,
+    Loading,
   },
 
   props: {
@@ -58,13 +62,15 @@ export default {
     status: Boolean,
     updateOptimisePortfolio: Function,
     getOptimizedStatus: Boolean,
+    portfolioData: Array,
+    stockPrices: Object,
+    updatePortfolioData: Function,
+    updateStockPrices: Function,
   },
 
   data() {
     return {
       isChecked: false,
-      portfolioData: [],
-      stockPrices: {},
       hasData: true,
 
       useremail: "",
@@ -77,27 +83,33 @@ export default {
     // Create an async function to handle user authentication and data fetching
     const handleUserAuthentication = async (user) => {
       if (user) {
-        this.useremail = user.email;
+        this.useremail = user.email;  
+        if (!this.hasData || Object.keys(this.stockPrices).length == 0) {
+            this.$refs.Loading.onLoading();
+            await this.fetchData(this.objective);
+            await this.getStockPrice();
+            this.$refs.Loading.offLoading();
+          
+        }
 
-        await this.fetchData();
-        await this.getStockPrice();
+        // If select optimisation tab, update optimise portfolio and fetch data
+        const watchCallback = async () => {
+          const objective = this.objective;
+          if (!this.getOptimizedStatus && !this.status && this.hasData) {
+            await this.updateOptimisePortfolio(objective);
+          }
+        await this.fetchData(objective);
+        };
 
         // Get stock price every 5 seconds
         setInterval(async () => {
           await this.getStockPrice();
         }, 5000);
 
-        const watchCallback = async () => {
-          if (!this.getOptimizedStatus && !this.status && this.hasData) {
-            await this.updateOptimisePortfolio(this.objective);
-          }
-
-          await this.fetchData();
-        };
-
         this.$watch("objective", watchCallback);
       } else {
         console.error("User not authenticated");
+        this.$refs.Loading.offLoading();
       }
     };
 
@@ -111,24 +123,24 @@ export default {
     },
 
     async refresh() {
-      await this.fetchData();
-
       this.$emit("refresh-request", this.hasData);
+      await this.fetchData(this.objective);
     },
 
-    async fetchData() {
+    async fetchData(objective) {
       let apiUrl;
       try {
-        if (this.objective) {
-          apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/read/allTrades/${this.useremail}/${this.objective}`;
+        if (objective) {
+          apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/read/allTrades/${this.useremail}/${objective}`;
         } else {
           apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/read/allTrades/${this.useremail}/""`;
         }
         console.log("Fetching Portfolio Data: ", apiUrl);
         const querySnapshot = await axios.get(apiUrl);
-        this.portfolioData = querySnapshot.data;
+        this.updatePortfolioData(objective, querySnapshot.data);
 
-        this.hasData = this.portfolioData.length > 0;
+        this.hasData = querySnapshot.data.length > 0;
+
         this.$emit("has-data", this.hasData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -142,7 +154,7 @@ export default {
           const response = await axios.get(apiUrl);
           const price = response.data;
 
-          this.stockPrices[item.ticker] = price;
+          this.updateStockPrices(item.ticker,price);
         }
       } catch (error) {
         console.error("Error fetching stock price:", error);
