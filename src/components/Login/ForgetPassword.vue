@@ -1,14 +1,16 @@
 <template>
   <div class="popup">
     <div class="inner-popup">
-      <button
-        class="closeButton"
-        aria-label="Dismiss alert"
-        type="button"
-        @click="closepopup"
-      >
-        <span aria-hidden="true">&times;</span>
-      </button>
+      <center class="buttonContainer">
+        <button
+          class="closeButton"
+          aria-label="Dismiss alert"
+          type="button"
+          @click="closepopup"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </center>
 
       <slot />
       <p class="InsertEmail">
@@ -75,7 +77,6 @@ export default {
   bottom: 0;
   z-index: 99;
   background-color: rgba(0, 0, 0, 0.2);
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,10 +107,14 @@ export default {
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
+.buttonContainer {
+  align-items: right;
+  margin-left: 100%;
+}
+
 .close-button {
-  height: 30px;
-  width: 30px;
-  margin-left: 90%;
+  height: 100px;
+  width: 20px;
   color: black;
   font-size: 1vw;
   background-color: white;
