@@ -183,6 +183,9 @@ a.flex-item {
     width:0px;
     margin:0px
   }
+  .loginContainer{
+    margin:3%
+  }
   .container {
     width: 40%;
   }
