@@ -15,9 +15,14 @@
       <table class="table">
         <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
           <td>{{ rowIndex + 1 }}</td>
-          <td v-for="(cell, cellIndex) in row" :key="cellIndex">
+          <button
+            class="indivStockButton"
+            v-for="(cell, cellIndex) in row"
+            :key="cellIndex"
+            @click="navToStock(cell)"
+          >
             {{ cell }}
-          </td>
+          </button>
         </tr>
       </table>
     </div>
@@ -25,12 +30,32 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Box",
   props: {
     imageSrc: String,
     header: String,
     rows: Array,
+  },
+  methods: {
+    async navToStock(cellValue) {
+      try {
+        const apiUrl = `https://smartfolio-7gt75z5x3q-as.a.run.app/api/yfinance/ticker/${cellValue}`;
+        const ticker = await axios.get(apiUrl);
+        console.log(ticker);
+        // Redirect to a new page and pass the search term as a parameter
+        this.$router.push({
+          name: "SearchResults",
+          params: { searchTerm: ticker.data }, // Use ticker.data to get the response data
+        });
+      } catch (error) {
+        console.error("Error converting search term to ticker:", error);
+        alert("Company name or ticker not found!");
+        // Handle the error here
+      }
+    },
   },
 };
 </script>
@@ -75,5 +100,23 @@ export default {
   border: none;
   border-top: 2px solid #d0d0d0;
   margin-right: 4%;
+}
+
+.indivStockButton {
+  padding-top: 0.8vw;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 1.6vw;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: left;
+}
+
+.indivStockButton:hover {
+  color: #133ae4; /* Change the color on hover */
+  text-decoration: underline;
+  background-color: transparent;
+  box-shadow: none;
 }
 </style>
