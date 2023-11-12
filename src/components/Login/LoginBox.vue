@@ -264,4 +264,11 @@ export default {
     width: 30px;
   }
 }
+
+@media screen and (max-width: 800px) {
+  .loginContainer {
+    margin-left:0px;
+    width: 85%;
+}
+}
 </style>
