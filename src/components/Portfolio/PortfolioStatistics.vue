@@ -137,7 +137,7 @@ export default {
 .statistics-content {
   display: flex;
   font-weight: bold;
-  font-size: 120%;
+  font-size: 2.5vh;
   margin-top: 1%;
 
   padding-top: 2%;
