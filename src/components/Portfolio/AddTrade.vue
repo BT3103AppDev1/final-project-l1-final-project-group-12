@@ -266,7 +266,7 @@ input::placeholder {
 
 #totalProfit {
   color: #02dbfd;
-  font-size: 2.5vw;
+  font-size: 5vh;
 }
 </style>
 
